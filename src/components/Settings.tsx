@@ -273,6 +273,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
     storeAddress: localStorage.getItem('storeAddress') || SHOP.address,
     wifiPass: localStorage.getItem('wifiPass') || WIFI.password,
     printerIp: localStorage.getItem('printerIp') || PRINTER.defaultIp,
+    hardwareProxyUrl: localStorage.getItem('hardwareProxyUrl') || 'http://localhost:3001',
     autoPrint: localStorage.getItem('autoPrint') === 'true',
     isMuted: localStorage.getItem('notificationMuted') === 'true',
     enableAI: localStorage.getItem('enableAI') !== 'false',
@@ -292,6 +293,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
 
   // Printer Settings
   const [printerIp, setPrinterIp] = useState(initialSettings.printerIp);
+  const [hardwareProxyUrl, setHardwareProxyUrl] = useState(initialSettings.hardwareProxyUrl);
   const [autoPrint, setAutoPrint] = useState(initialSettings.autoPrint);
 
   // Sound Settings
@@ -352,6 +354,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
       storeAddress !== initialSettings.storeAddress ||
       wifiPass !== initialSettings.wifiPass ||
       printerIp !== initialSettings.printerIp ||
+      hardwareProxyUrl !== initialSettings.hardwareProxyUrl ||
       autoPrint !== initialSettings.autoPrint ||
       isMuted !== initialSettings.isMuted ||
       enableAI !== initialSettings.enableAI ||
@@ -360,7 +363,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
       autoSyncEnabled !== initialSettings.autoSyncEnabled;
     
     setHasChanges(changed);
-  }, [storeName, storeAddress, wifiPass, printerIp, autoPrint, isMuted, enableAI, url, localRefreshInterval, autoSyncEnabled, initialSettings]);
+  }, [storeName, storeAddress, wifiPass, printerIp, hardwareProxyUrl, autoPrint, isMuted, enableAI, url, localRefreshInterval, autoSyncEnabled, initialSettings]);
 
   const handleSave = () => {
     if (localRefreshInterval < 15) {
@@ -372,6 +375,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
     localStorage.setItem('storeAddress', storeAddress);
     localStorage.setItem('wifiPass', wifiPass);
     localStorage.setItem('printerIp', printerIp);
+    localStorage.setItem('hardwareProxyUrl', hardwareProxyUrl);
     localStorage.setItem('autoPrint', String(autoPrint));
     localStorage.setItem('notificationMuted', String(isMuted));
     localStorage.setItem('enableAI', String(enableAI));
@@ -389,6 +393,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
       storeAddress,
       wifiPass,
       printerIp,
+      hardwareProxyUrl,
       autoPrint,
       isMuted,
       enableAI,
@@ -407,6 +412,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
       setStoreAddress(SHOP.address);
       setWifiPass(WIFI.password);
       setPrinterIp(PRINTER.defaultIp);
+      setHardwareProxyUrl('http://localhost:3001');
       setAutoPrint(false);
       setIsMuted(false);
       setEnableAI(true);
@@ -716,7 +722,21 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
                   className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl pl-11 pr-4 py-3 font-mono text-sm font-bold text-stone-800 dark:text-white focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none"
                 />
               </div>
-              <p className="text-[10px] text-stone-400 font-medium px-1 italic mt-1">* Hệ thống sẽ gửi lệnh ESC/POS trực tiếp đến IP máy in (port 9100) qua local server.</p>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider ml-1">Hardware Proxy URL (Chạy Server Local)</label>
+              <div className="relative">
+                <Wifi className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+                <input 
+                  type="url" 
+                  value={hardwareProxyUrl}
+                  onChange={(e) => setHardwareProxyUrl(e.target.value)}
+                  placeholder="VD: http://localhost:3001"
+                  className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl pl-11 pr-4 py-3 font-mono text-sm font-bold text-stone-800 dark:text-white focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none"
+                />
+              </div>
+              <p className="text-[10px] text-stone-400 font-medium px-1 italic mt-1">* Dành cho máy tính đang cắm máy in. Nếu dùng thiết bị khác để in qua Cloud, hãy nhập link ngrok.</p>
             </div>
           </div>
         </section>
