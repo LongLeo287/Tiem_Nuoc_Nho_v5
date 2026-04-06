@@ -606,7 +606,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
 
       {/* Main Content */}
       <main 
-        className="flex-grow overflow-y-auto w-full lg:max-w-none mx-auto relative pt-[56px] lg:pt-0 px-0 lg:px-6 lg:overflow-hidden flex flex-col min-w-0"
+        className="flex-grow overflow-y-auto w-full lg:max-w-none mx-auto relative pt-[56px] lg:pt-0 px-0 lg:px-6 flex flex-col min-w-0"
         onScroll={handleMainScroll}
       >
         <div className="h-full flex flex-col min-h-0 min-w-0">
@@ -631,17 +631,17 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
                 </div>
               } />
               <Route path="/history" element={
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-full">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-full w-full">
                   {isAuthenticated ? <OrderHistory /> : <Settings appsScriptUrl={appsScriptUrl} setAppsScriptUrl={setAppsScriptUrl} appMode={appMode} />}
                 </motion.div>
               } />
               <Route path="/staff/*" element={
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-full">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-full w-full">
                   {isAuthenticated ? <StaffView appsScriptUrl={appsScriptUrl} appMode={appMode} /> : <Settings appsScriptUrl={appsScriptUrl} setAppsScriptUrl={setAppsScriptUrl} appMode={appMode} />}
                 </motion.div>
               } />
               <Route path="/settings" element={
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="h-full">
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="h-full w-full">
                   <Settings
                     appsScriptUrl={appsScriptUrl}
                     setAppsScriptUrl={(url) => {
