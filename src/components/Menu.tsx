@@ -794,10 +794,10 @@ const MenuItemCard = memo(({
     return (
       <div
         onClick={handleItemClick}
-        className={`group relative bg-white dark:bg-stone-900 rounded-2xl p-4 flex items-center justify-between gap-4 border border-stone-100 dark:border-stone-800 shadow-sm ${
+        className={`group relative bg-white dark:bg-stone-900 rounded-2xl p-4 flex items-center justify-between gap-4 border border-stone-100 dark:border-stone-800 shadow-sm transition-all duration-300 lg:hover:-translate-y-1 lg:hover:shadow-xl cursor-pointer ${
           item.isOutOfStock
             ? 'opacity-50 grayscale pointer-events-none cursor-not-allowed'
-            : 'cursor-pointer'
+            : ''
         }`}
       >
         <div className="flex-1 min-w-0">
@@ -962,9 +962,9 @@ const EditMenuModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end lg:items-center justify-center z-50 lg:p-4">
       <div 
-        className="bg-white dark:bg-stone-900 w-full max-w-md rounded-t-[32px] overflow-hidden flex flex-col max-h-[90vh]"
+        className="bg-white dark:bg-stone-900 w-full max-w-md rounded-t-[32px] lg:rounded-[32px] overflow-hidden flex flex-col max-h-[90vh] lg:max-h-[85vh]"
       >
         <div className="p-6 flex-grow overflow-y-auto no-scrollbar">
           <div className="flex justify-between items-center mb-6">
@@ -1072,7 +1072,7 @@ const CustomizationModal: React.FC<{ item: GroupedMenuItem; currentQty: number; 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end justify-center z-50"
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end lg:items-center justify-center z-50 lg:p-4"
       onClick={onClose}
     >
       <motion.div 
@@ -1089,7 +1089,7 @@ const CustomizationModal: React.FC<{ item: GroupedMenuItem; currentQty: number; 
           }
         }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white dark:bg-stone-900 rounded-t-[40px] w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border-t border-stone-100 dark:border-stone-800"
+        className="bg-white dark:bg-stone-900 rounded-t-[40px] lg:rounded-[40px] w-full lg:max-w-2xl max-h-[92vh] lg:max-h-[85vh] flex flex-col shadow-2xl overflow-hidden border-t border-stone-100 dark:border-stone-800"
       >
         <div className="w-full flex justify-center pt-3 pb-1">
           <div className="w-12 h-1.5 bg-stone-200 dark:bg-stone-700 rounded-full" />
@@ -1252,7 +1252,7 @@ const QuantityModal: React.FC<{
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-50"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end lg:items-center justify-center z-50 lg:p-4"
       onClick={onClose}
     >
       <motion.div
@@ -1261,7 +1261,7 @@ const QuantityModal: React.FC<{
         exit={{ y: '100%' }}
         transition={{ type: 'spring', damping: 28, stiffness: 220 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white dark:bg-stone-900 rounded-t-[40px] w-full max-w-md shadow-2xl overflow-hidden border-t border-stone-100 dark:border-stone-800"
+        className="bg-white dark:bg-stone-900 rounded-t-[40px] lg:rounded-[40px] w-full max-w-md shadow-2xl overflow-hidden border-t border-stone-100 dark:border-stone-800"
       >
         <div className="w-full flex justify-center pt-3 pb-1">
           <div className="w-12 h-1.5 bg-stone-200 dark:bg-stone-700 rounded-full" />

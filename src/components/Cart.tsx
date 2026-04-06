@@ -24,9 +24,10 @@ const BRANCHES = [
 interface CartProps {
   appsScriptUrl: string;
   onNavigateSettings: () => void;
+  asSidePanel?: boolean;
 }
 
-export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
+export function Cart({ appsScriptUrl, onNavigateSettings, asSidePanel = false }: CartProps) {
   const { setIsFabHidden, setPendingWorkLabel } = useUI();
   const { orders, createOrder, deleteOrder, fetchAllData, updateOrderStatus, lockOrder, unlockOrder } = useData();
   const { currentUser, isAdmin } = useAuth();
@@ -596,16 +597,18 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
 
     if (submittedOrder) {
     return (
-      <div className="flex flex-col min-h-full pb-48 bg-stone-50 dark:bg-black">
+      <div className={`flex flex-col min-h-full ${asSidePanel ? '' : 'pb-48'} bg-stone-50 dark:bg-black`}>
         {/* Scrollable content */}
         <div className="flex-1 flex flex-col items-center px-5 pt-8 pb-4 text-center relative">
         {/* Close */}
-        <button 
-          onClick={handleNewOrder}
-          className="absolute top-4 right-4 w-10 h-10 bg-stone-100 dark:bg-stone-800 rounded-full flex items-center justify-center text-stone-500 tap-active"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        {!asSidePanel && (
+          <button 
+            onClick={handleNewOrder}
+            className="absolute top-4 right-4 w-10 h-10 bg-stone-100 dark:bg-stone-800 rounded-full flex items-center justify-center text-stone-500 tap-active"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
 
         {/* Title compact — bỏ icon lớn */}
         <div className="flex flex-col items-center mb-5">
@@ -631,13 +634,6 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
           </div>
 
           <div className="space-y-3">
-            {/* SĐT — chỉ hiện nếu có */}
-            {submittedOrder.phoneNumber_unused && (
-              <div className="flex justify-between text-sm">
-                <span className="text-stone-400">Số điện thoại</span>
-                <span className="font-bold text-stone-800 dark:text-white">{submittedOrder.phoneNumber_unused}</span>
-              </div>
-            )}
             {/* Bàn */}
             {submittedOrder.tableNumber && (
               <div className="flex justify-between text-sm">
@@ -696,8 +692,10 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
         </div>
 
         {/* Action bar — no void gap */}
-        <div className="fixed bottom-20 lg:bottom-0 left-0 lg:left-[260px] right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none">
-          <div className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto space-y-2">
+        <div className={asSidePanel 
+          ? "mt-auto sticky bottom-0 left-0 right-0 px-4 py-3 bg-white/90 dark:bg-stone-950/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40"
+          : "fixed bottom-20 lg:bottom-0 left-0 lg:left-[260px] right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none"}>
+          <div className={asSidePanel ? "space-y-2" : "max-w-md md:max-w-2xl lg:max-w-4xl mx-auto space-y-2"}>
             <button
               onClick={handleNewOrder}
               className="w-full py-3.5 bg-[#C9252C] text-white font-black rounded-2xl tap-active shadow-lg shadow-red-200 dark:shadow-none flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
@@ -732,8 +730,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
     // Use randomState which now includes cached AI messages, or fallback to static if AI disabled
     const displayState = isAIEnabled ? randomState : emptyStates[0];
     return (
-      <div className="flex flex-col h-[calc(100vh-80px)]">
-        <div className="flex flex-col items-center justify-center flex-1 text-center px-6 relative">
+      <div className={asSidePanel ? "flex flex-col h-full bg-stone-50 dark:bg-black relative overflow-y-auto" : "flex flex-col h-[calc(100vh-80px)]"}>
+        <div className={`flex flex-col items-center justify-center flex-1 text-center px-6 relative ${asSidePanel ? 'py-10' : ''}`}>
           <motion.div
             className="relative mb-6"
             animate={{ y: [0, -8, 0] }}
@@ -851,7 +849,7 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
         </div>
       )}
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto pb-52">
+      <div className={`flex-1 overflow-y-auto ${asSidePanel ? 'pb-8' : 'pb-52'}`}>
       <div className="p-3 space-y-3">
         {/* Cart Items Header */}
         <section className="space-y-2">
@@ -998,8 +996,10 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
       </div>{/* end flex-1 scroll */}
 
       {/* Sticky Footer Summary */}
-      <div className="fixed bottom-20 lg:bottom-0 left-0 lg:left-[260px] right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none">
-        <div className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto space-y-2">
+      <div className={asSidePanel
+        ? "sticky mt-auto bottom-0 left-0 right-0 px-4 py-3 bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-2xl border-t border-stone-200/50 dark:border-stone-800 z-40"
+        : "fixed bottom-20 lg:bottom-0 left-0 lg:left-[260px] right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none"}>
+        <div className={asSidePanel ? "space-y-2" : "max-w-md md:max-w-2xl lg:max-w-4xl mx-auto space-y-2"}>
           {/* Amount row — always visible */}
           <div className="flex items-baseline gap-1">
             <p className="text-[9px] font-black text-stone-400 uppercase tracking-widest leading-none mr-1">Tổng tiền</p>
