@@ -15,8 +15,9 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
   const [printState, setPrintState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [printMsg, setPrintMsg]     = useState('');
 
-  // Get IP from main settings
+  // Get IPs from settings
   const printerIp = localStorage.getItem('printerIp') || '';
+  const hardwareProxyUrl = localStorage.getItem('hardwareProxyUrl') || 'http://localhost:3001';
 
   // --- Thermal print via server.ts /api/print ---
   const handleThermalPrint = async () => {
@@ -31,7 +32,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
     setPrintMsg('');
 
     try {
-      const res = await fetch('/api/print', {
+      const res = await fetch(`${hardwareProxyUrl}/api/print`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
