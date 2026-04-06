@@ -103,14 +103,29 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 print:p-0 print:bg-white print:static">
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          body * { visibility: hidden; }
-          #printable-invoice, #printable-invoice * { visibility: visible; }
+          html, body {
+            visibility: hidden;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+          }
           #printable-invoice {
-            position: absolute;
-            left: 0; top: 0;
-            width: 80mm;
-            padding: 2mm;
-            margin: 0;
+            visibility: visible;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 80mm !important;
+            margin: 0 !important;
+            padding: 2mm !important;
+            background: white !important;
+            color: black !important;
+          }
+          #printable-invoice * {
+            visibility: visible;
+          }
+          .print-hidden {
+            display: none !important;
+            visibility: hidden !important;
           }
           @page { margin: 0; size: 80mm auto; }
         }
@@ -140,8 +155,8 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
         )}
 
         {/* Invoice Content */}
-        <div className="p-4 overflow-y-auto max-h-[75vh] sm:max-h-[65vh] print:max-h-none print:overflow-visible print:p-0">
-          <div id="printable-invoice" ref={invoiceRef} className="bg-white p-6 text-stone-800 font-sans print:p-2">
+        <div className="p-4 overflow-y-auto max-h-[75vh] sm:max-h-[65vh] print-hidden">
+          <div id="printable-invoice" ref={invoiceRef} className="bg-white p-6 text-stone-800 font-sans print:p-2 print:border-none print:shadow-none">
             <div className="text-center mb-6 border-b-2 border-dashed border-stone-200 pb-6">
               <div className="w-14 h-14 mx-auto mb-3 flex items-center justify-center">
                 <img
@@ -232,46 +247,56 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 sm:p-6 bg-stone-50 dark:bg-stone-800/50 flex gap-2.5 print:hidden">
+        <div className="p-4 sm:p-6 bg-stone-50 dark:bg-stone-800/50 flex flex-wrap sm:flex-nowrap gap-2.5 print-hidden">
           {/* Share */}
           <button
             onClick={handleShare}
-            className="flex-1 py-3.5 bg-[#C9252C] text-white font-black rounded-2xl tap-active flex items-center justify-center gap-2 shadow-lg shadow-red-100 dark:shadow-none uppercase tracking-widest text-[10px]"
+            className="w-full sm:flex-1 py-3.5 bg-[#C9252C] text-white font-black rounded-2xl tap-active flex items-center justify-center gap-2 shadow-lg shadow-red-100 dark:shadow-none uppercase tracking-widest text-[10px]"
           >
             <Share2 className="w-4 h-4" /> Chia sẻ
           </button>
 
-          {/* Thermal Print */}
-          <button
-            onClick={handleThermalPrint}
-            disabled={printState === 'loading'}
-            className={`relative w-12 h-12 rounded-2xl flex items-center justify-center tap-active border transition-colors
-              ${printerIp
-                ? 'bg-stone-800 dark:bg-stone-100 text-white dark:text-stone-900 border-stone-700 dark:border-stone-200'
-                : 'bg-white dark:bg-stone-800 text-stone-400 border-stone-200 dark:border-stone-700'
-              }
-              ${printState === 'loading' ? 'opacity-60' : ''}
-            `}
-            title={printerIp ? `In nhiệt — ${printerIp}:9100` : 'Chưa cấu hình IP máy in'}
-          >
-            {printState === 'loading'
-              ? <Loader2 className="w-4 h-4 animate-spin" />
-              : <Printer className="w-4 h-4" />
-            }
-            {/* dot: configured indicator */}
-            {printerIp && printState === 'idle' && (
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-stone-800" />
-            )}
-          </button>
+          <div className="flex w-full sm:w-auto gap-2.5">
+            {/* Native OS Print */}
+            <button
+              onClick={() => window.print()}
+              className="flex-1 sm:w-16 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center tap-active border border-blue-200 dark:border-blue-800/50"
+              title="In thông qua Chrome/Safari/AirPrint"
+            >
+              <Printer className="w-4 h-4" />
+            </button>
 
-          {/* Download */}
-          <button
-            onClick={handleDownload}
-            className="w-12 h-12 bg-white dark:bg-stone-800 text-stone-400 rounded-2xl flex items-center justify-center tap-active border border-stone-200 dark:border-stone-700"
-            title="Tải về PNG"
-          >
-            <Download className="w-4 h-4" />
-          </button>
+            {/* Thermal Print */}
+            <button
+              onClick={handleThermalPrint}
+              disabled={printState === 'loading'}
+              className={`relative w-12 h-12 rounded-2xl flex items-center justify-center tap-active border transition-colors
+                ${printerIp
+                  ? 'bg-stone-800 dark:bg-stone-100 text-white dark:text-stone-900 border-stone-700 dark:border-stone-200'
+                  : 'bg-white dark:bg-stone-800 text-stone-400 border-stone-200 dark:border-stone-700'
+                }
+                ${printState === 'loading' ? 'opacity-60' : ''}
+              `}
+              title={printerIp ? `In nhiệt LAN via Cò mồi — ${printerIp}:9100` : 'Chưa cấu hình IP máy in'}
+            >
+              {printState === 'loading'
+                ? <Loader2 className="w-4 h-4 animate-spin" />
+                : <Printer className="w-4 h-4" />
+              }
+              {printerIp && printState === 'idle' && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-stone-800" />
+              )}
+            </button>
+
+            {/* Download */}
+            <button
+              onClick={handleDownload}
+              className="w-12 h-12 bg-white dark:bg-stone-800 text-stone-400 rounded-2xl flex items-center justify-center tap-active border border-stone-200 dark:border-stone-700"
+              title="Tải về PNG"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
