@@ -640,7 +640,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
                   {...props} 
                   ref={ref as any} 
                   className={viewMode === 'grid' 
-                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-3 px-4 pb-8" 
+                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 lg:gap-4 px-4 pb-8" 
                     : "flex flex-col gap-2.5 px-4 pb-8"} 
                 />
               )),
@@ -906,8 +906,8 @@ const MenuItemCard = memo(({
       </div>
 
       <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/5">
-        <div className="flex items-center justify-between">
-          <p className="text-[#C9252C] font-black text-xl tracking-tighter">
+        <div className="flex items-center justify-between gap-1">
+          <p className="text-[#C9252C] font-black text-lg xl:text-xl tracking-tighter truncate">
             {item.price.toLocaleString('vi-VN')}
             <span className="text-[10px] align-top ml-0.5 uppercase">đ</span>
           </p>
@@ -918,10 +918,10 @@ const MenuItemCard = memo(({
                 e.stopPropagation();
                 if (!item.isOutOfStock) onAddQuick(e);
               }}
-              className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md tap-active transition-all active:scale-90 bg-[#C9252C] text-white shadow-red-200 dark:shadow-none hover:bg-red-700"
+              className="w-10 h-10 xl:w-11 xl:h-11 rounded-2xl flex items-center justify-center shadow-md tap-active transition-all active:scale-90 bg-[#C9252C] text-white shadow-red-200 dark:shadow-none hover:bg-red-700 shrink-0"
               title="Tùy chọn"
             >
-              <Plus className="w-6 h-6" />
+              <Plus className="w-5 h-5 xl:w-6 xl:h-6" />
             </button>
           )}
         </div>
