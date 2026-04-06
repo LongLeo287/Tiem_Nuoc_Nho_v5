@@ -33,14 +33,14 @@ interface OrderHistoryItem {
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<string, { bg: string; text: string; icon: React.ReactNode }> = {
-  'Đang xử lý': {
+  'Đã nhận': {
     bg: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-orange-200/70 dark:border-orange-800/40',
-    text: 'Đang xử lý',
+    text: 'Đã nhận',
     icon: <Clock className="w-3 h-3" />,
   },
-  'Đang pha chế': {
+  'Đang làm': {
     bg: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200/70 dark:border-blue-800/40',
-    text: 'Đang pha',
+    text: 'Đang làm',
     icon: <Coffee className="w-3 h-3" />,
   },
   'Hoàn thành': {
@@ -382,7 +382,7 @@ function OrderCard({
           {!isDone && !isPendingPayment && (
             <div className="flex gap-2">
               {/* Nút hành động chính */}
-              {order.orderStatus !== 'Đang pha chế' && order.orderStatus !== 'Đang xử lý' && (
+              {order.orderStatus !== 'Đang làm' && order.orderStatus !== 'Đã nhận' && (
                 <button
                   onClick={() => onUpdateStatus(order.orderId, 'Đang xử lý')}
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border border-orange-200/70 dark:border-orange-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
@@ -390,7 +390,7 @@ function OrderCard({
                   <Clock className="w-3 h-3" /> Nhận đơn
                 </button>
               )}
-              {order.orderStatus === 'Đang xử lý' && (
+              {order.orderStatus === 'Đã nhận' && (
                 <button
                   onClick={() => onUpdateStatus(order.orderId, 'Đang pha chế')}
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200/70 dark:border-blue-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
@@ -398,7 +398,7 @@ function OrderCard({
                   <Coffee className="w-3 h-3" /> Bắt đầu pha
                 </button>
               )}
-              {order.orderStatus === 'Đang pha chế' && (
+              {order.orderStatus === 'Đang làm' && (
                 <button
                   onClick={() => onUpdateStatus(order.orderId, 'Hoàn thành')}
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
@@ -853,7 +853,7 @@ export function OrderHistory() {
       )}
 
       {/* Order list */}
-      <div className="flex flex-col gap-3 px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 px-4">
         <AnimatePresence mode="popLayout">
           {(displayOrders || []).length === 0 ? (
             <motion.div

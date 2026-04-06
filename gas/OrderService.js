@@ -175,8 +175,8 @@ function createNewOrder(payload) {
     thanhToan,       // Cột K (10): PAYMENT_METHOD
     branchName,      // Cột L (11): BRANCH_NAME
     "Chưa thanh toán", // Cột M (12): PAYMENT_STATUS
-    "",              // Cột N (13): LOCKED_BY
-    "",              // Cột O (14): LOCKED_AT
+    payload.lockedBy || "",              // Cột N (13): LOCKED_BY
+    payload.lockedBy ? new Date() : "",              // Cột O (14): LOCKED_AT
   ]);
 
   // --- [H] Xử lý Hóa đơn điện tử (Nếu vượt ngưỡng 500tr) ---
@@ -249,12 +249,12 @@ function updateOrderStatus(payload) {
       const hangCanSua = i + 1; // Chuyển từ index mảng (0-based) → số dòng sheet (1-based)
 
       // Cập nhật ORDER_STATUS → Cột I = cột số 9
-      sheet.getRange(hangCanSua, 9).setValue(trangThaiMoi);
+      sheet.getRange(hangCanSua, 10).setValue(trangThaiMoi);
 
-      // Cập nhật PAYMENT_STATUS → Cột N = cột số 14 (nếu App có gửi)
+      // Cập nhật PAYMENT_STATUS → Cột M = cột số 13 (nếu App có gửi)
       // Col N riêng cho payment status, không đụng vào Col J (THANH_TOAN = phương thức TT)
       if (payload.paymentStatus !== undefined) {
-        sheet.getRange(hangCanSua, 14).setValue(payload.paymentStatus);
+        sheet.getRange(hangCanSua, 13).setValue(payload.paymentStatus);
       }
 
       // Nếu chuyển sang "Đã hủy" → ghi tiền hủy vào FINANCE_REPORT
@@ -497,15 +497,15 @@ function addItemsToOrder(payload) {
       return sum + (Number(it.price) || 0) * (Number(it.qty) || 1);
     }, 0);
 
-    const thanhTienCu = Number(data[i][7]) || 0; // Cột H: TOTAL_AMOUNT
-    const subtotalCu  = Number(data[i][4]) || 0; // Cột E: SUBTOTAL
+    const thanhTienCu = Number(data[i][8]) || 0; // TOTAL_AMOUNT
+    const subtotalCu  = Number(data[i][5]) || 0; // SUBTOTAL
     const thanhTienMoi = thanhTienCu + thuThemTien;
     const subtotalMoi  = subtotalCu  + thuThemTien;
 
     // ── [4] Ghi lại vào sheet ─────────────────────────────────────────────────
     sheet.getRange(hang, 4).setValue(JSON.stringify(existingItems)); // Cột D: ITEMS
-    sheet.getRange(hang, 5).setValue(subtotalMoi);                   // Cột E: SUBTOTAL
-    sheet.getRange(hang, 8).setValue(thanhTienMoi);                  // Cột H: TOTAL_AMOUNT
+    sheet.getRange(hang, 6).setValue(subtotalMoi); // SUBTOTAL
+    sheet.getRange(hang, 9).setValue(thanhTienMoi); // TOTAL_AMOUNT
 
     Logger.log("[addItemsToOrder] Đơn " + orderId + " +thêm " + newItems.length + " món, tổng mới: " + thanhTienMoi);
 
@@ -572,17 +572,19 @@ function editOrder(payload) {
     // Cập nhật items (cột D = 4)
     sheet.getRange(hang, 4).setValue(JSON.stringify(items));
 
-    // Cập nhật tổng tiền (cột E = SUBTOTAL, cột H = TOTAL_AMOUNT)
-    sheet.getRange(hang, 5).setValue(subtotal);
-    sheet.getRange(hang, 8).setValue(total);
+    // Cập nhật tổng tiền (cột F = SUBTOTAL, cột I = TOTAL_AMOUNT)
+    sheet.getRange(hang, 6).setValue(subtotal);
+    sheet.getRange(hang, 9).setValue(total);
 
     // Các trường tuỳ chọn — chỉ ghi nếu App gửi
     if (payload.tableNumber   !== undefined) sheet.getRange(hang, 3).setValue(payload.tableNumber);
-    if (payload.customerName  !== undefined) sheet.getRange(hang, 11).setValue(payload.customerName);
-    if (payload.notes         !== undefined) sheet.getRange(hang, 13).setValue(payload.notes);
-    if (payload.status        !== undefined) sheet.getRange(hang, 9).setValue(payload.status);
+    if (payload.branchName !== undefined) sheet.getRange(hang, 12).setValue(payload.branchName);
+    
+    if (payload.notes         !== undefined) sheet.getRange(hang, 5).setValue(payload.notes);
+    if (payload.status        !== undefined) sheet.getRange(hang, 10).setValue(payload.status);
 
     // Tự động mở khoá sau khi chỉnh sửa xong và lưu
+    sheet.getRange(hang, 14).setValue("");
     sheet.getRange(hang, 15).setValue("");
 
     Logger.log("[editOrder] Đơn " + orderId + " đã được cập nhật — tổng mới: " + total);
@@ -640,7 +642,8 @@ function unlockOrder(payload) {
   for (let i = 1; i < data.length; i++) {
     if (data[i][0].toString().trim() === orderId.toString().trim()) {
       const hang = i + 1;
-      sheet.getRange(hang, 15).setValue("");
+      sheet.getRange(hang, 14).setValue("");
+    sheet.getRange(hang, 15).setValue("");
       return { orderId: orderId, success: true };
     }
   }
