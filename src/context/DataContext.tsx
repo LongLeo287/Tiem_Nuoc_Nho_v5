@@ -247,16 +247,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
       if (menuData) {
         const menuMap = new Map<string, MenuItem>();
         menuData.forEach((item: any) => {
-          const id = String(item.ma_mon || '').trim();
+          const id = String(item.MENU_ID || item.ma_mon || '').trim();
           if (!id || menuMap.has(id)) return;
           menuMap.set(id, {
             id,
-            name:               String(item.ten_mon || ''),
-            price:              Number(item.gia_ban) || 0,
-            category:           String(item.danh_muc || 'Khác'),
-            // trang_thai = true → còn hàng → isOutOfStock = false
-            isOutOfStock:       item.trang_thai === false,
-            hasCustomizations:  item.has_customizations === true,
+            name:               String(item.MENU_NAME || item.ten_mon || ''),
+            price:              Number(item.PRICE || item.gia_ban) || 0,
+            category:           String(item.CATEGORY || item.danh_muc || 'Khác'),
+            // STATUS = true → còn hàng → isOutOfStock = false
+            isOutOfStock:       (item.STATUS !== undefined ? item.STATUS : item.trang_thai) === false,
+            hasCustomizations:  item.HAS_CUSTOMIZATIONS === true || item.has_customizations === true,
           });
         });
         const mappedMenu   = Array.from(menuMap.values());
@@ -291,17 +291,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
         if (!Array.isArray(rawItems)) rawItems = [];
 
         // Normalize timestamp: GAS có thể trả về 'YYYY-MM-DD HH:mm:ss' hoặc Date
-        let ts = get('TIMESTAMP', 'THOI_GIAN', 'NGAY_TAO', 'DATE', 'CREATED_AT');
+        let ts = get('CREATED_AT', 'TIMESTAMP', 'THOI_GIAN', 'NGAY_TAO', 'DATE');
         if (ts && typeof ts === 'string' && /^\d{4}-\d{2}-\d{2} \d{2}:/.test(ts)) {
           ts = ts.replace(' ', 'T'); // → ISO 8601
         }
 
-        const status = get('TRANG_THAI', 'STATUS', 'ORDER_STATUS') ?? 'Chờ xử lý';
-        const paymentMethod = get('THANH_TOAN', 'PAYMENT_METHOD', 'HINH_THUC_TT') ?? 'Tiền mặt';
+        const status = get('ORDER_STATUS', 'TRANG_THAI', 'STATUS') ?? 'Chờ xử lý';
+        const paymentMethod = get('PAYMENT_METHOD', 'THANH_TOAN', 'HINH_THUC_TT') ?? 'Tiền mặt';
 
-        // PAYMENT_STATUS: Sheet chỉ có 1 cột TRANG_THAI
-        // → Chỉ suy ra 'Đã thanh toán' khi Hoàn thành VÀ đã có pttt xác định
-        //   (tránh tự động đánh đã TT khi chưa qua luồng Thu tiền)
         let paymentStatus = get('PAYMENT_STATUS', 'TRANG_THAI_TT', 'TRANG_THAI_THANH_TOAN');
         if (!paymentStatus) {
           if (status === 'Công nợ') paymentStatus = 'Công nợ';
@@ -315,14 +312,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
 
         return {
           ORDER_ID:       get('ORDER_ID', 'MA_DON', 'MA_DON_HANG', 'ID') ?? '',
-          TIMESTAMP:      ts ?? new Date().toISOString(),
+          CREATED_AT:     ts ?? new Date().toISOString(),
           CUSTOMER_NAME:  get('CUSTOMER_NAME', 'TEN_KHACH', 'TEN_KHACH_HANG', 'KHACH_HANG', 'NAME') ?? 'Khách',
           PHONE:          get('PHONE', 'SDT', 'SO_DIEN_THOAI', 'PHONE_NUMBER') ?? '',
           TABLE_NO:       get('TABLE_NO', 'SO_BAN', 'BAN', 'TABLE') ?? '',
           ITEMS:          rawItems,
           SUBTOTAL:       Number(get('SUBTOTAL', 'TONG_CONG', 'TONG') || 0),
-          THANH_TIEN:     Number(get('THANH_TIEN', 'TONG_TIEN', 'TOTAL', 'AMOUNT', 'THUC_THU') || get('SUBTOTAL', 'TONG_CONG', 'TONG') || 0),
-          STATUS:         status,
+          TOTAL_AMOUNT:   Number(get('TOTAL_AMOUNT', 'THANH_TIEN', 'TONG_TIEN', 'TOTAL', 'AMOUNT', 'THUC_THU') || get('SUBTOTAL', 'TONG_CONG', 'TONG') || 0),
+          ORDER_STATUS:         status,
           PAYMENT_METHOD: paymentMethod,
           PAYMENT_STATUS: paymentStatus,
           NOTES:          get('NOTES', 'GHI_CHU', 'NOTE') ?? '',
@@ -366,11 +363,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
             phoneNumber:   String(row.PHONE || ''),
             tableNumber:   String(row.TABLE_NO || ''),
             items:         cartItems,
-            total:         Number(row.THANH_TIEN) || 0,
-            timestamp:     String(row.TIMESTAMP || new Date().toISOString()),
+            total:         Number(row.TOTAL_AMOUNT) || 0,
+            timestamp:     String(row.CREATED_AT || new Date().toISOString()),
             notes:         String(row.NOTES || ''),
             paymentMethod: String(row.PAYMENT_METHOD || 'Tiền mặt'),
-            orderStatus:   String(row.STATUS || 'Chờ xử lý'),
+            orderStatus:   String(row.ORDER_STATUS || 'Chờ xử lý'),
             paymentStatus: String(row.PAYMENT_STATUS || 'Chưa thanh toán'),
             lockedBy:      String(row.LOCKED_BY || ''),
           };
@@ -400,12 +397,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
 
       if (soTayArr) {
         const mappedSoTay: SoTayItem[] = soTayArr.map((item: any, idx: number) => ({
-          id_thu_chi: String(item.id_thu_chi || `st-${idx}`),
-          phan_loai:  String(item.phan_loai  || 'Chi') as 'Thu' | 'Chi',
-          danh_muc:   String(item.danh_muc   || 'Khác'),
-          so_tien:    Number(item.so_tien)   || 0,
-          ghi_chu:    String(item.ghi_chu    || ''),
-          thoi_gian:  String(item.thoi_gian  || new Date().toISOString()),
+          id_thu_chi: String(item.TRANSACTION_ID || item.id_thu_chi || `st-${idx}`),
+          phan_loai:  String(item.TRANS_TYPE || item.phan_loai  || 'Chi') as 'Thu' | 'Chi',
+          danh_muc:   String(item.CATEGORY || item.danh_muc   || 'Khác'),
+          so_tien:    Number(item.AMOUNT || item.so_tien)   || 0,
+          ghi_chu:    String(item.NOTES || item.ghi_chu    || ''),
+          thoi_gian:  String(item.CREATED_AT || item.thoi_gian  || new Date().toISOString()),
         }));
         const soTayString = JSON.stringify(mappedSoTay);
         if (JSON.stringify(soTayData) !== soTayString) {
