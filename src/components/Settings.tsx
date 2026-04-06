@@ -273,7 +273,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
     storeAddress: localStorage.getItem('storeAddress') || SHOP.address,
     wifiPass: localStorage.getItem('wifiPass') || WIFI.password,
     printerIp: localStorage.getItem('printerIp') || PRINTER.defaultIp,
-    hardwareProxyUrl: localStorage.getItem('hardwareProxyUrl') || 'http://localhost:3001',
+    hardwareProxyUrl: localStorage.getItem('hardwareProxyUrl') || 'http://localhost:3000',
     autoPrint: localStorage.getItem('autoPrint') === 'true',
     isMuted: localStorage.getItem('notificationMuted') === 'true',
     enableAI: localStorage.getItem('enableAI') !== 'false',
@@ -412,7 +412,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
       setStoreAddress(SHOP.address);
       setWifiPass(WIFI.password);
       setPrinterIp(PRINTER.defaultIp);
-      setHardwareProxyUrl('http://localhost:3001');
+      setHardwareProxyUrl('http://localhost:3000');
       setAutoPrint(false);
       setIsMuted(false);
       setEnableAI(true);
@@ -732,7 +732,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
                   type="url" 
                   value={hardwareProxyUrl}
                   onChange={(e) => setHardwareProxyUrl(e.target.value)}
-                  placeholder="VD: http://localhost:3001"
+                  placeholder="VD: http://localhost:3000"
                   className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl pl-11 pr-4 py-3 font-mono text-sm font-bold text-stone-800 dark:text-white focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none"
                 />
               </div>

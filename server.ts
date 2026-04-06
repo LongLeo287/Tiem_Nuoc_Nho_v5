@@ -3,6 +3,7 @@ import { createServer as createViteServer } from "vite";
 import { WebSocketServer, WebSocket } from "ws";
 import http from "http";
 import net from "net";
+import cors from "cors";
 
 async function startServer() {
   const app = express();
@@ -48,6 +49,7 @@ async function startServer() {
   });
 
   // API routes
+  app.use(cors());
   app.use(express.json());
 
   app.get("/api/health", (req, res) => {
