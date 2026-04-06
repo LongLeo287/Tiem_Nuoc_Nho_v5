@@ -26,6 +26,13 @@ function doGet(e) {
         setupAllSheets();
         return successResponse({status: "ok"}, "Đã đè toàn bộ file Excel Header theo chuẩn mới UPPER_SNAKE_CASE");
 
+      case "migrateOrdersData15Cols":
+        return successResponse(
+          migrateOrdersData15Cols(),
+          "Đã migrate ORDERS sang 15 columns qua GET"
+        );
+
+
       case "getSchema":
         return successResponse(getDatabaseSchema(), "Database Schema");
 
