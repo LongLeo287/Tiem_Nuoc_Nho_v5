@@ -658,16 +658,6 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
         </div>
       </main>
 
-      {/* Desktop Right Panel (lg only) - Cart always visible */}
-      {appMode === 'order' && (
-        <div className="hidden lg:flex flex-col w-[380px] xl:w-[420px] bg-white dark:bg-stone-950 border-l border-stone-200 dark:border-stone-800 h-[100dvh] sticky top-0 shrink-0 z-40 relative">
-          <Cart
-            appsScriptUrl={appsScriptUrl}
-            onNavigateSettings={() => {}}
-            asSidePanel={true}
-          />
-        </div>
-      )}
 
       {/* Quick QR FAB */}
       <QuickQrFab 
@@ -779,6 +769,18 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
         </nav>
       </div>
     </div>
+
+    {/* Desktop Right Panel (lg only) - Cart always visible */}
+    {appMode === 'order' && (
+      <div className="hidden lg:flex flex-col w-[380px] xl:w-[420px] bg-white dark:bg-stone-950 border-l border-stone-200 dark:border-stone-800 h-[100dvh] sticky top-0 shrink-0 z-40 relative">
+        <Cart
+          appsScriptUrl={appsScriptUrl}
+          onNavigateSettings={() => {}}
+          asSidePanel={true}
+        />
+      </div>
+    )}
+
   </div>
   );
 }
