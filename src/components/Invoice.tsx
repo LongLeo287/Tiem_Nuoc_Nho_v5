@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { toPng } from 'html-to-image';
+import { useReactToPrint } from 'react-to-print';
 import { Share2, Download, X, Coffee, Printer, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { SHOP } from '../config/shopConfig';
 
@@ -10,6 +11,12 @@ interface InvoiceProps {
 
 export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
   const invoiceRef = useRef<HTMLDivElement>(null);
+
+  // Native OS print hook (React-To-Print creates an isolated iframe with copied CSS)
+  const handleNativePrint = useReactToPrint({
+    contentRef: invoiceRef,
+    documentTitle: `hoadon-${order.orderId}`
+  });
 
   // Print state
   const [printState, setPrintState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -53,7 +60,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
     } catch (err: any) {
       // Fallback: try window.print() if server not reachable (e.g. on AI Studio cloud)
       if (err instanceof TypeError && err.message.includes('fetch')) {
-        window.print();
+        handleNativePrint();
         setPrintState('idle');
       } else {
         setPrintState('error');
@@ -103,30 +110,6 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 print:p-0 print:bg-white print:static">
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          html, body {
-            visibility: hidden;
-            margin: 0 !important;
-            padding: 0 !important;
-            background: white !important;
-          }
-          #printable-invoice {
-            visibility: visible;
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 80mm !important;
-            margin: 0 !important;
-            padding: 2mm !important;
-            background: white !important;
-            color: black !important;
-          }
-          #printable-invoice * {
-            visibility: visible;
-          }
-          .print-hidden {
-            display: none !important;
-            visibility: hidden !important;
-          }
           @page { margin: 0; size: 80mm auto; }
         }
       ` }} />
@@ -259,7 +242,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
           <div className="flex w-full sm:w-auto gap-2.5">
             {/* Native OS Print */}
             <button
-              onClick={() => window.print()}
+              onClick={() => handleNativePrint()}
               className="flex-1 sm:w-16 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center tap-active border border-blue-200 dark:border-blue-800/50"
               title="In thông qua Chrome/Safari/AirPrint"
             >
