@@ -56,7 +56,7 @@ function getOrdersData() {
     // Parse mảng items từ JSON string (cột D)
     let items = [];
     try {
-      const rawItems = row[4]; // Cột E: ITEMS
+      const rawItems = row[3]; // Cột E: ITEMS
       if (rawItems && rawItems !== "") {
         items = JSON.parse(rawItems.toString());
       }
@@ -69,16 +69,16 @@ function getOrdersData() {
     orderList.push({
       ORDER_ID: orderId.toString().trim(),
       CREATED_AT: row[1] ? row[1].toString() : new Date().toISOString(),
-      BRANCH_NAME: row[2] ? row[2].toString() : "Chi nhánh",
-      TABLE_NO: row[3] ? row[3].toString() : "",
+      BRANCH_NAME: row[11] ? row[11].toString() : "Chi nhánh",
+      TABLE_NO: row[2] ? row[2].toString() : "",
       ITEMS: items, // Mảng [{id, qty}] đã parse
-      NOTES: row[5] ? row[5].toString() : "",
-      SUBTOTAL: Number(row[6]) || 0,
-      DISCOUNT: Number(row[7]) || 0,
-      VAT_AMOUNT: Number(row[8]) || 0,
-      TOTAL_AMOUNT: Number(row[9]) || 0, // Tổng tiền thực thu
-      STATUS: row[10] ? row[10].toString() : "Hoàn thành",
-      PAYMENT_METHOD: row[11] ? row[11].toString() : "Tiền mặt",
+      NOTES: row[4] ? row[4].toString() : "",
+      SUBTOTAL: Number(row[5]) || 0,
+      DISCOUNT: Number(row[6]) || 0,
+      VAT_AMOUNT: Number(row[7]) || 0,
+      TOTAL_AMOUNT: Number(row[8]) || 0, // Tổng tiền thực thu
+      STATUS: row[9] ? row[9].toString() : "Hoàn thành",
+      PAYMENT_METHOD: row[10] ? row[10].toString() : "Tiền mặt",
       PAYMENT_STATUS: row[12] ? row[12].toString() : "Chưa thanh toán",
       LOCKED_BY: row[13] ? row[13].toString() : "",
       LOCKED_AT: row[14] ? row[14].toString() : "",
@@ -164,16 +164,16 @@ function createNewOrder(payload) {
   sheet.appendRow([
     orderId,         // Cột A (0): ORDER_ID
     dateStr,         // Cột B (1): CREATED_AT
-    branchName,      // Cột C (2): BRANCH_NAME
-    tableNo,         // Cột D (3): TABLE_NO
-    itemsStr,        // Cột E (4): ITEMS (JSON string)
-    notes,           // Cột F (5): NOTES
-    subtotal,        // Cột G (6): SUBTOTAL
-    discount,        // Cột H (7): DISCOUNT
-    vatAmount,       // Cột I (8): VAT_AMOUNT
-    thanhTien,       // Cột J (9): TOTAL_AMOUNT
-    trangThai,       // Cột K (10): ORDER_STATUS
-    thanhToan,       // Cột L (11): PAYMENT_METHOD
+    tableNo,         // Cột C (2): TABLE_NO
+    itemsStr,        // Cột D (3): ITEMS
+    notes,           // Cột E (4): NOTES
+    subtotal,        // Cột F (5): SUBTOTAL
+    discount,        // Cột G (6): DISCOUNT
+    vatAmount,       // Cột H (7): VAT_AMOUNT
+    thanhTien,       // Cột I (8): TOTAL_AMOUNT
+    trangThai,       // Cột J (9): ORDER_STATUS
+    thanhToan,       // Cột K (10): PAYMENT_METHOD
+    branchName,      // Cột L (11): BRANCH_NAME
     "Chưa thanh toán", // Cột M (12): PAYMENT_STATUS
     "",              // Cột N (13): LOCKED_BY
     "",              // Cột O (14): LOCKED_AT
@@ -654,10 +654,10 @@ function migrateOrdersData15Cols() {
   if (data.length <= 1) return 'No data';
   
   // Old Mapping (16 cols):
-  // 0:ORDER_ID 1:CREATED_AT 2:TABLE 3:ITEMS 4:SUB 5:DISC 6:VAT 7:TOTAL 8:STATUS 9:PAYMETH 10:CUST 11:PHONE 12:NOTES 13:PAYSTAT 14:LOCKBY 15:LOCKAT
+  // 0:ORDER_ID 1:CREATED_AT 2:TABLE 3:ITEMS 4:SUB 5:DISC 6:VAT 7:TOTAL_AMOUNT 8:STATUS 9:PAYMETH 10:CUST 11:PHONE 12:NOTES 13:PAYSTAT 14:LOCKBY 15:LOCKAT
   
   // New Mapping (15 cols):
-  // 0:ID 1:TIME 2:BRANCH 3:TABLE 4:ITEMS 5:NOTES 6:SUB 7:DISC 8:VAT 9:TOTAL 10:STATUS 11:PAYMETH 12:PAYSTAT 13:LOCKBY 14:LOCKAT
+  // 0:ID 1:TIME 2:BRANCH 3:TABLE 4:ITEMS 5:NOTES 6:SUB 7:DISC 8:VAT 9:TOTAL_AMOUNT 10:STATUS 11:PAYMETH 12:PAYSTAT 13:LOCKBY 14:LOCKAT
   
   const newRows = [];
   for (let i = 1; i < data.length; i++) {
@@ -665,14 +665,14 @@ function migrateOrdersData15Cols() {
     const row = new Array(15).fill('');
     row[0] = r[0]; // ID
     row[1] = r[1]; // TIME
-    row[2] = r[10] || 'Chi nh�nh'; // BRANCH (was CUST 10)
+    row[2] = r[10] || 'Chi nh�nh'; // BRANCH (was CUST 10)
     row[3] = r[2]; // TABLE
     row[4] = r[3]; // ITEMS
     row[5] = r[12]; // NOTES
     row[6] = r[4]; // SUB
     row[7] = r[5]; // DISC
     row[8] = r[6]; // VAT
-    row[9] = r[7]; // TOTAL
+    row[9] = r[7]; // TOTAL_AMOUNT
     row[10] = r[8]; // STATUS
     row[11] = r[9]; // PAYMETH
     row[12] = r[13]; // PAYSTAT
@@ -681,7 +681,7 @@ function migrateOrdersData15Cols() {
     newRows.push(row);
   }
   
-  sheet.getRange(2, 1, sheet.getLastRow(), sheet.getLastColumn()).clearContent();
+  sheet.getRange(2, 1, sheet.getLastRow() - 1, Math.max(16, sheet.getLastColumn())).clearContent();
   sheet.getRange(2, 1, newRows.length, 15).setValues(newRows);
   return 'Success ' + newRows.length + ' rows migrated';
 }

@@ -145,16 +145,16 @@ function _setupOrders(ss) {
         [
       "ORDER_ID",       // A (1)
       "CREATED_AT",     // B (2)
-      "BRANCH_NAME",    // C (3)
-      "TABLE_NO",       // D (4)
-      "ITEMS",          // E (5)
-      "NOTES",          // F (6)
-      "SUBTOTAL",       // G (7)
-      "DISCOUNT",       // H (8)
-      "VAT_AMOUNT",     // I (9)
-      "TOTAL_AMOUNT",   // J (10)
-      "ORDER_STATUS",   // K (11)
-      "PAYMENT_METHOD", // L (12)
+      "TABLE_NO",       // C (3)
+      "ITEMS",          // D (4)
+      "NOTES",          // E (5)
+      "SUBTOTAL",       // F (6)
+      "DISCOUNT",       // G (7)
+      "VAT_AMOUNT",     // H (8)
+      "TOTAL_AMOUNT",   // I (9)
+      "ORDER_STATUS",   // J (10)
+      "PAYMENT_METHOD", // K (11)
+      "BRANCH_NAME",    // L (12)
       "PAYMENT_STATUS", // M (13)
       "LOCKED_BY",      // N (14)
       "LOCKED_AT",      // O (15)
@@ -162,7 +162,7 @@ function _setupOrders(ss) {
     "#dcfce7",
   );
 
-  ["G", "H", "I", "J"].forEach(function (col) {
+  ["F", "G", "H", "I"].forEach(function (col) {
     sheet.getRange(col + "2:" + col + "1000").setNumberFormat("#,##0");
   });
   sheet.getRange("B2:B1000").setNumberFormat("yyyy-mm-dd hh:mm:ss");

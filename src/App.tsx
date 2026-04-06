@@ -24,7 +24,7 @@ import { notificationService } from './services/NotificationService';
 import { RoleGuard } from './components/ui/RoleGuard';
 import { StockAlertBanner } from './components/StockAlertBanner';
 
-const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbxA7Nm136aUakVfoBcE8QsUnMB-NSGFqfb1DHFj9k01hMA0Or9p_hDsxuptCCWxGes/exec';
+const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbxb7tJoFoUD-vs51fWioQtuNkbc1lY2MX15Jtj9nigmmTWoemsqwT0NLEE3KKe-Cn1w/exec';
 
 interface AppContentProps {
   appsScriptUrl: string;
