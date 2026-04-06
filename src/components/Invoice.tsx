@@ -58,15 +58,15 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
         throw new Error(data.error || 'Lỗi không xác định');
       }
     } catch (err: any) {
-      // Fallback: try window.print() if server not reachable (e.g. on AI Studio cloud)
+      // Thất bại khi gửi lệnh API (do chưa chạy server.ts hoặc sai IP máy con)
       if (err instanceof TypeError && err.message.includes('fetch')) {
-        handleNativePrint();
-        setPrintState('idle');
+        setPrintMsg(`Lỗi Cò mồi: Không kết nối được Proxy ${hardwareProxyUrl}! Vui lòng gõ npx tsx server.ts`);
+        setPrintState('error');
       } else {
         setPrintState('error');
         setPrintMsg(err.message || 'Không kết nối được máy in');
-        setTimeout(() => setPrintState('idle'), 4000);
       }
+      setTimeout(() => setPrintState('idle'), 4000);
     }
   };
 
