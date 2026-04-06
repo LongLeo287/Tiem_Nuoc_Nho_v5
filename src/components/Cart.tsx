@@ -50,7 +50,7 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
 
   const savedCarts = useMemo(() => {
     return orders
-      .filter(o => o.orderStatus === 'Nháp')
+      .filter(o => o.lockedBy && o.lockedBy !== '')
       .map(o => ({
         id: o.orderId,
         name: o.branchName || `Nháp ${o.orderId}`,
@@ -570,7 +570,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
       timestamp:     new Date().toISOString(),
       notes,
       paymentMethod: 'Chưa xác định',
-      orderStatus:   'Nháp',
+      orderStatus:   'Chờ xử lý',
+      lockedBy:     currentUser?.name || 'Vô danh',
       paymentStatus: 'Chưa thanh toán',
       staffId:       currentUser?.id,
       staffName:     currentUser?.name,
@@ -695,8 +696,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
         </div>
 
         {/* Action bar — no void gap */}
-        <div className="fixed bottom-20 left-0 right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none">
-          <div className="max-w-md mx-auto space-y-2">
+        <div className="fixed bottom-20 lg:bottom-0 left-0 lg:left-[260px] right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none">
+          <div className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto space-y-2">
             <button
               onClick={handleNewOrder}
               className="w-full py-3.5 bg-[#C9252C] text-white font-black rounded-2xl tap-active shadow-lg shadow-red-200 dark:shadow-none flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
@@ -997,8 +998,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
       </div>{/* end flex-1 scroll */}
 
       {/* Sticky Footer Summary */}
-      <div className="fixed bottom-20 left-0 right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none">
-        <div className="max-w-md mx-auto space-y-2">
+      <div className="fixed bottom-20 lg:bottom-0 left-0 lg:left-[260px] right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none">
+        <div className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto space-y-2">
           {/* Amount row — always visible */}
           <div className="flex items-baseline gap-1">
             <p className="text-[9px] font-black text-stone-400 uppercase tracking-widest leading-none mr-1">Tổng tiền</p>

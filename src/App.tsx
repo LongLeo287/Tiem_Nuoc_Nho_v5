@@ -377,7 +377,82 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-stone-50 dark:bg-black text-stone-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
+    <div className="flex flex-col lg:flex-row h-[100dvh] bg-stone-50 dark:bg-black text-stone-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
+      {/* Desktop Sidebar (lg only) */}
+      <div className="hidden lg:flex flex-col w-[260px] bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 h-[100dvh] sticky top-0 shrink-0 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-none">
+        <div className="p-6 flex flex-col gap-5 border-b border-stone-100 dark:border-stone-800 h-[104px] justify-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-[12px] bg-[#C9252C] flex items-center justify-center flex-shrink-0 shadow-lg shadow-red-900/40">
+              <Coffee className="w-5 h-5 text-white" />
+            </div>
+            <h1 className="text-xl font-black text-stone-800 dark:text-white tracking-tight">Tiệm Nước Nhỏ</h1>
+          </div>
+        </div>
+        <div className="px-4 py-4 border-b border-stone-100 dark:border-stone-800">
+          <div className="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-xl">
+            <button onClick={() => handleTabClick('/', 'order')} className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg ${appMode === 'order' ? 'bg-white dark:bg-stone-700 text-[#C9252C] dark:text-red-400 shadow-sm' : 'text-stone-400 hover:text-stone-600'}`}>
+              <Coffee className="w-4 h-4" /> <span className="text-[10px] font-black uppercase tracking-wider">Order</span>
+            </button>
+            {isAuthenticated && isAdmin && (
+              <button onClick={() => handleTabClick('/staff', 'management')} className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg ${appMode === 'management' ? 'bg-white dark:bg-stone-700 text-[#C9252C] dark:text-red-400 shadow-sm' : 'text-stone-400 hover:text-stone-600'}`}>
+                <LayoutDashboard className="w-4 h-4" /> <span className="text-[10px] font-black uppercase tracking-wider">Quản lý</span>
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1 custom-scrollbar">
+          {((appMode === 'order' ? [
+            { to: '/', icon: Coffee, label: 'Dashboard POS', desc: 'Thực đơn & Order' },
+            { to: '/cart', icon: ShoppingBag, label: 'Đơn đang tạo', desc: 'Các đơn nháp', badge: cartCount > 0 ? cartCount : availableDrafts.length },
+            { to: '/history', icon: Clock, label: 'Lịch sử', desc: 'Đơn hàng gần đây' },
+            { to: '/settings', icon: SettingsIcon, label: 'Cài đặt', desc: 'Kết nối ứng dụng' },
+          ] : [
+            { to: '/staff/dashboard', icon: BarChart3, label: 'Tổng quan', desc: 'Báo cáo doanh thu', roles: ['manager'] },
+            { to: '/staff/operations', icon: LayoutDashboard, label: 'Vận hành', desc: 'Quản lý quầy', roles: ['staff', 'manager'] },
+            { to: '/staff/finance', icon: Wallet, label: 'Tài chính', desc: 'Kiểm soát dòng tiền', roles: ['manager'] },
+            { to: '/staff/users', icon: Users, label: 'Nhân sự', desc: 'Quản trị nhân viên', roles: ['manager'] },
+            { to: '/settings', icon: SettingsIcon, label: 'Cài đặt', desc: 'Cấu hình hệ thống' },
+          ]) as Array<{ to: string; icon: any; label: string; desc?: string; badge?: number; roles?: string[] }>).filter(item => {
+            if (item.to === '/' || item.to === '/cart' || item.to === '/settings') return true;
+            if (!isAuthenticated) return false;
+            if (item.roles && !item.roles.includes(currentUser?.role || '')) return false;
+            return true;
+          }).map((item, index) => {
+            const isActive = item.to === '/' ? location.pathname === '/' : (location.pathname.startsWith(item.to) || (item.to === '/staff/dashboard' && location.pathname === '/staff'));
+            const Icon = item.icon;
+            return (
+              <button
+                key={`desk-${item.to}-${index}`}
+                onClick={() => handleTabClick(item.to)}
+                // Use relative positioning so that pseudo-elements can be attached
+                className={`w-full group relative flex items-center gap-3.5 px-4 py-3 rounded-2xl transition-all duration-300 ${isActive ? 'bg-red-50 dark:bg-red-900/20 text-[#C9252C] dark:text-red-400' : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/50'}`}
+              >
+                {isActive && (
+                  <motion.div 
+                    layoutId="desktop-active-indicator"
+                    className="absolute left-0 w-1 h-8 bg-[#C9252C] rounded-r-lg" 
+                  />
+                )}
+                <div className={`p-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-white dark:bg-stone-800 shadow-sm text-[#C9252C] dark:text-red-400' : 'bg-transparent text-stone-400 group-hover:text-stone-600 dark:group-hover:text-stone-300'}`}>
+                  <Icon className="w-5 h-5" strokeWidth={isActive ? 2.5 : 2} />
+                </div>
+                <div className="flex-1 text-left flex flex-col min-w-0">
+                  <span className={`text-[13px] font-black truncate leading-tight ${isActive ? '' : ''}`}>{item.label}</span>
+                  {item.desc && <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500 truncate">{item.desc}</span>}
+                </div>
+                {item.badge !== undefined && item.badge > 0 && (
+                   <div className="w-5 h-5 flex items-center justify-center bg-[#C9252C] text-white text-[10px] font-black rounded-full flex-shrink-0">
+                     {item.badge}
+                   </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      
+      {/* Container Chính */}
+      <div className="flex flex-col flex-1 relative min-w-0 h-[100dvh]">
       <StockAlertBanner appMode={appMode} />
 
       {/* Full Screen Loading Overlay */}
@@ -476,8 +551,8 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 px-4 py-3 flex justify-between items-center bg-white/80 dark:bg-stone-900/60 backdrop-blur-[48px] saturate-[1.8] border-b border-stone-100/50 dark:border-white/8">
-        <div className="flex bg-stone-100/80 dark:bg-stone-800/80 p-1 rounded-2xl border border-stone-200/50 dark:border-white/8">
+      <header className="fixed top-0 left-0 right-0 lg:sticky lg:inset-auto z-40 px-4 py-3 flex justify-between items-center bg-white/80 dark:bg-stone-900/60 backdrop-blur-[48px] saturate-[1.8] border-b border-stone-100/50 dark:border-stone-800 lg:border-none lg:bg-transparent lg:dark:bg-transparent lg:shadow-none w-full lg:max-w-7xl mx-auto lg:mt-2 lg:px-6">
+        <div className="flex bg-stone-100/80 dark:bg-stone-800/80 p-1 rounded-xl border border-stone-200/50 dark:border-stone-700/50 lg:hidden">
           <button 
             onClick={() => handleTabClick('/', 'order')}
             className={`relative flex items-center gap-2 px-3 py-1.5 rounded-xl ${appMode === 'order' ? 'bg-white dark:bg-stone-700 text-[#C9252C] dark:text-red-400 shadow-sm' : 'text-stone-400 dark:text-stone-500 hover:text-stone-600'}`}
@@ -532,7 +607,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
 
       {/* Main Content */}
       <main 
-        className="flex-grow overflow-y-auto w-full relative pt-[56px]"
+        className="flex-grow overflow-y-auto w-full max-w-7xl mx-auto relative pt-[56px] lg:pt-0 px-0 lg:px-6"
         onScroll={handleMainScroll}
       >
         <div className="h-full">
@@ -621,7 +696,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
       </AnimatePresence>
 
       {/* Bottom Navigation — Floating Glass Pill (iOS 26 style) */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-5">
+      <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-5 lg:hidden">
         <nav className="
           relative
           bg-white/25 dark:bg-stone-900/60
@@ -691,6 +766,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
         </nav>
       </div>
     </div>
+  </div>
   );
 }
 

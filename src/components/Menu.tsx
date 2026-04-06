@@ -405,7 +405,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
     return (
       <div className="flex flex-col min-h-full bg-stone-50 dark:bg-black">
         {/* Skeleton Layer 1 — Search + Controls */}
-        <div className="fixed left-0 right-0 z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md px-4 pt-3 pb-3 border-b border-stone-100/50 dark:border-stone-800/50 shadow-sm top-[56px]">
+        <div className="fixed left-0 right-0 lg:sticky lg:inset-auto lg:top-[-1px] z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md px-4 pt-3 pb-3 border-b border-stone-100/50 dark:border-stone-800/50 shadow-sm top-[56px] w-full">
           <div className="flex gap-2 items-center animate-pulse">
             <div className="flex-grow h-11 bg-stone-100 dark:bg-stone-800 rounded-2xl" />
             <div className="w-11 h-11 bg-stone-100 dark:bg-stone-800 rounded-2xl flex-shrink-0" />
@@ -415,7 +415,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
         </div>
 
         {/* Skeleton Layer 2 — Category Tabs */}
-        <div className="fixed left-0 right-0 z-20 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 top-[120px]">
+        <div className="fixed left-0 right-0 lg:sticky lg:inset-auto lg:top-[68px] z-20 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 top-[120px] w-full">
           <div className="flex gap-2 py-2 px-4 overflow-hidden animate-pulse">
             {[80, 64, 96, 72, 60].map((w, i) => (
               <div key={i} className={`h-8 w-[${w}px] bg-stone-100 dark:bg-stone-800 rounded-xl flex-shrink-0`} />
@@ -424,7 +424,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
         </div>
 
         {/* Skeleton Cards — list view style */}
-        <div className="pt-[132px] px-4 pb-24 space-y-3 animate-pulse">
+        <div className="pt-[132px] lg:pt-4 px-4 pb-24 lg:pb-8 space-y-3 animate-pulse">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <div
               key={i}
@@ -485,8 +485,8 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
     <div className="flex flex-col min-h-full">
       {/* ── Layer 1: Search + Controls ── */}
       <div
-        className={`fixed left-0 right-0 top-[56px] z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md px-4 pt-3 pb-3 border-b border-stone-100/50 dark:border-stone-800/50 shadow-sm transition-transform duration-300 ease-in-out ${
-          isHeaderHidden ? '-translate-y-full' : 'translate-y-0'
+        className={`fixed left-0 right-0 top-[56px] lg:sticky lg:top-[-1px] lg:inset-x-auto z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md px-4 pt-3 pb-3 lg:pb-0 border-b lg:border-none border-stone-100/50 dark:border-stone-800/50 shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full ${
+          isHeaderHidden ? '-translate-y-full lg:translate-y-0' : 'translate-y-0'
         }`}
       >
         {/* Loading Indicator */}
@@ -589,8 +589,8 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
 
       {/* ── Layer 2: Category Tabs ── */}
       <div
-        className={`fixed left-0 right-0 top-[120px] z-20 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 transition-transform duration-300 ease-in-out ${
-          isHeaderHidden ? '-translate-y-[58px]' : 'translate-y-0'
+        className={`fixed left-0 right-0 top-[120px] lg:sticky lg:top-[56px] lg:inset-x-auto z-20 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 transition-transform duration-300 ease-in-out w-full ${
+          isHeaderHidden ? '-translate-y-[58px] lg:translate-y-0' : 'translate-y-0'
         }`}
       >
         <div
@@ -626,7 +626,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
       </div>
 
       {/* ── Content area ── */}
-      <div className={`flex-grow relative pb-32 min-h-[600px] transition-[padding] duration-300 ease-in-out ${isHeaderHidden ? 'pt-[62px]' : 'pt-[124px]'}`}>
+      <div className={`flex-grow relative pb-32 lg:pb-12 min-h-[600px] transition-[padding] duration-300 ease-in-out lg:pt-0 ${isHeaderHidden ? 'pt-[62px]' : 'pt-[124px]'}`}>
         {filteredItems.length > 0 ? (
           <VirtuosoGrid
             ref={virtuosoRef}
