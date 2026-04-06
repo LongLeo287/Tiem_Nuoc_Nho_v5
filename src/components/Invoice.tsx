@@ -155,7 +155,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
         )}
 
         {/* Invoice Content */}
-        <div className="p-4 overflow-y-auto max-h-[75vh] sm:max-h-[65vh] print-hidden">
+        <div className="p-4 overflow-y-auto max-h-[75vh] sm:max-h-[65vh] print:max-h-none print:overflow-visible print:p-0">
           <div id="printable-invoice" ref={invoiceRef} className="bg-white p-6 text-stone-800 font-sans print:p-2 print:border-none print:shadow-none">
             <div className="text-center mb-6 border-b-2 border-dashed border-stone-200 pb-6">
               <div className="w-14 h-14 mx-auto mb-3 flex items-center justify-center">
