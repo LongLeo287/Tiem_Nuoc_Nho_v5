@@ -17,7 +17,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
 
   // Get IPs from settings
   const printerIp = localStorage.getItem('printerIp') || '';
-  const hardwareProxyUrl = localStorage.getItem('hardwareProxyUrl') || 'http://localhost:3001';
+  const hardwareProxyUrl = localStorage.getItem('hardwareProxyUrl') || 'http://localhost:3000';
 
   // --- Thermal print via server.ts /api/print ---
   const handleThermalPrint = async () => {
