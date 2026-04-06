@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Save, CheckCircle2, Store, Printer, Volume2, Wifi, Moon, Sun, Database, RotateCcw, Clock, AlertCircle, User, LogOut, Shield, Users, Plus, Trash2, Edit2, KeyRound, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import { supabaseFetch as fetch } from '../lib/supabaseFetch';
+// native fetch is used automatically
 import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
 import { Staff } from '../types';
