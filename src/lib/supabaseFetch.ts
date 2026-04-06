@@ -26,45 +26,12 @@ export const supabaseFetch = async (url: string | URL | Request, init?: RequestI
     });
 
     switch (action) {
-      case 'getMenu': {
-        const { data, error } = await supabase.from('products').select('payload');
-        if (error) throw error;
-        // Chuyển payload list thành mảng
-        const resultItems = data ? data.map((row: any) => row.payload) : [];
-        return jsonResponse({ status: 'success', data: resultItems });
-      }
-      
-      case 'getOrders': {
-        const { data, error } = await supabase.from('orders').select('payload');
-        if (error) throw error;
-        const resultItems = data ? data.map((row: any) => row.payload) : [];
-        return jsonResponse({ status: 'success', data: resultItems });
-      }
-      
-      case 'getSoTay': {
-        const { data, error } = await supabase.from('sotay').select('payload');
-        if (error) throw error;
-        const resultItems = data ? data.map((row: any) => row.payload) : [];
-        return jsonResponse({ status: 'success', data: resultItems });
-      }
-      
+      case 'getMenu':
+      case 'getOrders':
+      case 'getSoTay':
       case 'getDashboard': {
-        // Có thể tính từ bảng orders hoặc mock tạm cho nhanh (tương tự localDb)
-        const { data: ordersData } = await supabase.from('orders').select('payload');
-        let revenue = 0;
-        let totalOrders = 0;
-        if (ordersData) {
-           const today = new Date().toISOString().split('T')[0];
-           ordersData.forEach(row => {
-             const r = row.payload;
-             const ts = r.TIMESTAMP || r.THOI_GIAN || r.DATE || '';
-             if (ts.startsWith(today) && (r.STATUS === 'Hoàn thành' || r.TRANG_THAI_TT === 'Đã thanh toán' || r.PAYMENT_STATUS === 'Đã thanh toán')) {
-               revenue += Number(r.THANH_TIEN || r.TOTAL || r.AMOUNT || r.TONG_CONG || 0);
-               totalOrders++;
-             }
-           });
-        }
-        return jsonResponse({ status: 'success', data: { revenue, orders: totalOrders, topItems: [] } });
+        console.log(`[Middleware] Forwarding READ action '${action}' directly to Google Sheets Master DB.`);
+        return window.fetch(url, init);
       }
       
       case 'createOrder':
