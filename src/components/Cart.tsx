@@ -31,9 +31,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
   const { orders, createOrder, deleteOrder, fetchAllData, updateOrderStatus, lockOrder, unlockOrder } = useData();
   const { currentUser, isAdmin } = useAuth();
   const { cart, updateQuantity, updateCartItem, clearCart, restoreCart } = useCart();
-  const [customerName, setCustomerName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [tableNumber, setTableNumber] = useState('');
+  const [branchName, setBranchName] = useState('');
+    const [tableNumber, setTableNumber] = useState('');
   const [branch, setBranch] = useState('');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,10 +53,10 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
       .filter(o => o.orderStatus === 'Nháp')
       .map(o => ({
         id: o.orderId,
-        name: o.customerName || `Nháp ${o.orderId}`,
+        name: o.branchName || `Nháp ${o.orderId}`,
         items: o.items,
         timestamp: new Date(o.timestamp),
-        context: { tableNumber: o.tableNumber, branch: BRANCHES.find(b => b.label === o.customerName)?.id || '', notes: o.notes },
+        context: { tableNumber: o.tableNumber, branch: BRANCHES.find(b => b.label === o.branchName)?.id || '', notes: o.notes },
         lockedBy: o.lockedBy
       }));
   }, [orders]);
@@ -105,7 +104,7 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
       setEditingOrderId(order.orderId);
       setTableNumber(order.tableNumber || '');
       setNotes((order as any).notes || '');
-      const matchBranch = BRANCHES.find(b => b.label === order.customerName);
+      const matchBranch = BRANCHES.find(b => b.label === order.branchName);
       if (matchBranch) setBranch(matchBranch.id);
     } catch (e) {
       console.error('edit_bill_order restore failed', e);
@@ -445,9 +444,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
 
     const orderData: OrderData = {
       orderId:       ma_don,
-      customerName:  branchLabel,
-      phoneNumber,
-      tableNumber,
+      branchName:  branchLabel,
+            tableNumber,
       items:         cart,
       total,
       timestamp:     new Date().toISOString(),
@@ -466,7 +464,7 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
     showToast('Đặt đơn thành công!');
     notificationService.notifyNewOrder(orderData);
     clearCart();
-    setCustomerName('');
+    setBranchName('');
     setTableNumber('');
     setNotes('');
     setShowQrModal(false); // đóng QR modal nếu đang mở
@@ -530,8 +528,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
     restoreCart(submittedOrder.items);
     setTableNumber(submittedOrder.tableNumber || '');
     setNotes((submittedOrder as any).notes || '');
-    // Tìm lại branch từ customerName
-    const matchBranch = BRANCHES.find(b => b.label === submittedOrder.customerName);
+    // Tìm lại branch từ branchName
+    const matchBranch = BRANCHES.find(b => b.label === submittedOrder.branchName);
     if (matchBranch) setBranch(matchBranch.id);
     // Clear submitted order → hiện cart
     setSubmittedOrder(null);
@@ -565,9 +563,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
 
     const orderData: OrderData = {
       orderId:       ma_don,
-      customerName:  finalName,
-      phoneNumber,
-      tableNumber,
+      branchName:  finalName,
+            tableNumber,
       items:         cart,
       total,
       timestamp:     new Date().toISOString(),
@@ -634,10 +631,10 @@ export function Cart({ appsScriptUrl, onNavigateSettings }: CartProps) {
 
           <div className="space-y-3">
             {/* SĐT — chỉ hiện nếu có */}
-            {submittedOrder.phoneNumber && (
+            {submittedOrder.phoneNumber_unused && (
               <div className="flex justify-between text-sm">
                 <span className="text-stone-400">Số điện thoại</span>
-                <span className="font-bold text-stone-800 dark:text-white">{submittedOrder.phoneNumber}</span>
+                <span className="font-bold text-stone-800 dark:text-white">{submittedOrder.phoneNumber_unused}</span>
               </div>
             )}
             {/* Bàn */}

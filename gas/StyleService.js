@@ -72,7 +72,6 @@ function applyDesignSystem() {
   _applyDashboard(ss);
 
   SpreadsheetApp.flush();
-  SpreadsheetApp.getUi().alert("✅ Design đã được áp dụng đồng bộ!");
 }
 
 // ─────────────────────────────────────────────────────────────

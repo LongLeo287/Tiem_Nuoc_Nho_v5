@@ -24,7 +24,7 @@ import { notificationService } from './services/NotificationService';
 import { RoleGuard } from './components/ui/RoleGuard';
 import { StockAlertBanner } from './components/StockAlertBanner';
 
-const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycby_rcvWfNqGpm4jKbKOCrqzXxu9k_L43b83dssQctYyutGPeOpUZC87ut3_mhaspD4B/exec';
+const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbxA7Nm136aUakVfoBcE8QsUnMB-NSGFqfb1DHFj9k01hMA0Or9p_hDsxuptCCWxGes/exec';
 
 interface AppContentProps {
   appsScriptUrl: string;
@@ -434,7 +434,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
             </div>
             <div className="flex-1 min-w-0 flex items-center gap-2">
               <span className="text-[9px] font-black uppercase tracking-widest text-red-400 flex-shrink-0">Đơn mới!</span>
-              <span className="text-xs font-bold text-white truncate">{newOrderNotification.customerName || 'Khách hàng'}</span>
+              <span className="text-xs font-bold text-white truncate">{newOrderNotification.branchName || 'Khách hàng'}</span>
               <span className="text-[9px] text-white/40 flex-shrink-0">{newOrderNotification.total?.toLocaleString()}đ · {newOrderNotification.items?.length || 0} món</span>
             </div>
             <button 
@@ -462,7 +462,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
             </div>
             <div className="flex-1 min-w-0 flex items-center gap-2">
               <span className="text-[9px] font-black uppercase tracking-widest text-violet-300 flex-shrink-0">Yêu cầu TT!</span>
-              <span className="text-xs font-bold text-white truncate">{paymentPendingNotification.customerName || 'Khách hàng'}</span>
+              <span className="text-xs font-bold text-white truncate">{paymentPendingNotification.branchName || 'Khách hàng'}</span>
               <span className="text-[9px] text-white/50 flex-shrink-0">{paymentPendingNotification.total?.toLocaleString()}đ · {paymentPendingNotification.items?.length || 0} món</span>
             </div>
             <button

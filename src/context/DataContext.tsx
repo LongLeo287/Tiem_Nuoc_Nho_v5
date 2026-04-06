@@ -313,8 +313,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
         return {
           ORDER_ID:       get('ORDER_ID', 'MA_DON', 'MA_DON_HANG', 'ID') ?? '',
           CREATED_AT:     ts ?? new Date().toISOString(),
-          CUSTOMER_NAME:  get('CUSTOMER_NAME', 'TEN_KHACH', 'TEN_KHACH_HANG', 'KHACH_HANG', 'NAME') ?? 'Khách',
-          PHONE:          get('PHONE', 'SDT', 'SO_DIEN_THOAI', 'PHONE_NUMBER') ?? '',
+          BRANCH_NAME: get('BRANCH_NAME', 'CHI_NHANH', 'CUSTOMER_NAME') ?? 'Chi nhánh',
+          
           TABLE_NO:       get('TABLE_NO', 'SO_BAN', 'BAN', 'TABLE') ?? '',
           ITEMS:          rawItems,
           SUBTOTAL:       Number(get('SUBTOTAL', 'TONG_CONG', 'TONG') || 0),
@@ -359,8 +359,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
 
           return {
             orderId:       String(row.ORDER_ID || ''),
-            customerName:  String(row.CUSTOMER_NAME || 'Khách'),
-            phoneNumber:   String(row.PHONE || ''),
+            branchName: String(row.BRANCH_NAME || 'Chi nhánh'),
+            
             tableNumber:   String(row.TABLE_NO || ''),
             items:         cartItems,
             total:         Number(row.TOTAL_AMOUNT) || 0,
@@ -572,7 +572,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
                 items:        orderData.items,
                 total:        Number(orderData.total) || 0,
                 tableNumber:  orderData.tableNumber  ?? o.tableNumber,
-                customerName: orderData.customerName ?? o.customerName,
+                branchName: orderData.branchName ?? o.branchName,
                 notes:        orderData.notes        ?? o.notes,
                 orderStatus:  orderData.orderStatus  ?? o.orderStatus,
               }
@@ -588,15 +588,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode; appsScriptUrl: 
             total:        Number(orderData.total) || 0,
             subtotal:     Number(orderData.total) || 0,
             tableNumber:  orderData.tableNumber  ?? '',
-            customerName: orderData.customerName ?? '',
+            branchName: orderData.branchName ?? '',
             notes:        orderData.notes        ?? '',
             ...(orderData.orderStatus ? { status: orderData.orderStatus } : {}),
           }
         : {
             action:        'createOrder',
             items:         itemsPayload,
-            customerName:  orderData.customerName  || '',
-            phoneNumber:   orderData.phoneNumber   || '',
+            branchName: orderData.branchName || '',
+            
             tableNumber:   orderData.tableNumber   || '',
             paymentMethod: orderData.paymentMethod || 'Tiền mặt',
             notes:         orderData.notes         || '',

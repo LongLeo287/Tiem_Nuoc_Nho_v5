@@ -8,7 +8,7 @@ interface GlobalQrModalProps {
   onClose: () => void;
   amount?: number;
   onConfirm?: () => void;
-  customerName?: string;
+  branchName?: string;
   orderCode?: string;
 }
 
@@ -30,7 +30,7 @@ const QR_API = (data: string) =>
  *   ──────────────────────
  *   Tổng         : ~505px  ✓ (< 560px safe area)
  */
-export function GlobalQrModal({ isOpen, onClose, amount, onConfirm, customerName, orderCode }: GlobalQrModalProps) {
+export function GlobalQrModal({ isOpen, onClose, amount, onConfirm, branchName, orderCode }: GlobalQrModalProps) {
   const [activeTab, setActiveTab] = useState<BankKey>('timo');
   const [timoQrUrl, setTimoQrUrl] = useState('');
   const [momoQrUrl, setMomoQrUrl] = useState('');
@@ -39,10 +39,10 @@ export function GlobalQrModal({ isOpen, onClose, amount, onConfirm, customerName
 
   useEffect(() => {
     if (!isOpen) return;
-    const desc = [customerName, orderCode].filter(Boolean).join('_').slice(0, 25);
+    const desc = [branchName, orderCode].filter(Boolean).join('_').slice(0, 25);
     setTimoQrUrl(QR_API(buildTimoQr(TIMO.baseQrString, amount && amount > 0 ? amount : undefined, desc || undefined)));
     setMomoQrUrl(QR_API(buildMomoQr(MOMO.baseQrString, amount && amount > 0 ? amount : undefined, desc || undefined)));
-  }, [amount, isOpen, customerName, orderCode]);
+  }, [amount, isOpen, branchName, orderCode]);
 
   const handleCopyMomo = async () => {
     await navigator.clipboard.writeText(MOMO.phone);
@@ -141,11 +141,11 @@ export function GlobalQrModal({ isOpen, onClose, amount, onConfirm, customerName
 
           {/* ⑤ Actions — text lớn hơn */}
           <div className="px-4 pt-2 pb-4 space-y-2 shrink-0 border-t border-stone-100 dark:border-stone-800">
-            {(customerName || orderCode) && (
+            {(branchName || orderCode) && (
               <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
                 <span className="text-[9px] font-black text-stone-400 uppercase tracking-widest">Nội dung CK</span>
                 <span className="text-xs font-black text-stone-700 dark:text-stone-200 truncate max-w-[190px] text-right">
-                  {[customerName, orderCode].filter(Boolean).join('_')}
+                  {[branchName, orderCode].filter(Boolean).join('_')}
                 </span>
               </div>
             )}

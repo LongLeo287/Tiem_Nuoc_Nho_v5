@@ -161,8 +161,8 @@ export const Invoice: React.FC<InvoiceProps> = ({ order, onClose }) => {
               <h1 className="text-xl font-black uppercase tracking-tighter mb-1">
                 {SHOP.name.toUpperCase()}
               </h1>
-              {order.customerName && order.customerName !== SHOP.name && (
-                <p className="text-[10px] text-stone-500 font-bold">{order.customerName}</p>
+              {order.branchName && order.branchName !== SHOP.name && (
+                <p className="text-[10px] text-stone-500 font-bold">{order.branchName}</p>
               )}
               <p className="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Hóa đơn thanh toán</p>
             </div>

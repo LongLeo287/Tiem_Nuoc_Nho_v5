@@ -49,8 +49,9 @@ export interface CartItem extends MenuItem {
 
 export interface OrderRow {
   ORDER_ID: string;
-  CUSTOMER_NAME: string;
-  PHONE: string;
+  BRANCH_NAME: string;
+    // PHONE removed
+
   TABLE_NO: string;
   ITEM_ID: string;
   ITEM_NAME: string;
@@ -65,8 +66,8 @@ export interface OrderRow {
 
 export interface OrderData {
   orderId: string;
-  customerName: string;
-  phoneNumber: string;
+  branchName: string;
+  
   tableNumber: string;
   items: CartItem[];
   total: number;

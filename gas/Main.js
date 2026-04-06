@@ -139,6 +139,12 @@ function doPost(e) {
           "Đã khoá đơn hàng",
         );
 
+      case "migrateOrdersData15Cols":
+        return successResponse(
+          migrateOrdersData15Cols(),
+          "Đã migrate ORDERS sang 15 columns",
+        );
+
       case "unlockOrder":
         return successResponse(
           unlockOrder(payload),
