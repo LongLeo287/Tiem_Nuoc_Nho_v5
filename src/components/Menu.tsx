@@ -494,7 +494,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
   }
 
   return (
-    <div className="flex flex-col min-h-full lg:h-full lg:w-full lg:min-h-0">
+    <div className="flex flex-col min-h-full lg:h-full lg:w-full lg:min-h-0 min-w-0">
       {/* ── Layer 1: Search + Controls ── */}
       <div
         className={`fixed left-0 right-0 top-[56px] lg:static lg:inset-x-auto z-30 bg-white/95 dark:bg-[#0a0a0a] backdrop-blur-none px-4 pt-4 pb-3 border-b border-stone-100/50 dark:border-white/5 shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
