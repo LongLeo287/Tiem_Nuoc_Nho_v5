@@ -551,7 +551,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 lg:sticky lg:inset-auto z-40 px-4 py-3 flex justify-between items-center bg-white/80 dark:bg-stone-900/60 backdrop-blur-[48px] saturate-[1.8] border-b border-stone-100/50 dark:border-stone-800 lg:border-none lg:bg-transparent lg:dark:bg-transparent lg:shadow-none w-full lg:max-w-7xl mx-auto lg:mt-2 lg:px-6">
+      <header className="fixed top-0 left-0 right-0 lg:sticky lg:inset-auto z-40 px-4 py-3 flex justify-between items-center bg-white/80 dark:bg-stone-900/60 backdrop-blur-[48px] saturate-[1.8] border-b border-stone-100/50 dark:border-stone-800 lg:border-none lg:bg-transparent lg:dark:bg-transparent lg:shadow-none w-full lg:max-w-none mx-auto lg:mt-2 lg:px-6">
         <div className="flex bg-stone-100/80 dark:bg-stone-800/80 p-1 rounded-xl border border-stone-200/50 dark:border-stone-700/50 lg:hidden">
           <button 
             onClick={() => handleTabClick('/', 'order')}
@@ -607,7 +607,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
 
       {/* Main Content */}
       <main 
-        className="flex-grow overflow-y-auto w-full max-w-7xl mx-auto relative pt-[56px] lg:pt-0 px-0 lg:px-6"
+        className="flex-grow overflow-y-auto w-full lg:max-w-none mx-auto relative pt-[56px] lg:pt-0 px-0 lg:px-6"
         onScroll={handleMainScroll}
       >
         <div className="h-full">

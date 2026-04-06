@@ -640,7 +640,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
                   {...props} 
                   ref={ref as any} 
                   className={viewMode === 'grid' 
-                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-4 pb-8" 
+                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-3 px-4 pb-8" 
                     : "flex flex-col gap-2.5 px-4 pb-8"} 
                 />
               )),
@@ -860,10 +860,10 @@ const MenuItemCard = memo(({
   return (
     <div 
       onClick={handleItemClick}
-      className={`group relative bg-white dark:bg-stone-900 rounded-[32px] p-4 flex flex-col justify-between h-full border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer ${item.isOutOfStock ? 'opacity-60 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''} ${colorClass}`}
+      className={`group relative bg-white dark:bg-stone-900 rounded-[28px] lg:rounded-3xl p-4 flex flex-col justify-between h-full border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer ${item.isOutOfStock ? 'opacity-60 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''} ${colorClass}`}
     >
       {item.isOutOfStock && (
-        <div className="absolute inset-0 z-20 bg-white/40 dark:bg-black/40 backdrop-blur-[1px] flex items-center justify-center rounded-[32px]">
+        <div className="absolute inset-0 z-20 bg-white/40 dark:bg-black/40 backdrop-blur-[1px] flex items-center justify-center rounded-[28px] lg:rounded-3xl">
           <div className="bg-stone-800/90 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full transform -rotate-6 shadow-xl border border-white/10 tracking-widest">Hết hàng</div>
         </div>
       )}
