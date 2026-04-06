@@ -485,7 +485,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
     <div className="flex flex-col min-h-full">
       {/* ── Layer 1: Search + Controls ── */}
       <div
-        className={`fixed left-0 right-0 top-[56px] lg:sticky lg:top-[-1px] lg:inset-x-auto z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md px-4 pt-3 pb-3 lg:pb-0 border-b lg:border-none border-stone-100/50 dark:border-stone-800/50 shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full ${
+        className={`fixed left-0 right-0 top-[56px] lg:sticky lg:top-[-1px] lg:inset-x-auto z-30 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-xl px-4 pt-3 pb-3 border-b border-stone-100/50 dark:border-white/5 lg:border-none shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full ${
           isHeaderHidden ? '-translate-y-full lg:translate-y-0' : 'translate-y-0'
         }`}
       >
@@ -589,13 +589,13 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
 
       {/* ── Layer 2: Category Tabs ── */}
       <div
-        className={`fixed left-0 right-0 top-[120px] lg:sticky lg:top-[56px] lg:inset-x-auto z-20 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 transition-transform duration-300 ease-in-out w-full ${
+        className={`fixed left-0 right-0 top-[120px] lg:sticky lg:top-[66px] lg:inset-x-auto z-20 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-stone-100 dark:border-white/5 transition-transform duration-300 ease-in-out w-full ${
           isHeaderHidden ? '-translate-y-[58px] lg:translate-y-0' : 'translate-y-0'
         }`}
       >
         <div
           ref={categoryScrollRef}
-          className="flex gap-2 overflow-x-auto py-2 px-4 no-scrollbar"
+          className="flex gap-2 overflow-x-auto py-3 lg:py-4 px-4 no-scrollbar"
         >
           {displayCategories.map((category, index) => {
             const isActive = activeCategory === category && !searchQuery;
@@ -607,10 +607,10 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
                   setActiveCategory(category);
                   setSearchQuery('');
                 }}
-                className={`relative flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-200 ${
+                className={`relative flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-200 border ${
                   isActive
-                    ? 'text-white bg-[#C9252C] shadow-lg shadow-red-900/20 scale-105'
-                    : 'bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700 active:scale-95'
+                    ? 'text-white bg-[#C9252C] border-[#C9252C] shadow-lg shadow-red-900/20'
+                    : 'bg-stone-100 dark:bg-stone-800/50 text-stone-500 dark:text-stone-400 border-transparent hover:bg-stone-200 dark:hover:bg-stone-800 active:scale-95'
                 }`}
               >
                 <span className="relative z-10 flex items-center gap-1.5">
@@ -640,8 +640,8 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
                   {...props} 
                   ref={ref as any} 
                   className={viewMode === 'grid' 
-                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 lg:gap-5 px-4 pb-8" 
-                    : "flex flex-col gap-2.5 px-4 pb-8"} 
+                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 lg:gap-5 px-4 pb-8 pt-4" 
+                    : "flex flex-col gap-2.5 px-4 pb-8 pt-4"} 
                 />
               )),
               Item: React.forwardRef((props, ref) => (
