@@ -606,14 +606,14 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
 
       {/* Main Content */}
       <main 
-        className="flex-grow overflow-y-auto w-full lg:max-w-none mx-auto relative pt-[56px] lg:pt-0 px-0 lg:px-6"
+        className="flex-grow overflow-y-auto w-full lg:max-w-none mx-auto relative pt-[56px] lg:pt-0 px-0 lg:px-6 lg:overflow-hidden flex flex-col min-w-0"
         onScroll={handleMainScroll}
       >
-        <div className="h-full">
+        <div className="h-full flex flex-col min-h-0 min-w-0">
           <AnimatePresence mode="popLayout">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="h-full">
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="h-full lg:flex lg:flex-col lg:min-h-0 min-w-0">
                   <Menu 
                     appsScriptUrl={appsScriptUrl}
                     onNavigateSettings={() => {}}
@@ -621,8 +621,8 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
                 </motion.div>
               } />
               <Route path="/cart" element={
-                <div className="lg:hidden h-full">
-                  <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full">
+                <div className="lg:hidden h-full flex flex-col min-h-0 min-w-0">
+                  <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full flex flex-col min-h-0 min-w-0">
                     <Cart
                       appsScriptUrl={appsScriptUrl}
                       onNavigateSettings={() => {}}
