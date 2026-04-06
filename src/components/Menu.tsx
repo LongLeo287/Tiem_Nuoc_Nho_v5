@@ -44,8 +44,20 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
   const lastScrollTop = React.useRef(0);
 
   useEffect(() => {
-    const main = document.querySelector('main');
-    if (main) setScrollParent(main);
+    const handleScrollParent = () => {
+      const isDesktop = window.innerWidth >= 1024;
+      const inner = document.getElementById('pos-scroll-container');
+      const m = document.querySelector('main');
+      if (isDesktop && inner) {
+        setScrollParent(inner);
+      } else if (m) {
+        setScrollParent(m);
+      }
+    };
+    
+    handleScrollParent();
+    window.addEventListener('resize', handleScrollParent);
+    return () => window.removeEventListener('resize', handleScrollParent);
   }, []);
 
   const [activeCategory, setActiveCategory] = useState('Tất cả');
@@ -482,10 +494,10 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
   }
 
   return (
-    <div className="flex flex-col min-h-full">
+    <div className="flex flex-col min-h-full lg:h-full lg:w-full lg:min-h-0">
       {/* ── Layer 1: Search + Controls ── */}
       <div
-        className={`fixed left-0 right-0 top-[56px] lg:sticky lg:top-[-1px] lg:inset-x-auto z-30 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-xl px-4 pt-3 pb-3 border-b border-stone-100/50 dark:border-white/5 lg:border-none shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full ${
+        className={`fixed left-0 right-0 top-[56px] lg:static lg:inset-x-auto z-30 bg-white/95 dark:bg-[#0a0a0a] backdrop-blur-none px-4 pt-4 pb-3 border-b border-stone-100/50 dark:border-white/5 shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
           isHeaderHidden ? '-translate-y-full lg:translate-y-0' : 'translate-y-0'
         }`}
       >
@@ -589,7 +601,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
 
       {/* ── Layer 2: Category Tabs ── */}
       <div
-        className={`fixed left-0 right-0 top-[120px] lg:sticky lg:top-[66px] lg:inset-x-auto z-20 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-stone-100 dark:border-white/5 transition-transform duration-300 ease-in-out w-full ${
+        className={`fixed left-0 right-0 top-[120px] lg:static lg:inset-x-auto z-20 bg-white/95 dark:bg-[#0a0a0a] backdrop-blur-none border-b border-stone-100 dark:border-white/5 transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
           isHeaderHidden ? '-translate-y-[58px] lg:translate-y-0' : 'translate-y-0'
         }`}
       >
@@ -626,7 +638,10 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
       </div>
 
       {/* ── Content area ── */}
-      <div className={`flex-grow relative pb-32 lg:pb-12 min-h-[600px] transition-[padding] duration-300 ease-in-out lg:pt-0 ${isHeaderHidden ? 'pt-[62px]' : 'pt-[124px]'}`}>
+      <div 
+        id="pos-scroll-container"
+        className={`flex-grow lg:flex-1 relative pb-32 lg:pb-0 min-h-[600px] lg:min-h-0 lg:overflow-y-auto transition-[padding] duration-300 ease-in-out lg:pt-0 custom-scrollbar ${isHeaderHidden ? 'pt-[62px]' : 'pt-[124px]'}`}
+      >
         {filteredItems.length > 0 ? (
           <VirtuosoGrid
             ref={virtuosoRef}
@@ -635,13 +650,14 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
             style={{ height: '100%' }}
             computeItemKey={(index, item) => item.name}
             components={{
+              Header: () => <div className="h-4 lg:h-6" />,
               List: React.forwardRef((props, ref) => (
                 <div 
                   {...props} 
                   ref={ref as any} 
                   className={viewMode === 'grid' 
-                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 lg:gap-5 px-4 pb-8 pt-4" 
-                    : "flex flex-col gap-2.5 px-4 pb-8 pt-4"} 
+                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 lg:gap-5 px-4 pb-8" 
+                    : "flex flex-col gap-2.5 px-4 pb-8"} 
                 />
               )),
               Item: React.forwardRef((props, ref) => (

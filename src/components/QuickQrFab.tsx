@@ -15,8 +15,15 @@ export const QuickQrFab: React.FC<QuickQrFabProps> = ({ onClick, appMode }) => {
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const main = document.querySelector('main');
-    if (!main) return;
+    const getScrollElement = () => {
+      const isDesktop = window.innerWidth >= 1024;
+      const inner = document.getElementById('pos-scroll-container');
+      const main = document.querySelector('main');
+      return (isDesktop && inner) ? inner : main;
+    };
+
+    const target = getScrollElement();
+    if (!target) return;
 
     const handleScroll = () => {
       setIsScrolling(true);
@@ -26,9 +33,9 @@ export const QuickQrFab: React.FC<QuickQrFabProps> = ({ onClick, appMode }) => {
       }, 400);
     };
 
-    main.addEventListener('scroll', handleScroll, { passive: true });
+    target.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      main.removeEventListener('scroll', handleScroll);
+      target.removeEventListener('scroll', handleScroll);
       if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
     };
   }, []);
@@ -41,7 +48,7 @@ export const QuickQrFab: React.FC<QuickQrFabProps> = ({ onClick, appMode }) => {
   return (
     <button
       onClick={onClick}
-      className={`fixed bottom-[90px] left-6 z-50 w-14 h-14 bg-[#C9252C] text-white rounded-full shadow-xl flex items-center justify-center hover:bg-[#B91C1C] transition-all duration-300 ${
+      className={`fixed bottom-[90px] left-6 lg:bottom-10 lg:left-[284px] z-50 w-14 h-14 bg-[#C9252C] text-white rounded-full shadow-xl flex items-center justify-center hover:bg-[#B91C1C] transition-all duration-300 ${
         isScrolling ? 'opacity-0 scale-75 pointer-events-none' : 'opacity-100 scale-100'
       }`}
       aria-label="Mở mã QR"

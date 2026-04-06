@@ -9,11 +9,18 @@ export const BackToTopFab = () => {
   const { isFabHidden } = useUI();
 
   useEffect(() => {
-    const main = document.querySelector('main');
-    if (!main) return;
+    const getScrollElement = () => {
+      const isDesktop = window.innerWidth >= 1024;
+      const inner = document.getElementById('pos-scroll-container');
+      const main = document.querySelector('main');
+      return (isDesktop && inner) ? inner : main;
+    };
+
+    const target = getScrollElement();
+    if (!target) return;
 
     const handleScroll = () => {
-      setShowBackToTop(main.scrollTop > 400);
+      setShowBackToTop(target.scrollTop > 400);
 
       // Mark as scrolling → hide FABs
       setIsScrolling(true);
@@ -25,9 +32,9 @@ export const BackToTopFab = () => {
       }, 400);
     };
 
-    main.addEventListener('scroll', handleScroll, { passive: true });
+    target.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      main.removeEventListener('scroll', handleScroll);
+      target.removeEventListener('scroll', handleScroll);
       if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
     };
   }, []);
@@ -37,10 +44,11 @@ export const BackToTopFab = () => {
   return (
     <button
       onClick={() => {
-        const main = document.querySelector('main');
-        if (main) main.scrollTo({ top: 0, behavior: 'auto' });
+        const isDesktop = window.innerWidth >= 1024;
+        const target = (isDesktop && document.getElementById('pos-scroll-container')) || document.querySelector('main');
+        if (target) target.scrollTo({ top: 0, behavior: 'auto' });
       }}
-      className={`fixed bottom-[160px] left-6 z-50 w-12 h-12 bg-white dark:bg-stone-900 text-stone-800 dark:text-white rounded-full shadow-2xl border border-stone-100 dark:border-stone-800 flex items-center justify-center transition-all duration-300 ${
+      className={`fixed bottom-[160px] left-6 lg:bottom-[110px] lg:left-[284px] z-50 w-12 h-12 bg-white dark:bg-stone-900 text-stone-800 dark:text-white rounded-full shadow-2xl border border-stone-100 dark:border-stone-800 flex items-center justify-center transition-all duration-300 ${
         isScrolling ? 'opacity-0 scale-75 pointer-events-none' : 'opacity-100 scale-100'
       }`}
       aria-label="Lên đầu trang"
