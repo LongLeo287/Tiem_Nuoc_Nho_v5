@@ -24,11 +24,7 @@
 
 function setupAllSheets() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const ui = SpreadsheetApp.getUi();
 
-  ui.alert(
-    "🔄 Đang thiết lập...\nVui lòng chờ, quá trình có thể mất 1-2 phút.",
-  );
 
   _setupMenu(ss);
   _setupOrders(ss);
@@ -47,9 +43,6 @@ function setupAllSheets() {
 
   SpreadsheetApp.flush();
   Logger.log("=== SETUP + DESIGN HOÀN TẤT ===");
-  ui.alert(
-    "✅ Hoàn tất!\nTất cả 11 sheets đã được thiết lập và căn chỉnh thiết kế đồng bộ L6.",
-  );
 }
 
 // ============================================================================
@@ -149,50 +142,49 @@ function _setupOrders(ss) {
   var sheet = _getOrCreate(ss, CONFIG.SHEET_ORDERS);
   _setHeader(
     sheet,
-    [
-      "ORDER_ID",       // A
-      "CREATED_AT",     // B
-      "TABLE_NO",       // C
-      "ITEMS",          // D
-      "SUBTOTAL",       // E
-      "DISCOUNT",       // F
-      "VAT_AMOUNT",     // G
-      "TOTAL_AMOUNT",   // H
-      "ORDER_STATUS",   // I
-      "PAYMENT_METHOD", // J
-      "CUSTOMER_NAME",  // K
-      "PHONE",          // L
-      "NOTES",          // M
-      "PAYMENT_STATUS", // N
-      "LOCKED_BY",      // O
-      "LOCKED_AT",      // P
+        [
+      "ORDER_ID",       // A (1)
+      "CREATED_AT",     // B (2)
+      "BRANCH_NAME",    // C (3)
+      "TABLE_NO",       // D (4)
+      "ITEMS",          // E (5)
+      "NOTES",          // F (6)
+      "SUBTOTAL",       // G (7)
+      "DISCOUNT",       // H (8)
+      "VAT_AMOUNT",     // I (9)
+      "TOTAL_AMOUNT",   // J (10)
+      "ORDER_STATUS",   // K (11)
+      "PAYMENT_METHOD", // L (12)
+      "PAYMENT_STATUS", // M (13)
+      "LOCKED_BY",      // N (14)
+      "LOCKED_AT",      // O (15)
     ],
     "#dcfce7",
   );
 
-  ["E", "F", "G", "H"].forEach(function (col) {
+  ["G", "H", "I", "J"].forEach(function (col) {
     sheet.getRange(col + "2:" + col + "1000").setNumberFormat("#,##0");
   });
   sheet.getRange("B2:B1000").setNumberFormat("yyyy-mm-dd hh:mm:ss");
 
-  // Col I: trạng thái đơn hàng
-  _dropdownValidation(sheet, 9, 2, 1000, [
+  // Col K (11): trạng thái đơn hàng
+  _dropdownValidation(sheet, 11, 2, 1000, [
     "Chờ xử lý",
     "Đã nhận",
     "Đang làm",
     "Hoàn thành",
     "Đã hủy",
   ]);
-  // Col J: phương thức thanh toán (chỉ phương thức, trạng thái đã chuyển sang Col N)
-  _dropdownValidation(sheet, 10, 2, 1000, [
+  // Col L (12): phương thức thanh toán
+  _dropdownValidation(sheet, 12, 2, 1000, [
     "Tiền mặt",
     "Chuyển khoản",
     "MoMo",
     "VNPay",
     "Chưa xác định",
   ]);
-  // Col N: trạng thái thanh toán (mới)
-  _dropdownValidation(sheet, 14, 2, 1000, [
+  // Col M (13): trạng thái thanh toán
+  _dropdownValidation(sheet, 13, 2, 1000, [
     "Chưa thanh toán",
     "Chờ thanh toán",
     "Đã thanh toán",
@@ -200,12 +192,12 @@ function _setupOrders(ss) {
   ]);
 
   // Làm rộng cột ITEMS (chứa JSON)
-  sheet.setColumnWidth(4, 250);
+  sheet.setColumnWidth(5, 250);
   _autoResizeCols(sheet, 3);
-  sheet.autoResizeColumn(5);
-  sheet.autoResizeColumn(6);
   sheet.autoResizeColumn(7);
   sheet.autoResizeColumn(8);
+  sheet.autoResizeColumn(9);
+  sheet.autoResizeColumn(10);
   Logger.log("[Setup] ORDERS ✅");
 }
 
@@ -484,28 +476,28 @@ function _setupDashboard(ss) {
     // ── DOANH THU ────────────────────────────────────────────────────────────
     [
       "🏆 DOANH THU NĂM (lũy kế)",
-      '=IFERROR(SUMIF(ORDERS!I2:I,"Hoàn thành",ORDERS!H2:H),0)',
+      '=IFERROR(SUMIF(ORDERS!K2:K,"Hoàn thành",ORDERS!J2:J),0)',
       "⚠️ GAS đọc ô B2 để kích hoạt hóa đơn điện tử",
       "#fef08a",
     ],
 
     [
       "📅 Doanh thu hôm nay",
-      '=IFERROR(SUMPRODUCT((ORDERS!I2:I="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm-dd"),10)=TEXT(TODAY(),"yyyy-mm-dd"))*ORDERS!H2:H),0)',
+      '=IFERROR(SUMPRODUCT((ORDERS!K2:K="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm-dd"),10)=TEXT(TODAY(),"yyyy-mm-dd"))*ORDERS!J2:J),0)',
       "",
       "#f0fdf4",
     ],
 
     [
       "📆 Doanh thu tháng này",
-      '=IFERROR(SUMPRODUCT((ORDERS!I2:I="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm"),7)=TEXT(TODAY(),"yyyy-mm"))*ORDERS!H2:H),0)',
+      '=IFERROR(SUMPRODUCT((ORDERS!K2:K="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm"),7)=TEXT(TODAY(),"yyyy-mm"))*ORDERS!J2:J),0)',
       "",
       "#f0fdf4",
     ],
 
     [
       "📆 Doanh thu tháng trước",
-      '=IFERROR(SUMPRODUCT((ORDERS!I2:I="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm"),7)=TEXT(EDATE(TODAY(),-1),"yyyy-mm"))*ORDERS!H2:H),0)',
+      '=IFERROR(SUMPRODUCT((ORDERS!K2:K="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm"),7)=TEXT(EDATE(TODAY(),-1),"yyyy-mm"))*ORDERS!J2:J),0)',
       "",
       "#f0fdf4",
     ],
@@ -513,28 +505,28 @@ function _setupDashboard(ss) {
     // ── ĐƠN HÀNG ─────────────────────────────────────────────────────────────
     [
       "🛍️ Đơn hoàn thành hôm nay",
-      '=IFERROR(SUMPRODUCT((ORDERS!I2:I="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm-dd"),10)=TEXT(TODAY(),"yyyy-mm-dd"))),0)',
+      '=IFERROR(SUMPRODUCT((ORDERS!K2:K="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm-dd"),10)=TEXT(TODAY(),"yyyy-mm-dd"))),0)',
       "",
       "#eff6ff",
     ],
 
     [
       "🛍️ Đơn hoàn thành tháng này",
-      '=IFERROR(SUMPRODUCT((ORDERS!I2:I="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm"),7)=TEXT(TODAY(),"yyyy-mm"))),0)',
+      '=IFERROR(SUMPRODUCT((ORDERS!K2:K="Hoàn thành")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm"),7)=TEXT(TODAY(),"yyyy-mm"))),0)',
       "",
       "#eff6ff",
     ],
 
     [
       "⏳ Đơn đang chờ / đang làm",
-      '=IFERROR(COUNTIF(ORDERS!I2:I,"Chờ xử lý")+COUNTIF(ORDERS!I2:I,"Đang làm")+COUNTIF(ORDERS!I2:I,"Đã nhận"),0)',
+      '=IFERROR(COUNTIF(ORDERS!K2:K,"Chờ xử lý")+COUNTIF(ORDERS!K2:K,"Đang làm")+COUNTIF(ORDERS!K2:K,"Đã nhận"),0)',
       "Cần xử lý ngay",
       "#fff7ed",
     ],
 
     [
       "❌ Đơn đã hủy (tháng này)",
-      '=IFERROR(SUMPRODUCT((ORDERS!I2:I="Đã hủy")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm"),7)=TEXT(TODAY(),"yyyy-mm"))),0)',
+      '=IFERROR(SUMPRODUCT((ORDERS!K2:K="Đã hủy")*(LEFT(TEXT(ORDERS!B2:B,"yyyy-mm"),7)=TEXT(TODAY(),"yyyy-mm"))),0)',
       "",
       "#fef2f2",
     ],

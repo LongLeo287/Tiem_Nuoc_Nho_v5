@@ -33,8 +33,8 @@ function getDashboardData() {
 
     rows.forEach((row) => {
       const timestamp = new Date(row[1]);
-      const amount = Number(row[7]) || 0;
-      const status = row[8];
+      const amount = Number(row[9]) || 0;
+      const status = row[10];
 
       if (
         status === "Hoàn thành" ||

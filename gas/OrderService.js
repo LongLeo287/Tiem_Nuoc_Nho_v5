@@ -10,12 +10,12 @@
  *   - deleteOrder()       → Xóa vĩnh viễn một đơn hàng (chỉ Manager)
  * ============================================================================
  *
- * CẤU TRÚC 13 CỘT CỦA SHEET ORDERS (A → M):
- *   A: ORDER_ID       B: CREATED_AT      C: TABLE_NO
- *   D: ITEMS          E: SUBTOTAL       F: DISCOUNT
- *   G: VAT_AMOUNT     H: TOTAL_AMOUNT     I: ORDER_STATUS
- *   J: THANH_TOAN     K: CUSTOMER_NAME  L: PHONE
- *   M: NOTES          N: PAYMENT_STATUS O: LOCKED_BY
+ * CẤU TRÚC 15 CỘT CỦA SHEET ORDERS (A → O):
+ *   A: ORDER_ID       B: CREATED_AT     C: BRANCH_NAME
+ *   D: TABLE_NO       E: ITEMS          F: NOTES
+ *   G: SUBTOTAL       H: DISCOUNT       I: VAT_AMOUNT
+ *   J: TOTAL_AMOUNT   K: ORDER_STATUS   L: PAYMENT_METHOD
+ *   M: PAYMENT_STATUS N: LOCKED_BY      O: LOCKED_AT
  *
  * LƯU Ý: Dòng 1 của sheet phải là dòng tiêu đề với đúng tên cột trên.
  * ============================================================================
@@ -56,7 +56,7 @@ function getOrdersData() {
     // Parse mảng items từ JSON string (cột D)
     let items = [];
     try {
-      const rawItems = row[3]; // Cột D: ITEMS
+      const rawItems = row[4]; // Cột E: ITEMS
       if (rawItems && rawItems !== "") {
         items = JSON.parse(rawItems.toString());
       }
@@ -69,21 +69,19 @@ function getOrdersData() {
     orderList.push({
       ORDER_ID: orderId.toString().trim(),
       CREATED_AT: row[1] ? row[1].toString() : new Date().toISOString(),
-      TABLE_NO: row[2] ? row[2].toString() : "",
+      BRANCH_NAME: row[2] ? row[2].toString() : "Chi nhánh",
+      TABLE_NO: row[3] ? row[3].toString() : "",
       ITEMS: items, // Mảng [{id, qty}] đã parse
-      SUBTOTAL: Number(row[4]) || 0,
-      DISCOUNT: Number(row[5]) || 0,
-      VAT_AMOUNT: Number(row[6]) || 0,
-      TOTAL_AMOUNT: Number(row[7]) || 0, // Tổng tiền thực thu
-      STATUS: row[8] ? row[8].toString() : "Hoàn thành",
-      PAYMENT_METHOD: row[9] ? row[9].toString() : "Tiền mặt",
-      CUSTOMER_NAME: row[10] ? row[10].toString() : "Khách",
-      PHONE: row[11] ? row[11].toString() : "",
-      NOTES: row[12] ? row[12].toString() : "",
-      // Col N (index 13): trạng thái thanh toán riêng
-      PAYMENT_STATUS: row[13] ? row[13].toString() : "Chưa thanh toán",
-      // Col O (index 14): trạng thái khoá đơn (editing lock)
-      LOCKED_BY: row[14] ? row[14].toString() : "",
+      NOTES: row[5] ? row[5].toString() : "",
+      SUBTOTAL: Number(row[6]) || 0,
+      DISCOUNT: Number(row[7]) || 0,
+      VAT_AMOUNT: Number(row[8]) || 0,
+      TOTAL_AMOUNT: Number(row[9]) || 0, // Tổng tiền thực thu
+      STATUS: row[10] ? row[10].toString() : "Hoàn thành",
+      PAYMENT_METHOD: row[11] ? row[11].toString() : "Tiền mặt",
+      PAYMENT_STATUS: row[12] ? row[12].toString() : "Chưa thanh toán",
+      LOCKED_BY: row[13] ? row[13].toString() : "",
+      LOCKED_AT: row[14] ? row[14].toString() : "",
     });
   });
 
@@ -139,9 +137,8 @@ function createNewOrder(payload) {
 
   // --- [C] Thông tin cơ bản ---
   const tableNo = payload.tableNumber || "Mang đi";
-  const customerName = payload.customerName || "";
-  const phoneNumber = payload.phoneNumber || "";
-  const notes = payload.notes || "";
+  const branchName = payload.branchName || "";
+    const notes = payload.notes || "";
   const thanhToan = payload.paymentMethod || "Tiền mặt";
 
   // --- [D] Tiền nong — KHÔNG để = 0 ---
@@ -165,21 +162,21 @@ function createNewOrder(payload) {
 
   // --- [G] Ghi vào sheet ORDERS (đúng 14 cột A → N) ---
   sheet.appendRow([
-    orderId,         // Cột A: ORDER_ID
-    dateStr,         // Cột B: CREATED_AT
-    tableNo,         // Cột C: TABLE_NO
-    itemsStr,        // Cột D: ITEMS (JSON string)
-    subtotal,        // Cột E: SUBTOTAL
-    discount,        // Cột F: DISCOUNT
-    vatAmount,       // Cột G: VAT_AMOUNT
-    thanhTien,       // Cột H: TOTAL_AMOUNT ← FIX: không còn = 0 nữa
-    trangThai,       // Cột I: ORDER_STATUS
-    thanhToan,       // Cột J: THANH_TOAN (phương thức: Tiền mặt / Chuyển khoản)
-    customerName,    // Cột K: CUSTOMER_NAME
-    phoneNumber,     // Cột L: PHONE
-    notes,           // Cột M: NOTES
-    "Chưa thanh toán", // Cột N: PAYMENT_STATUS (mặc định chưa thu tiền)
-    "",              // Cột O: LOCKED_BY (mặc định rỗng)
+    orderId,         // Cột A (0): ORDER_ID
+    dateStr,         // Cột B (1): CREATED_AT
+    branchName,      // Cột C (2): BRANCH_NAME
+    tableNo,         // Cột D (3): TABLE_NO
+    itemsStr,        // Cột E (4): ITEMS (JSON string)
+    notes,           // Cột F (5): NOTES
+    subtotal,        // Cột G (6): SUBTOTAL
+    discount,        // Cột H (7): DISCOUNT
+    vatAmount,       // Cột I (8): VAT_AMOUNT
+    thanhTien,       // Cột J (9): TOTAL_AMOUNT
+    trangThai,       // Cột K (10): ORDER_STATUS
+    thanhToan,       // Cột L (11): PAYMENT_METHOD
+    "Chưa thanh toán", // Cột M (12): PAYMENT_STATUS
+    "",              // Cột N (13): LOCKED_BY
+    "",              // Cột O (14): LOCKED_AT
   ]);
 
   // --- [H] Xử lý Hóa đơn điện tử (Nếu vượt ngưỡng 500tr) ---
@@ -209,7 +206,7 @@ function createNewOrder(payload) {
     thanhTien: thanhTien,
     trangThai: trangThai,
     invoice: invoiceResult,
-    loiNhan: "Đã chốt đơn " + orderId + " cho " + (customerName || "khách"),
+    loiNhan: "Đã chốt đơn " + orderId + " (" + (branchName || tableNo) + ")",
   };
 }
 
@@ -648,4 +645,43 @@ function unlockOrder(payload) {
     }
   }
   throw new Error("Không tìm thấy đơn hàng: " + orderId);
+}
+
+function migrateOrdersData15Cols() {
+  const sheet = getActiveDB().getSheetByName(CONFIG.SHEET_ORDERS);
+  if (!sheet) return 'No sheet';
+  const data = sheet.getDataRange().getValues();
+  if (data.length <= 1) return 'No data';
+  
+  // Old Mapping (16 cols):
+  // 0:ORDER_ID 1:CREATED_AT 2:TABLE 3:ITEMS 4:SUB 5:DISC 6:VAT 7:TOTAL 8:STATUS 9:PAYMETH 10:CUST 11:PHONE 12:NOTES 13:PAYSTAT 14:LOCKBY 15:LOCKAT
+  
+  // New Mapping (15 cols):
+  // 0:ID 1:TIME 2:BRANCH 3:TABLE 4:ITEMS 5:NOTES 6:SUB 7:DISC 8:VAT 9:TOTAL 10:STATUS 11:PAYMETH 12:PAYSTAT 13:LOCKBY 14:LOCKAT
+  
+  const newRows = [];
+  for (let i = 1; i < data.length; i++) {
+    const r = data[i];
+    const row = new Array(15).fill('');
+    row[0] = r[0]; // ID
+    row[1] = r[1]; // TIME
+    row[2] = r[10] || 'Chi nh�nh'; // BRANCH (was CUST 10)
+    row[3] = r[2]; // TABLE
+    row[4] = r[3]; // ITEMS
+    row[5] = r[12]; // NOTES
+    row[6] = r[4]; // SUB
+    row[7] = r[5]; // DISC
+    row[8] = r[6]; // VAT
+    row[9] = r[7]; // TOTAL
+    row[10] = r[8]; // STATUS
+    row[11] = r[9]; // PAYMETH
+    row[12] = r[13]; // PAYSTAT
+    row[13] = r[14] || ''; // LOCKBY
+    if(r.length > 15) row[14] = r[15] || ''; // LOCKAT
+    newRows.push(row);
+  }
+  
+  sheet.getRange(2, 1, sheet.getLastRow(), sheet.getLastColumn()).clearContent();
+  sheet.getRange(2, 1, newRows.length, 15).setValues(newRows);
+  return 'Success ' + newRows.length + ' rows migrated';
 }

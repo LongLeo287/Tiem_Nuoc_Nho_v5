@@ -2057,7 +2057,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                                 <span className="text-[9px] font-black text-stone-400 uppercase tracking-widest">#{order.orderId}</span>
                                 {isNew && <span className="w-1.5 h-1.5 bg-[#C9252C] rounded-full animate-pulse" />}
                               </div>
-                              <h3 className="font-black text-stone-800 dark:text-white text-base tracking-tight">{order.customerName}</h3>
+                              <h3 className="font-black text-stone-800 dark:text-white text-base tracking-tight">{order.branchName}</h3>
                             </div>
                           </div>
                           <div className="text-right">
@@ -3006,7 +3006,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
           isOpen={showQrPayment}
           onClose={() => { setShowQrPayment(false); setPayingOrder(null); }}
           amount={payingOrder.total}
-          customerName={payingOrder.customerName}
+          branchName={payingOrder.branchName}
           orderCode={payingOrder.orderId}
           onConfirm={async () => {
             await updateStatus(payingOrder.orderId, 'completed', {

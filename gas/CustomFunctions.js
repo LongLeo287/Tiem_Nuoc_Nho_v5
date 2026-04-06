@@ -4,7 +4,7 @@
  * CHỨC NĂNG: Hàm tự tạo (Custom Functions) dùng TRỰC TIẾP trên Google Sheets
  *
  * CÁCH DÙNG TRONG SHEET: Gõ tên hàm vào ô như một công thức bình thường.
- * VD: =DEM_SO_LUONG_MON("CF01", ORDERS!D2:D, ORDERS!I2:I)
+ * VD: =DEM_SO_LUONG_MON("CF01", ORDERS!E2:E, ORDERS!K2:K)
  *
  * LƯU Ý: Các hàm này KHÔNG phải API endpoint — không gọi từ App được.
  *        Chúng chỉ chạy khi bạn dùng trong ô Google Sheets.
@@ -20,7 +20,7 @@
 /**
  * Đếm tổng số lượng của một món ăn đã bán (chỉ đơn Completed).
  *
- * CÁCH DÙNG: =DEM_SO_LUONG_MON("CF01", ORDERS!D2:D, ORDERS!I2:I)
+ * CÁCH DÙNG: =DEM_SO_LUONG_MON("CF01", ORDERS!E2:E, ORDERS!K2:K)
  *
  * @param {string}              maMon       Mã món cần đếm (VD: "CF01")
  * @param {Array<Array<string>>} cotJson     Cột chứa JSON items (Cột D của ORDERS)
@@ -63,7 +63,7 @@ function DEM_SO_LUONG_MON(maMon, cotJson, cotTrangThai) {
 /**
  * Tính tổng doanh thu trong một khoảng ngày (chỉ đơn Completed).
  *
- * CÁCH DÙNG: =TINH_DOANH_THU("2026-03-01", "2026-03-31", ORDERS!B2:B, ORDERS!H2:H, ORDERS!I2:I)
+ * CÁCH DÙNG: =TINH_DOANH_THU("2026-03-01", "2026-03-31", ORDERS!B2:B, ORDERS!J2:J, ORDERS!K2:K)
  *
  * @param {string}               ngayBatDau  Ngày bắt đầu, format "yyyy-MM-dd"
  * @param {string}               ngayKetThuc Ngày kết thúc, format "yyyy-MM-dd"

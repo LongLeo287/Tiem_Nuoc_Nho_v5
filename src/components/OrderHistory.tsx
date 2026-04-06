@@ -17,8 +17,8 @@ import { OrderItemSheet } from './OrderItemSheet';
 // ─── types ────────────────────────────────────────────────────────────────────
 interface OrderHistoryItem {
   orderId: string;
-  customerName: string;
-  phoneNumber?: string;
+  branchName: string;
+  
   timestamp: string;
   total: number;
   items: any[];
@@ -601,7 +601,7 @@ function OrderCard({
         isOpen={showAdminQr}
         onClose={() => setShowAdminQr(false)}
         amount={order.total}
-        customerName={order.customerName}
+        branchName={order.branchName}
         orderCode={order.orderId}
         onConfirm={handleAdminConfirmQr}
       />
@@ -610,7 +610,7 @@ function OrderCard({
         isOpen={showQrForPayment}
         onClose={() => setShowQrForPayment(false)}
         amount={order.total}
-        customerName={order.customerName}
+        branchName={order.branchName}
         orderCode={order.orderId}
         onConfirm={handleConfirmTransfer}
       />
