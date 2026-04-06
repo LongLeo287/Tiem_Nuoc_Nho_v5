@@ -1,0 +1,50 @@
+{
+  "getMenu": [
+    "ma_mon",
+    "ten_mon",
+    "gia_ban",
+    "danh_muc",
+    "trang_thai",
+    "has_customizations"
+  ],
+  "getOrders": [
+    "ORDER_ID",
+    "TIMESTAMP",
+    "TABLE_NO",
+    "ITEMS",
+    "SUBTOTAL",
+    "DISCOUNT",
+    "VAT_AMOUNT",
+    "THANH_TIEN",
+    "STATUS",
+    "PAYMENT_METHOD",
+    "CUSTOMER_NAME",
+    "PHONE",
+    "NOTES",
+    "PAYMENT_STATUS",
+    "LOCKED_BY"
+  ],
+  "getSoTay": [
+    "id_thu_chi",
+    "thoi_gian",
+    "phan_loai",
+    "danh_muc",
+    "so_tien",
+    "ghi_chu"
+  ],
+  "getDashboard": {
+    "revenue": {
+      "today": 90000,
+      "thisWeek": 0,
+      "thisMonth": 90000
+    },
+    "orders": {
+      "today": 2,
+      "thisWeek": 0,
+      "thisMonth": 2
+    },
+    "totalAnnualRevenue": 1510000,
+    "isThresholdAlertActive": false,
+    "timestamp": "2026-04-06T08:27:41.586Z"
+  }
+}
