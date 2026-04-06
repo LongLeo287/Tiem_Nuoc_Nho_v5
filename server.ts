@@ -155,29 +155,28 @@ async function startServer() {
     const socket = new net.Socket();
     let isResponseSent = false;
 
-    const cleanup = () => {
-      socket.destroy();
-      setTimeout(() => printingOrders.delete(orderId), 3000); // cooldown 3s for retry
-    };
-
-    socket.setTimeout(2500); // 2.5s network connection timeout 
+    socket.setTimeout(4000); // 4s network connection timeout 
 
     socket.connect(port, printerIp, () => {
       try {
-        socket.write(buildEscPos(order));
+        const payload = buildEscPos(order);
+        
+        // Write data and use callback to end socket gracefully
+        socket.write(payload, () => {
+          socket.end(); // Graceful FIN packet to allow hardware buffer flush
+        });
+        
         if (!isResponseSent) {
           isResponseSent = true;
-          res.json({ success: true, message: 'Đã in thành công' });
+          res.json({ success: true, message: 'Gửi packet RAW TCP thành công' });
         }
-        // Give the socket some time to flush the buffer before closing
-        setTimeout(cleanup, 1000);
       } catch (e: any) {
         console.error('Lỗi khi gửi dữ liệu in:', e.message);
         if (!isResponseSent) {
           isResponseSent = true;
           res.status(500).json({ success: false, error: 'Lỗi in: ' + e.message });
         }
-        cleanup();
+        socket.destroy();
       }
     });
 
@@ -187,7 +186,7 @@ async function startServer() {
         isResponseSent = true;
         res.status(500).json({ success: false, error: 'Không thể kết nối máy in: ' + e.message });
       }
-      cleanup();
+      socket.destroy();
     });
     
     socket.on('timeout', () => {
@@ -196,7 +195,12 @@ async function startServer() {
         isResponseSent = true;
         res.status(500).json({ success: false, error: 'Phản hồi lệnh in quá chậm (Timeout): ' + printerIp });
       }
-      cleanup();
+      socket.destroy();
+    });
+
+    socket.on('close', () => {
+      // Cooldown 3s before allowing the same order to be printed again
+      setTimeout(() => printingOrders.delete(orderId), 3000);
     });
   });
   // ────────────────────────────────────────────────────────────────────────────
