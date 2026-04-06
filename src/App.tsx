@@ -403,7 +403,6 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1 custom-scrollbar">
           {((appMode === 'order' ? [
             { to: '/', icon: Coffee, label: 'Dashboard POS', desc: 'Thực đơn & Order' },
-            { to: '/cart', icon: ShoppingBag, label: 'Đơn đang tạo', desc: 'Các đơn nháp', badge: cartCount > 0 ? cartCount : availableDrafts.length },
             { to: '/history', icon: Clock, label: 'Lịch sử', desc: 'Đơn hàng gần đây' },
             { to: '/settings', icon: SettingsIcon, label: 'Cài đặt', desc: 'Kết nối ứng dụng' },
           ] : [
