@@ -404,7 +404,6 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
           {((appMode === 'order' ? [
             { to: '/', icon: Coffee, label: 'Dashboard POS', desc: 'Thực đơn & Order' },
             { to: '/history', icon: Clock, label: 'Lịch sử', desc: 'Đơn hàng gần đây' },
-            ...(!isAdmin ? [{ to: '/staff/operations', icon: LayoutDashboard, label: 'Vận hành', desc: 'Quản lý quầy' }] : []),
             ...(isAdmin ? [] : [{ to: '/settings', icon: SettingsIcon, label: 'Cài đặt', desc: 'Kết nối ứng dụng' }]),
           ] : [
             { to: '/staff/dashboard', icon: BarChart3, label: 'Tổng quan', desc: 'Báo cáo doanh thu', roles: ['manager'] },
@@ -714,7 +713,6 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
             { to: '/', icon: Coffee, label: 'Menu' },
             { to: '/cart', icon: ShoppingBag, label: 'Giỏ', badge: cartCount > 0 ? cartCount : availableDrafts.length },
             { to: '/history', icon: Clock, label: 'Lịch sử' },
-            ...(!isAdmin ? [{ to: '/staff/operations', icon: LayoutDashboard, label: 'Vận hành' }] : []),
             ...(isAdmin ? [] : [{ to: '/settings', icon: SettingsIcon, label: 'Cài đặt' }]),
           ] : [
             { to: '/staff/dashboard', icon: BarChart3, label: 'Dashboard', roles: ['manager'] },
