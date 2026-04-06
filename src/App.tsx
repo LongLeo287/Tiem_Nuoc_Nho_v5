@@ -622,12 +622,14 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
                 </motion.div>
               } />
               <Route path="/cart" element={
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full">
-                  <Cart
-                    appsScriptUrl={appsScriptUrl}
-                    onNavigateSettings={() => {}}
-                  />
-                </motion.div>
+                <div className="lg:hidden h-full">
+                  <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full">
+                    <Cart
+                      appsScriptUrl={appsScriptUrl}
+                      onNavigateSettings={() => {}}
+                    />
+                  </motion.div>
+                </div>
               } />
               <Route path="/history" element={
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-full">
@@ -655,6 +657,17 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
           </AnimatePresence>
         </div>
       </main>
+
+      {/* Desktop Right Panel (lg only) - Cart always visible */}
+      {appMode === 'order' && (
+        <div className="hidden lg:flex flex-col w-[380px] xl:w-[420px] bg-white dark:bg-stone-950 border-l border-stone-200 dark:border-stone-800 h-[100dvh] sticky top-0 shrink-0 z-40 relative">
+          <Cart
+            appsScriptUrl={appsScriptUrl}
+            onNavigateSettings={() => {}}
+            asSidePanel={true}
+          />
+        </div>
+      )}
 
       {/* Quick QR FAB */}
       <QuickQrFab 
