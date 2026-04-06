@@ -463,19 +463,27 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
 
   useEffect(() => {
     if (location.pathname === '/staff' || location.pathname === '/staff/') {
-      navigate('/staff/dashboard', { replace: true });
+      navigate(isAdmin ? '/staff/dashboard' : '/staff/operations', { replace: true });
     } else if (location.pathname.startsWith('/staff/dashboard')) {
-      setViewMode('dashboard');
+      if (!isAdmin) {
+        navigate('/staff/operations', { replace: true });
+      } else {
+        setViewMode('dashboard');
+      }
     } else if (location.pathname.startsWith('/staff/operations')) {
       // Default to orders if just /staff/operations
       setViewMode(prev => ['orders', 'inventory', 'menu'].includes(prev) ? prev : 'orders');
     } else if (location.pathname.startsWith('/staff/finance')) {
-      setViewMode('finance');
+      if (!isAdmin) {
+        navigate('/staff/operations', { replace: true });
+      } else {
+        setViewMode('finance');
+      }
     } else if (location.pathname.startsWith('/staff/users')) {
       if (isAdmin) {
         setViewMode('staff');
       } else {
-        navigate('/staff/dashboard', { replace: true });
+        navigate('/staff/operations', { replace: true });
       }
     }
   }, [location.pathname, navigate, isAdmin]);

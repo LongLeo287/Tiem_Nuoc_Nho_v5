@@ -434,10 +434,10 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
         >
           <h1 className="text-2xl sm:text-3xl font-black text-stone-800 dark:text-white tracking-tight">Cài đặt</h1>
           <p className="text-stone-500 dark:text-stone-400 font-medium text-sm">
-            {appMode === 'management' ? 'Quản lý cửa hàng và cấu hình hệ thống' : 'Tùy chỉnh cá nhân và thiết bị'}
+            {isAdmin ? 'Quản lý cửa hàng và cấu hình hệ thống' : 'Tùy chỉnh cá nhân và thiết bị'}
           </p>
         </motion.div>
-        {appMode === 'management' && (
+        {isAdmin && (
           <button
             onClick={handleResetToDefault}
             className="h-11 px-3 text-stone-400 hover:text-[#C9252C] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl flex items-center justify-center gap-2 tap-active"
@@ -462,56 +462,55 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
             className="space-y-6"
           >
             {/* Store Info Section */}
-            <section className="bg-white/80 dark:bg-stone-900/80 backdrop-blur-xl rounded-3xl p-5 sm:p-6 shadow-xl shadow-stone-200/50 dark:shadow-black/50 border border-white/50 dark:border-stone-800 space-y-5">
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 bg-red-50 dark:bg-red-900/20 text-[#C9252C] rounded-xl flex items-center justify-center shadow-inner">
-              <Store className="w-5 h-5" />
+            {isAdmin && (
+              <section className="bg-white/80 dark:bg-stone-900/80 backdrop-blur-xl rounded-3xl p-5 sm:p-6 shadow-xl shadow-stone-200/50 dark:shadow-black/50 border border-white/50 dark:border-stone-800 space-y-5">
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 bg-red-50 dark:bg-red-900/20 text-[#C9252C] rounded-xl flex items-center justify-center shadow-inner">
+                <Store className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="font-black text-stone-800 dark:text-white text-base leading-none">Thông tin cửa hàng</h2>
+                <p className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest mt-1">Store Info</p>
+              </div>
             </div>
-            <div>
-              <h2 className="font-black text-stone-800 dark:text-white text-base leading-none">Thông tin cửa hàng</h2>
-              <p className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest mt-1">Store Info</p>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider ml-1">Tên quán</label>
-              <input 
-                type="text" 
-                value={storeName}
-                onChange={(e) => setStoreName(e.target.value)}
-                placeholder="Nhập tên quán..."
-                disabled={appMode === 'order'}
-                className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl px-4 py-3 font-bold text-stone-800 dark:text-white text-sm focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none disabled:opacity-60"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider ml-1">Mật khẩu Wifi</label>
-              <div className="relative">
-                <Wifi className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider ml-1">Tên quán</label>
                 <input 
                   type="text" 
-                  value={wifiPass}
-                  onChange={(e) => setWifiPass(e.target.value)}
-                  placeholder="Nhập mật khẩu wifi..."
-                  disabled={appMode === 'order'}
-                  className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl pl-11 pr-4 py-3 font-bold text-stone-800 dark:text-white text-sm focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none disabled:opacity-60"
+                  value={storeName}
+                  onChange={(e) => setStoreName(e.target.value)}
+                  placeholder="Nhập tên quán..."
+                  className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl px-4 py-3 font-bold text-stone-800 dark:text-white text-sm focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none disabled:opacity-60"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider ml-1">Mật khẩu Wifi</label>
+                <div className="relative">
+                  <Wifi className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+                  <input 
+                    type="text" 
+                    value={wifiPass}
+                    onChange={(e) => setWifiPass(e.target.value)}
+                    placeholder="Nhập mật khẩu wifi..."
+                    className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl pl-11 pr-4 py-3 font-bold text-stone-800 dark:text-white text-sm focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none disabled:opacity-60"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5 md:col-span-2">
+                <label className="text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider ml-1">Địa chỉ</label>
+                <input 
+                  type="text" 
+                  value={storeAddress}
+                  onChange={(e) => setStoreAddress(e.target.value)}
+                  placeholder="Nhập địa chỉ quán..."
+                  className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl px-4 py-3 font-bold text-stone-800 dark:text-white text-sm focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none disabled:opacity-60"
                 />
               </div>
             </div>
-            <div className="space-y-1.5 md:col-span-2">
-              <label className="text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider ml-1">Địa chỉ</label>
-              <input 
-                type="text" 
-                value={storeAddress}
-                onChange={(e) => setStoreAddress(e.target.value)}
-                placeholder="Nhập địa chỉ quán..."
-                disabled={appMode === 'order'}
-                className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl px-4 py-3 font-bold text-stone-800 dark:text-white text-sm focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none disabled:opacity-60"
-              />
-            </div>
-          </div>
-        </section>
+          </section>
+            )}
 
         {/* Preferences Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -576,7 +575,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
         </div>
 
         {/* Connection Settings - Management Only */}
-        {appMode === 'management' && (
+        {isAdmin && (
           <section className="bg-white dark:bg-stone-900 rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-100 dark:border-stone-800 space-y-5">
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 bg-orange-50 dark:bg-orange-900/20 text-orange-500 rounded-xl flex items-center justify-center shadow-inner">
@@ -624,7 +623,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
         )}
 
         {/* Sync Settings - Management Only */}
-        {appMode === 'management' && (
+        {isAdmin && (
           <section className="bg-white dark:bg-stone-900 rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-100 dark:border-stone-800 space-y-5">
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/20 text-blue-500 rounded-xl flex items-center justify-center shadow-inner">
@@ -742,7 +741,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
         </section>
 
         {/* AI Settings - Management Only */}
-        {appMode === 'management' && (
+        {isAdmin && (
           <section className="bg-white dark:bg-stone-900 rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-100 dark:border-stone-800 space-y-5">
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center shadow-inner">
