@@ -404,10 +404,11 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
           {((appMode === 'order' ? [
             { to: '/', icon: Coffee, label: 'Dashboard POS', desc: 'Thực đơn & Order' },
             { to: '/history', icon: Clock, label: 'Lịch sử', desc: 'Đơn hàng gần đây' },
+            ...(!isAdmin ? [{ to: '/staff/operations', icon: LayoutDashboard, label: 'Vận hành', desc: 'Quản lý quầy' }] : []),
             ...(isAdmin ? [] : [{ to: '/settings', icon: SettingsIcon, label: 'Cài đặt', desc: 'Kết nối ứng dụng' }]),
           ] : [
             { to: '/staff/dashboard', icon: BarChart3, label: 'Tổng quan', desc: 'Báo cáo doanh thu', roles: ['manager'] },
-            { to: '/staff/operations', icon: LayoutDashboard, label: 'Vận hành', desc: 'Quản lý quầy', roles: ['staff', 'manager'] },
+            { to: '/staff/operations', icon: LayoutDashboard, label: 'Vận hành', desc: 'Quản lý quầy', roles: ['manager'] },
             { to: '/staff/finance', icon: Wallet, label: 'Tài chính', desc: 'Kiểm soát dòng tiền', roles: ['manager'] },
             { to: '/staff/users', icon: Users, label: 'Nhân sự', desc: 'Quản trị nhân viên', roles: ['manager'] },
             { to: '/settings', icon: SettingsIcon, label: 'Cài đặt', desc: 'Cấu hình hệ thống' },
@@ -713,10 +714,11 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
             { to: '/', icon: Coffee, label: 'Menu' },
             { to: '/cart', icon: ShoppingBag, label: 'Giỏ', badge: cartCount > 0 ? cartCount : availableDrafts.length },
             { to: '/history', icon: Clock, label: 'Lịch sử' },
+            ...(!isAdmin ? [{ to: '/staff/operations', icon: LayoutDashboard, label: 'Vận hành' }] : []),
             ...(isAdmin ? [] : [{ to: '/settings', icon: SettingsIcon, label: 'Cài đặt' }]),
           ] : [
             { to: '/staff/dashboard', icon: BarChart3, label: 'Dashboard', roles: ['manager'] },
-            { to: '/staff/operations', icon: LayoutDashboard, label: 'Vận Hành', roles: ['staff', 'manager'] },
+            { to: '/staff/operations', icon: LayoutDashboard, label: 'Vận Hành', roles: ['manager'] },
             { to: '/staff/finance', icon: Wallet, label: 'Tài Chính', roles: ['manager'] },
             { to: '/staff/users', icon: Users, label: 'Nhân sự', roles: ['manager'] },
             { to: '/settings', icon: SettingsIcon, label: 'Cài đặt' },
