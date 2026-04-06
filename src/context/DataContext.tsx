@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { OrderData, DashboardData, SoTayItem, MenuItem, OrderRow, CartItem } from '../types';
 import { triggerInventoryDeduction, triggerInventoryRefund } from '../lib/inventoryWorker';
-import { supabaseFetch as fetch } from '../lib/supabaseFetch';
+// native fetch is used automatically
 
 interface DataContextType {
   menuItems: MenuItem[];

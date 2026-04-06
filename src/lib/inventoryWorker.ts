@@ -1,5 +1,5 @@
 import { checkStockAlerts } from './stockAlerts';
-import { supabaseFetch as fetch } from './supabaseFetch';
+// native fetch is used automatically
 
 /**
  * Xử lý trừ kho nguyên liệu dựa trên đơn hàng

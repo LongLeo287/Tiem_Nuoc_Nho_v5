@@ -148,42 +148,52 @@ async function startServer() {
     // Add to lock
     printingOrders.add(orderId);
 
-    // Return immediately to the client so the UI doesn't hang!
-    res.json({ success: true, message: 'Lệnh in đã được đưa vào hàng đợi nền' });
-
-    // Process socket in background
+    // Process socket
     const port = Number(printerPort) || 9100;
     const socket = new net.Socket();
-    let done = false;
+    let isResponseSent = false;
 
     const cleanup = () => {
-      if (done) return;
-      done = true;
       socket.destroy();
-      // Remove lock after a cooldown (e.g. 5 seconds) so user can reprint if they want later
-      setTimeout(() => printingOrders.delete(orderId), 5000);
+      setTimeout(() => printingOrders.delete(orderId), 3000); // cooldown 3s for retry
     };
 
-    socket.setTimeout(5000); // 5s timeout to prevent hanging
+    socket.setTimeout(2500); // 2.5s network connection timeout 
 
     socket.connect(port, printerIp, () => {
       try {
         socket.write(buildEscPos(order));
-        // Give the socket 1s to flush the buffer before closing
+        if (!isResponseSent) {
+          isResponseSent = true;
+          res.json({ success: true, message: 'Đã in thành công' });
+        }
+        // Give the socket some time to flush the buffer before closing
         setTimeout(cleanup, 1000);
       } catch (e: any) {
-        console.error('Lỗi in:', e.message);
+        console.error('Lỗi khi gửi dữ liệu in:', e.message);
+        if (!isResponseSent) {
+          isResponseSent = true;
+          res.status(500).json({ success: false, error: 'Lỗi in: ' + e.message });
+        }
         cleanup();
       }
     });
 
-    socket.on('error', (e) => {
+    socket.on('error', (e: any) => {
       console.error('Socket error trên máy in:', e.message);
+      if (!isResponseSent) {
+        isResponseSent = true;
+        res.status(500).json({ success: false, error: 'Không thể kết nối máy in: ' + e.message });
+      }
       cleanup();
     });
     
     socket.on('timeout', () => {
       console.error('Timeout máy in:', printerIp);
+      if (!isResponseSent) {
+        isResponseSent = true;
+        res.status(500).json({ success: false, error: 'Phản hồi lệnh in quá chậm (Timeout): ' + printerIp });
+      }
       cleanup();
     });
   });
