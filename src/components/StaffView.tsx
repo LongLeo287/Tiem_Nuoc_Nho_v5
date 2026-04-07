@@ -1214,14 +1214,14 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
 
   return (
     <div className="flex flex-col min-h-full pb-24">
-      {/* Top Navigation Tabs */}
+      {/* Top Navigation Tabs - Dynamic Island */}
       {location.pathname.startsWith('/staff/operations') && (
-        <div className="sticky top-0 z-30 glass-header transition-colors">
-          <div className="flex items-center gap-3 p-3">
-            <div className="flex-grow flex flex-col gap-2">
-              <div className="flex gap-1 overflow-x-auto scrollbar-hide py-0.5">
+        <div className="sticky top-4 z-40 px-4 mt-2 mb-6 pointer-events-none">
+          <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.1)] dark:shadow-none flex items-center justify-between gap-2 p-2 mx-auto max-w-[500px]">
+            <div className="flex-grow flex flex-col gap-2 min-w-0">
+              <div className="flex gap-1 overflow-x-auto no-scrollbar px-1">
                 {[
-                  { id: 'orders', label: 'Đơn hàng', icon: ListOrdered },
+                  { id: 'orders', label: 'Đơn', icon: ListOrdered },
                   { id: 'inventory', label: 'Kho', icon: Package },
                   { id: 'menu', label: 'Menu', icon: MenuIcon },
                 ].map((tab) => {
@@ -1231,10 +1231,10 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                     <button
                       key={tab.id}
                       onClick={() => setViewMode(tab.id as any)}
-                      className={`flex-shrink-0 px-3 py-2 rounded-xl transition-all duration-300 flex items-center gap-2 tap-active ${
+                      className={`flex-shrink-0 px-4 py-2.5 rounded-[24px] transition-all duration-300 flex items-center gap-2 tap-active ${
                         isActive 
                           ? 'bg-stone-800 dark:bg-white text-white dark:text-black shadow-md' 
-                          : 'text-stone-400 dark:text-stone-500 hover:bg-stone-50 dark:hover:bg-stone-900'
+                          : 'bg-transparent text-stone-500 hover:bg-stone-100/50 dark:hover:bg-stone-800/50'
                       }`}
                     >
                       <Icon className={`w-4 h-4 ${isActive ? 'opacity-100' : 'opacity-70'}`} />
@@ -1244,7 +1244,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                             initial={{ width: 0, opacity: 0, x: -5 }}
                             animate={{ width: 'auto', opacity: 1, x: 0 }}
                             exit={{ width: 0, opacity: 0, x: -5 }}
-                            className="text-[9px] font-black uppercase tracking-widest whitespace-nowrap overflow-hidden"
+                            className="text-[10px] font-black uppercase tracking-widest whitespace-nowrap overflow-hidden"
                           >
                             {tab.label}
                           </motion.span>
@@ -1262,9 +1262,9 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 else fetchAllData(false);
               }}
               disabled={isRefreshing}
-              className={`flex-shrink-0 w-10 h-10 bg-stone-100 dark:bg-stone-900 text-stone-500 dark:text-stone-400 rounded-xl flex items-center justify-center tap-active border border-stone-200/50 dark:border-stone-800/50 transition-all ${isRefreshing ? 'animate-spin opacity-50' : ''}`}
+              className={`flex-shrink-0 w-11 h-11 ${isRefreshing ? 'bg-stone-100 dark:bg-stone-800' : 'bg-white dark:bg-stone-900 border border-stone-200/50 dark:border-stone-800/50 hover:bg-stone-50 dark:hover:bg-stone-800'} text-stone-500 dark:text-stone-400 rounded-[24px] flex items-center justify-center tap-active shadow-sm transition-all`}
             >
-              <RefreshCw className="w-4 h-4" />
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin opacity-50' : ''}`} />
             </button>
           </div>
         </div>
@@ -1926,9 +1926,9 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 </div>
               </div>
 
-              {/* Status Filter Pills - Sticky */}
-              <div className="sticky top-0 z-30 -mx-6 px-6 py-2 bg-stone-50/80 dark:bg-black/80 backdrop-blur-md">
-                <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar scroll-smooth">
+              {/* Status Filter Pills - Dynamic Island */}
+              <div className="sticky top-[88px] lg:top-4 z-30 pointer-events-none mb-4 -mt-2">
+                <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex gap-2 overflow-x-auto p-1.5 mx-auto w-max max-w-[calc(100%-2rem)] no-scrollbar scroll-smooth">
                   {[
                     { id: 'All', label: 'Tất cả', count: (orders || []).length, color: 'bg-stone-500' },
                     { id: 'Chờ xử lý', label: 'Mới', count: (orders || []).filter(o => o.orderStatus === 'Chờ xử lý').length, color: 'bg-amber-500' },
@@ -1945,15 +1945,15 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                           setFilterStatus(status.id);
                           setCurrentPage(1);
                         }}
-                        className={`px-4 py-2.5 rounded-2xl whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all tap-active flex items-center gap-2 border ${
+                        className={`px-4 py-2.5 rounded-[24px] whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all tap-active flex items-center gap-2 border ${
                           isSelected
-                            ? `${status.color} text-white border-transparent shadow-lg shadow-stone-200 dark:shadow-none scale-105`
-                            : 'glass-premium text-stone-400 dark:text-stone-500 border-white/50 dark:border-white/10 shadow-sm'
+                            ? `${status.color} text-white border-transparent shadow-lg shadow-stone-200 dark:shadow-none scale-[1.02]`
+                            : 'bg-transparent text-stone-500 dark:text-stone-400 border-transparent hover:bg-stone-100/50 dark:hover:bg-stone-800/50'
                         }`}
                       >
                         {status.label}
                         <span className={`px-1.5 py-0.5 rounded-md text-[9px] ${
-                          isSelected ? 'bg-white/20 text-white' : 'bg-white/40 dark:bg-stone-800/40 text-stone-500 dark:text-stone-400'
+                          isSelected ? 'bg-white/20 text-white' : 'bg-stone-100 dark:bg-stone-800/40 text-stone-500 dark:text-stone-400'
                         }`}>
                           {status.count}
                         </span>
