@@ -10,7 +10,7 @@ import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { Invoice } from './Invoice';
-import { BackToTopFab } from './BackToTopFab';
+
 import { GlobalQrModal } from './GlobalQrModal';
 import { OrderItemSheet } from './OrderItemSheet';
 
@@ -774,7 +774,7 @@ export function OrderHistory() {
 
   // ── Main render ──────────────────────────────────
   return (
-    <div className="flex flex-col pb-24 bg-stone-50 dark:bg-black min-h-full">
+    <div className="flex flex-col pb-24 bg-stone-50 dark:bg-black h-full min-h-0 overflow-y-auto custom-scrollbar">
       {/* Time filter — admin: tùy chọn; staff: cố định hôm nay */}
       {/* Time filter — Dynamic Island */}
       <div className="sticky top-4 z-20 pointer-events-none mb-6">
@@ -920,7 +920,7 @@ export function OrderHistory() {
           </motion.div>
         )}
       </AnimatePresence>
-      <BackToTopFab />
+
     </div>
   );
 }

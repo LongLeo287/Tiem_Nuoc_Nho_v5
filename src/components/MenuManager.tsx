@@ -67,9 +67,29 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
       else setTimeAgo(`${Math.floor(seconds / 3600)} giờ trước`);
     };
 
+    const handleOpenAddModal = () => {
+      setEditingItem(null);
+      setFormData({
+        ten_mon: '',
+        gia_ban: 0,
+        danh_muc: '',
+        co_san: true,
+        has_customizations: false,
+        inventoryQty: 0,
+        ma_mon: ''
+      });
+      setIsModalOpen(true);
+    };
+
+    window.addEventListener('open-add-menu-modal', handleOpenAddModal);
+
+
     updateTimeAgo();
     const interval = setInterval(updateTimeAgo, 30000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('open-add-menu-modal', handleOpenAddModal);
+    };
   }, [lastUpdated]);
 
   // Map rawMenuItems to local MenuItem format
@@ -399,116 +419,42 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#F8F9FA] dark:bg-black font-sans">
-      {/* Editorial Header */}
-      <div className="relative px-6 pt-10 pb-16 overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#C9252C]/5 rounded-full blur-3xl -mr-20 -mt-20" />
-        <div className="relative z-10">
-          <div 
-            className="flex flex-col sm:flex-row sm:items-end justify-between gap-6"
-          >
-            <div>
-              <h1 className="text-5xl font-black text-stone-900 dark:text-white leading-[0.9] tracking-tighter uppercase">
-                Quản lý<br />
-                <span className="text-[#C9252C]">Thực đơn</span>
-              </h1>
-              <div className="flex items-center gap-3 mt-4">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="w-6 h-6 rounded-full border-2 border-white dark:border-black bg-stone-200 dark:bg-stone-800" />
-                  ))}
-                </div>
-                <p className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest">
-                  {stats.total} món • {stats.categories} danh mục • {stats.outOfStock} hết hàng
-                </p>
+    <div className="flex flex-col h-full min-h-0">
+
+
+      {/* ── Unified Dynamic Island: Search, Controls & Categories ── */}
+      <div className="sticky top-[44px] lg:top-[44px] z-[35] w-full flex-shrink-0 -mx-1 px-1 py-4 lg:py-6 bg-stone-50/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md">
+        <div className="glass-premium rounded-[32px] lg:rounded-[40px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.12)] flex flex-col p-2 lg:p-3 w-full gap-2">
+          {/* Row 1: Search + Controls */}
+          <div className="flex gap-2 items-center relative z-50">
+            {/* Search Bar */}
+            <div className="relative flex-grow group">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400 group-focus-within:text-[#C9252C] z-10 transition-colors">
+                <Search className="h-4 w-4 lg:h-5 lg:w-5" />
               </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => fetchAllData(false)}
-                disabled={isRefreshing}
-                className="w-14 h-14 glass-premium rounded-[24px] flex items-center justify-center text-stone-400 hover:text-stone-900 dark:hover:text-white tap-active shadow-sm border border-white/50 dark:border-white/10"
-              >
-                <RefreshCw className={`w-6 h-6 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </button>
-              
-              <button
-                onClick={() => {
-                  setEditingItem(null);
-                  setFormData({
-                    ten_mon: '',
-                    gia_ban: 0,
-                    danh_muc: '',
-                    co_san: true,
-                    has_customizations: false,
-                    inventoryQty: 0,
-                    ma_mon: ''
-                  });
-                  setIsModalOpen(true);
-                }}
-                className="h-14 px-8 bg-[#C9252C] text-white rounded-[24px] font-black text-sm uppercase tracking-widest shadow-xl shadow-red-200 dark:shadow-none tap-active flex items-center gap-3 hover:bg-red-700"
-              >
-                <Plus className="w-6 h-6" />
-                <span>Thêm món</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Bento Grid */}
-      <div className="px-6 -mt-8 mb-8 grid grid-cols-2 sm:grid-cols-4 gap-4 relative z-20">
-        {[
-          { label: 'Tổng số món', value: stats.total, icon: Coffee, color: 'text-blue-500', bg: 'bg-blue-50' },
-          { label: 'Hết hàng', value: stats.outOfStock, icon: X, color: 'text-red-500', bg: 'bg-red-50' },
-          { label: 'Sắp hết', value: stats.lowStock, icon: Zap, color: 'text-amber-500', bg: 'bg-amber-50' },
-          { label: 'Danh mục', value: stats.categories, icon: Tag, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-        ].map((stat, i) => (
-          <div
-            key={stat.label}
-            className="glass-premium p-4 rounded-3xl border border-white/50 dark:border-white/10 shadow-sm"
-          >
-            <div className={`w-10 h-10 ${stat.bg} dark:bg-opacity-10 ${stat.color} rounded-xl flex items-center justify-center mb-3`}>
-              <stat.icon className="w-5 h-5" />
-            </div>
-            <p className="text-[10px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-widest">{stat.label}</p>
-            <p className="text-2xl font-black text-stone-900 dark:text-white mt-1">{stat.value}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Search & Actions */}
-      <div className="px-6 mb-6 flex flex-col gap-3">
-        <div className="flex gap-2 items-center">
-          {/* Search Bar */}
-          <div className="relative flex-grow">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
-              <Search className="w-4 h-4" />
-            </div>
-            <input 
-              type="text"
-              placeholder="Tìm kiếm món ăn, mã số..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsSearchExpanded(true)}
-              onBlur={() => setTimeout(() => setIsSearchExpanded(false), 200)}
-              className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 pl-10 pr-10 py-3 rounded-2xl font-medium text-[15px] text-stone-800 dark:text-white placeholder:text-stone-400 focus:ring-2 focus:ring-[#C9252C]/20 focus:border-[#C9252C] outline-none shadow-sm"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 tap-active"
-              >
-                <X className="h-4 w-4 bg-stone-200 dark:bg-stone-800 rounded-full p-0.5" />
-              </button>
-            )}
-            
-            {/* Autocomplete Suggestions */}
-              {isSearchExpanded && searchQuery.trim() && (
-                <div
-                  className="absolute top-full left-0 right-0 mt-2 glass-premium border border-white/50 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden z-50"
+              <input 
+                type="text"
+                placeholder="Tìm kiếm món, mã số..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchExpanded(true)}
+                onBlur={() => setTimeout(() => setIsSearchExpanded(false), 200)}
+                className="w-full h-12 lg:h-14 bg-white/50 dark:bg-stone-900/50 border border-transparent focus:border-[#C9252C]/30 focus:bg-white dark:focus:bg-stone-900 pl-10 lg:pl-12 pr-10 rounded-[24px] lg:rounded-[28px] font-bold text-[14px] lg:text-[15px] text-stone-800 dark:text-white placeholder:text-stone-400 outline-none relative z-0 transition-all shadow-inner dark:shadow-[inset_0_2px_10px_rgba(0,0,0,0.2)]"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-[#C9252C] z-10 tap-active transition-colors"
                 >
+                  <div className="w-8 h-8 flex items-center justify-center bg-stone-200/50 dark:bg-stone-700/50 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">
+                    <X className="h-4 w-4" />
+                  </div>
+                </button>
+              )}
+
+              {/* Autocomplete Suggestions */}
+              {isSearchExpanded && searchQuery.trim() && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xl border border-stone-200/50 dark:border-stone-700/50 rounded-[24px] shadow-2xl overflow-hidden z-50 p-2">
                   {menuItems
                     .filter(item => 
                       item.ten_mon.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -523,80 +469,83 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
                           setSearchQuery(suggestion.ten_mon);
                           setIsSearchExpanded(false);
                         }}
-                        className="w-full text-left px-4 py-3 hover:bg-stone-50 dark:hover:bg-stone-800 border-b border-stone-50 dark:border-stone-800/50 last:border-0 flex items-center justify-between"
+                        className="w-full text-left px-4 py-3 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-[20px] flex items-center justify-between transition-colors mb-1 last:mb-0"
                       >
                         <div>
-                          <div className="font-bold text-sm text-stone-800 dark:text-white">{suggestion.ten_mon}</div>
-                          <div className="text-[10px] font-medium text-stone-400 uppercase tracking-widest">{suggestion.danh_muc}</div>
+                          <div className="font-bold text-[14px] text-stone-800 dark:text-white">{suggestion.ten_mon}</div>
+                          <div className="text-[10px] font-black text-stone-400 uppercase tracking-widest mt-0.5">{suggestion.danh_muc}</div>
                         </div>
-                        <div className="text-sm font-black text-[#C9252C]">{suggestion.gia_ban.toLocaleString()}đ</div>
+                        <div className="text-[14px] font-black text-emerald-600 dark:text-emerald-400">{suggestion.gia_ban.toLocaleString()}đ</div>
                       </button>
                     ))}
-                  {menuItems.filter(item => item.ten_mon.toLowerCase().includes(searchQuery.toLowerCase()) || item.danh_muc.toLowerCase().includes(searchQuery.toLowerCase()) || item.ma_mon.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
-                    <div className="px-4 py-4 text-center text-sm text-stone-500 dark:text-stone-400">
-                      Không tìm thấy món nào
-                    </div>
-                  )}
                 </div>
               )}
-          </div>
-          
-          {/* AI Lab Toggle */}
-          <button 
-            onClick={() => setShowForecast(!showForecast)}
-            className={`h-11 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 tap-active border shadow-sm flex-shrink-0 ${
-              showForecast 
-                ? 'bg-[#C9252C] text-white border-[#C9252C] shadow-red-200 dark:shadow-none' 
-                : 'bg-stone-50 dark:bg-stone-950 text-stone-600 dark:text-stone-400 border-stone-200 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800'
-            }`}
-          >
-            <Wand2 className="w-4 h-4" />
-            <span className="hidden sm:inline">AI Lab</span>
-          </button>
-          
-          {/* View Mode Toggle */}
-          <button
-            onClick={() => setViewLayout(viewLayout === 'grid' ? 'list' : 'grid')}
-            className="w-11 h-11 flex-shrink-0 flex items-center justify-center bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-2xl text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 tap-active shadow-sm"
-            title={viewLayout === 'grid' ? 'Chuyển sang dạng danh sách' : 'Chuyển sang dạng lưới'}
-          >
-            {viewLayout === 'grid' ? <List className="w-5 h-5" /> : <LayoutGrid className="w-5 h-5" />}
-          </button>
-        </div>
+            </div>
 
-        {/* Category Navigation */}
-        <div className="flex gap-2.5 overflow-x-auto pb-2 -mx-6 px-6 no-scrollbar">
-          {['Tất cả', ...existingCategories].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => {
-                setActiveCategory(cat);
-                setSearchQuery('');
-              }}
-              className={`px-4 py-2 rounded-xl whitespace-nowrap text-[13px] font-bold tap-active border ${
-                activeCategory === cat && !searchQuery
-                  ? 'bg-[#C9252C] text-white border-[#C9252C] shadow-sm shadow-red-200 dark:shadow-none'
-                  : 'glass-premium/80 text-stone-600 dark:text-stone-300 border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-800'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+            <div className="flex gap-1.5 flex-shrink-0">
+              {/* View Mode Toggle */}
+              <button
+                onClick={() => setViewLayout(viewLayout === 'grid' ? 'list' : 'grid')}
+                className="w-12 h-12 lg:w-14 lg:h-14 flex-shrink-0 flex items-center justify-center bg-transparent lg:bg-white/40 dark:lg:bg-stone-900/40 rounded-[24px] lg:rounded-[28px] text-stone-600 dark:text-stone-400 hover:bg-white/50 dark:hover:bg-stone-800 transition-colors border border-transparent"
+                title={viewLayout === 'grid' ? 'Chuyển sang dạng danh sách' : 'Chuyển sang dạng lưới'}
+              >
+                {viewLayout === 'grid' ? <List className="w-5 h-5 lg:w-6 lg:h-6" /> : <LayoutGrid className="w-5 h-5 lg:w-6 lg:h-6" />}
+              </button>
+
+              {/* AI Lab Toggle */}
+              <button 
+                onClick={() => setShowForecast(!showForecast)}
+                className={`w-12 h-12 lg:w-14 lg:h-14 flex-shrink-0 flex items-center justify-center rounded-[24px] lg:rounded-[28px] transition-all border border-transparent tap-active ${
+                  showForecast 
+                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/20' 
+                    : 'bg-transparent lg:bg-white/40 dark:lg:bg-stone-900/40 text-stone-600 dark:text-stone-400 hover:bg-white/50 dark:hover:bg-stone-800'
+                }`}
+                title="AI Insights Lab"
+              >
+                <Wand2 className="w-5 h-5 lg:w-6 lg:h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Row 2: Category Tabs */}
+          <div className="flex gap-1.5 lg:gap-2 overflow-x-auto pt-1 pb-2 lg:pb-3 -mb-2 px-1 no-scrollbar w-full custom-scrollbar hide-scrollbar">
+            {['Tất cả', ...existingCategories].map((cat, index) => {
+              const isActive = activeCategory === cat && !searchQuery;
+              return (
+                <button
+                  key={`${cat}-${index}`}
+                  data-active={isActive}
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    setSearchQuery('');
+                  }}
+                  className={`relative flex-shrink-0 px-5 py-2.5 lg:py-3 rounded-[20px] lg:rounded-[24px] text-[11px] lg:text-[12px] font-black uppercase tracking-widest transition-all duration-300 border ${
+                    isActive
+                      ? 'text-white bg-gradient-to-r from-[#C9252C] to-[#E53935] border-transparent shadow-[0_4px_16px_rgba(201,37,44,0.3)] dark:shadow-[0_4px_16px_rgba(201,37,44,0.15)] lg:scale-[1.02]'
+                      : 'bg-transparent text-stone-500 dark:text-stone-400 border-transparent hover:bg-white/50 dark:hover:bg-stone-800/50 hover:text-stone-700 dark:hover:text-stone-300'
+                  }`}
+                >
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    {cat}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-grow overflow-y-auto px-6 pb-32">
-          {showForecast ? (
-            <div
-              key="ai-lab"
-              className="space-y-8"
-            >
-              {/* AI Lab Header */}
-              <div className="bg-stone-900 dark:bg-stone-800 rounded-[40px] p-8 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full -mr-48 -mt-48" />
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-6">
+      <div>
+        {showForecast ? (
+          <div
+            key="ai-lab"
+            className="space-y-8"
+          >
+            {/* AI Lab Header */}
+            <div className="bg-stone-900 dark:bg-stone-800 rounded-[32px] p-8 text-white relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full -mr-48 -mt-48" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
                       <Sparkles className="w-6 h-6 text-white" />
                     </div>
@@ -668,7 +617,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
                   {filteredForecast.map((item, idx) => (
                     <div
                       key={item.ma_mon}
-                      className={`glass-premium p-6 rounded-[32px] border shadow-sm transition-all ${
+                      className={`relative z-10 glass-premium p-6 rounded-[32px] border shadow-sm transition-all ${
                         item.inventoryQty === 0 
                           ? 'border-red-200 dark:border-red-900/50 bg-red-50/30 dark:bg-red-900/5' 
                           : item.daysLeft <= 3 
@@ -752,99 +701,145 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
                   <p className="text-sm text-stone-400 mt-2">Thử thay đổi từ khóa hoặc danh mục lọc</p>
                 </div>
               ) : (
-                <div className={viewLayout === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
-                  {filteredItems.map((item, idx) => (
-                    <div
-                      key={item.ma_mon}
-                      className={`group glass-premium rounded-[28px] shadow-sm hover:shadow-xl relative overflow-hidden ${!item.co_san ? 'opacity-50 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''} ${viewLayout === 'list' ? 'flex items-center p-4' : 'p-6'}`}
-                    >
-                      {!item.co_san && (
-                        <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]" 
-                             style={{ backgroundImage: 'repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 50%)', backgroundSize: '10px 10px' }} 
-                        />
-                      )}
-                      {/* Status Indicators */}
-                      <div className={viewLayout === 'list' ? "flex-shrink-0 mr-6" : "flex justify-between items-start mb-6"}>
-                        <div className="flex gap-2">
-                          <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${item.co_san ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-stone-200 text-stone-600 border-stone-300'}`}>
-                            {item.co_san ? 'Đang bán' : 'Tạm ngưng'}
-                          </span>
-                          {item.inventoryQty !== undefined && item.inventoryQty <= 5 && item.co_san && (
-                            <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border animate-pulse ${
-                              item.inventoryQty === 0 
-                                ? 'bg-red-500 text-white border-red-600' 
-                                : 'bg-amber-50 text-amber-600 border-amber-100'
-                            }`}>
-                              {item.inventoryQty === 0 ? 'Hết hàng' : 'Sắp hết'}
-                            </span>
-                          )}
-                        </div>
-                        {viewLayout === 'grid' && (
-                          <button 
-                            onClick={(e) => handleToggleAvailability(item, e)}
-                            className={`w-10 h-10 rounded-2xl flex items-center justify-center ${item.co_san ? 'bg-stone-50 text-stone-400 hover:text-red-500' : 'bg-emerald-100 text-emerald-600'}`}
-                          >
-                            <Power className="w-5 h-5" />
-                          </button>
-                        )}
-                      </div>
+                <div className={viewLayout === 'grid' ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 xl:gap-5 px-1 pb-8" : "space-y-4"}>
+                  {filteredItems.map((item, idx) => {
+                    const colors = [
+                      'bg-red-50 dark:bg-red-900/10 border-red-100 dark:border-red-900/30', 
+                      'bg-blue-50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30', 
+                      'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-900/30', 
+                      'bg-amber-50 dark:bg-amber-900/10 border-amber-100 dark:border-amber-900/30', 
+                      'bg-purple-50 dark:bg-purple-900/10 border-purple-100 dark:border-purple-900/30'
+                    ];
+                    const colorIndex = item.ten_mon.length % colors.length;
+                    const colorClass = colors[colorIndex];
 
-                      {/* Main Info */}
-                      <div className="flex-grow min-w-0">
-                        <div className="flex justify-between items-start">
-                          <h4 className={`text-lg font-black leading-tight truncate ${!item.co_san ? 'text-stone-400 line-through decoration-stone-400 decoration-2' : 'text-stone-800 dark:text-white group-hover:text-[#C9252C]'}`}>
-                            {item.ten_mon}
-                          </h4>
-                        </div>
-                        <div className="flex items-baseline gap-2 mt-1">
-                          <p className={`text-2xl font-black ${!item.co_san ? 'text-stone-400' : 'text-[#C9252C]'}`}>{item.gia_ban.toLocaleString()}đ</p>
-                          <span className="text-[9px] font-mono font-bold text-stone-300 uppercase tracking-tighter">#{item.ma_mon}</span>
-                        </div>
-                        <div className="flex items-center gap-3 mt-3">
-                          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-stone-50 dark:bg-stone-800 rounded-lg">
-                            <Tag className="w-3 h-3 text-stone-400" />
-                            <span className="text-[10px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-widest">{item.danh_muc}</span>
-                          </div>
-                          {item.inventoryQty !== undefined && (
-                            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-stone-50 dark:bg-stone-800 rounded-lg">
-                              <Package className="w-3 h-3 text-stone-400" />
-                              <span className="text-[10px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-widest">Kho: {item.inventoryQty}</span>
+                    if (viewLayout === 'list') {
+                      return (
+                        <div
+                          key={item.ma_mon}
+                          className={`group relative z-10 bg-white dark:bg-stone-900 rounded-2xl p-4 flex items-center justify-between gap-4 border border-stone-100 dark:border-stone-800 shadow-sm transition-all duration-300 ${!item.co_san ? 'opacity-50 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''}`}
+                        >
+                          {!item.co_san && (
+                            <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]" 
+                                 style={{ backgroundImage: 'repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 50%)', backgroundSize: '10px 10px' }} 
+                            />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center flex-wrap gap-2 mb-1">
+                              <h3 className={`font-bold text-[15px] leading-tight truncate ${!item.co_san ? 'text-stone-400 line-through decoration-stone-400 decoration-1' : 'text-stone-800 dark:text-white'}`}>
+                                {item.ten_mon}
+                              </h3>
+                              {item.inventoryQty !== undefined && item.co_san && (
+                                <span className={`flex-shrink-0 text-[9px] font-black px-2 py-0.5 rounded-full border ${item.inventoryQty === 0 ? 'text-red-500 bg-red-50 border-red-100' : item.inventoryQty <= 5 ? 'text-orange-500 bg-orange-50 border-orange-100' : 'text-stone-400 bg-stone-50 border-stone-100'}`}>
+                                  {item.inventoryQty === 0 ? 'Hết hàng' : item.inventoryQty <= 5 ? `Sắp hết · ${item.inventoryQty} còn` : `${item.inventoryQty} còn`}
+                                </span>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </div>
+                            <div className="flex items-center gap-2">
+                              <p className="text-[#C9252C] font-black text-[15px]">
+                                {item.gia_ban.toLocaleString('vi-VN')}đ
+                              </p>
+                              <span className="text-[9px] font-mono font-bold text-stone-300 uppercase tracking-tighter">#{item.ma_mon}</span>
+                            </div>
+                          </div>
 
-                      {/* Actions */}
-                      <div className={viewLayout === 'list' ? "flex gap-2 ml-6" : "mt-8 pt-6 border-t border-stone-50 dark:border-stone-800 flex justify-between items-center"}>
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={() => handleEdit(item)}
-                            className="w-12 h-12 bg-stone-50 dark:bg-stone-800 rounded-2xl flex items-center justify-center text-stone-400 hover:text-stone-800 dark:hover:text-white shadow-sm"
-                          >
-                            <Edit2 className="w-5 h-5" />
-                          </button>
-                          <button 
-                            onClick={() => handleDelete(item.ma_mon)}
-                            className="w-12 h-12 bg-stone-50 dark:bg-stone-800 rounded-2xl text-stone-300 hover:text-red-500 shadow-sm"
-                          >
-                            <Trash2 className="w-5 h-5" />
-                          </button>
+                          <div className="flex gap-2 shrink-0">
+                             <button onClick={(e) => handleToggleAvailability(item, e)} className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${item.co_san ? 'bg-stone-50 text-stone-400 hover:text-red-500' : 'bg-emerald-100 text-emerald-600'}`}>
+                               <Power className="w-5 h-5" />
+                             </button>
+                            <button onClick={() => handleEdit(item)} className="w-10 h-10 bg-stone-50 dark:bg-stone-800 rounded-xl flex items-center justify-center shrink-0 text-stone-400 hover:text-stone-800 shadow-sm">
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => handleDelete(item.ma_mon)} className="w-10 h-10 bg-stone-50 dark:bg-stone-800 rounded-xl flex items-center justify-center shrink-0 text-stone-300 hover:text-red-500 shadow-sm">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
-                        
-                        {viewLayout === 'grid' && (
-                          <div className="flex flex-col items-end">
-                            <span className="text-[8px] font-black text-stone-300 uppercase tracking-[0.2em]">Cập nhật</span>
-                            <span className="text-[10px] font-bold text-stone-400">Hôm nay</span>
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={item.ma_mon}
+                        className={`group relative z-10 bg-white dark:bg-stone-900 rounded-[28px] lg:rounded-[32px] p-5 flex flex-col justify-between h-full border border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 ${!item.co_san ? 'opacity-60 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''} ${colorClass}`}
+                      >
+                        {!item.co_san && (
+                          <div className="absolute inset-0 z-20 bg-white/40 dark:bg-black/40 backdrop-blur-[1px] flex items-center justify-center rounded-[28px] lg:rounded-3xl pointer-events-none">
+                            <div className="bg-stone-800/90 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full transform -rotate-6 shadow-xl border border-white/10 tracking-widest">Tạm ngưng</div>
                           </div>
                         )}
+
+                        <div className="mb-2 relative z-30">
+                          <div className="flex justify-between items-start gap-2 mb-1">
+                             <div className="flex-1 min-w-0">
+                               <h3 className={`font-black text-[14px] leading-tight line-clamp-2 uppercase tracking-tight ${!item.co_san ? 'text-stone-400 line-through decoration-stone-400 decoration-1' : 'text-stone-800 dark:text-white'}`}>
+                                {item.ten_mon}
+                              </h3>
+                              {item.inventoryQty !== undefined && item.co_san && (
+                                <span
+                                  className={`inline-block text-[9px] font-black px-2 py-0.5 rounded-full mt-1.5 border ${
+                                    item.inventoryQty === 0
+                                      ? 'text-red-500 bg-red-50 border-red-100 dark:bg-red-900/20 dark:border-red-900/30'
+                                      : item.inventoryQty <= 5
+                                      ? 'text-orange-500 bg-orange-50 border-orange-100 dark:bg-orange-900/20 dark:border-orange-900/30'
+                                      : 'text-stone-400 bg-stone-50 border-stone-100 dark:bg-stone-800/50 dark:border-stone-700'
+                                  }`}
+                                >
+                                  {item.inventoryQty === 0 ? 'Hết hàng' : item.inventoryQty <= 5 ? `Sắp hết · ${item.inventoryQty} còn` : `${item.inventoryQty} còn`}
+                                </span>
+                              )}
+                              <div className="mt-1 flex items-center gap-1.5">
+                                <span className="text-[10px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-widest leading-none drop-shadow-sm">{item.danh_muc}</span>
+                                <span className="text-[8px] font-mono font-bold text-stone-300 uppercase opacity-50 tracking-tighter self-end">{item.ma_mon}</span>
+                              </div>
+                             </div>
+                            <button
+                              onClick={(e) => handleToggleAvailability(item, e)}
+                              className={`p-2 rounded-full flex-shrink-0 transition-all active:scale-90 ${
+                                item.co_san 
+                                  ? 'text-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 hover:text-red-500 hover:bg-stone-50 shadow-sm' 
+                                  : 'text-stone-400 bg-white shadow-sm'
+                              }`}
+                              title={item.co_san ? 'Đang bán (Bấm để tạm ngưng)' : 'Tạm ngưng (Bấm để mở lại)'}
+                            >
+                              <Power className={`w-4.5 h-4.5`} />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="mt-auto pt-5 border-t border-stone-100 dark:border-stone-800 relative z-30">
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="text-[#C9252C] font-black text-[18px] xl:text-[20px] tracking-tight shrink-0">
+                              {item.gia_ban.toLocaleString('vi-VN')}
+                              <span className="text-[11px] align-top ml-0.5 uppercase tracking-widest text-[#C9252C]/70">đ</span>
+                            </p>
+                            
+                            <div className="flex gap-1.5 shrink-0">
+                              <button
+                                onClick={() => handleEdit(item)}
+                                className="w-10 h-10 rounded-[14px] flex items-center justify-center bg-stone-100/80 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 transition-colors tap-active"
+                                title="Cập nhật"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(item.ma_mon)}
+                                className="w-10 h-10 rounded-[14px] flex items-center justify-center bg-stone-100/80 dark:bg-stone-800 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-500 text-stone-400 transition-colors tap-active"
+                                title="Xóa"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
           )}
-      </div>
+        </div>
 
       {/* Form Modal */}
       {isModalOpen && (

@@ -204,7 +204,7 @@ export function AddMenuSheet({ onClose }: AddMenuSheetProps) {
             {/* Search — mirror Menu.tsx */}
             <div className="px-4 pb-2 shrink-0">
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400 group-focus-within:text-[#C9252C] z-10">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400 group-focus-within:text-[#C9252C] z-10 transition-colors">
                   <Search className="h-4 w-4" />
                 </div>
                 <input
@@ -212,13 +212,11 @@ export function AddMenuSheet({ onClose }: AddMenuSheetProps) {
                   placeholder="Tìm món ngon..."
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  className="w-full h-11 bg-stone-100 dark:bg-stone-800 border border-transparent focus:border-[#C9252C] focus:bg-white dark:focus:bg-stone-950 pl-10 pr-10 rounded-2xl font-bold text-[14px] text-stone-800 dark:text-white placeholder:text-stone-400 outline-none"
+                  className="w-full h-11 bg-stone-50 dark:bg-stone-800/50 border-none focus:ring-2 focus:ring-[#C9252C]/20 pl-10 pr-10 rounded-2xl font-bold text-[14px] text-stone-800 dark:text-white placeholder:text-stone-400 outline-none transition-all"
                 />
                 {search && (
-                  <button onClick={() => setSearch('')} className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 z-10 tap-active">
-                    <div className="w-8 h-8 flex items-center justify-center bg-stone-200 dark:bg-stone-700 rounded-full">
-                      <X className="h-4 w-4" />
-                    </div>
+                  <button onClick={() => setSearch('')} className="absolute inset-y-0 right-3 flex items-center text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 z-10 tap-active">
+                    <X className="h-4 w-4" />
                   </button>
                 )}
               </div>
@@ -226,16 +224,16 @@ export function AddMenuSheet({ onClose }: AddMenuSheetProps) {
 
             {/* Category pills — mirror Menu.tsx */}
             {!search && (
-              <div className="px-4 pb-2 shrink-0 overflow-x-auto no-scrollbar">
-                <div className="flex gap-2">
+               <div className="px-4 pb-2 shrink-0 overflow-x-auto whitespace-nowrap custom-scrollbar hide-scrollbar border-t border-stone-100 dark:border-stone-800 pt-2 mt-1">
+                <div className="flex items-center gap-2">
                   {categories.map(cat => (
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
-                      className={`shrink-0 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-200 ${
+                      className={`shrink-0 px-5 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${
                         activeCategory === cat
-                          ? 'text-white bg-[#C9252C] shadow-lg shadow-red-900/20 scale-105'
-                          : 'bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700 active:scale-95'
+                          ? 'text-white bg-[#C9252C] shadow-md shadow-red-200 dark:shadow-none scale-105'
+                          : 'bg-transparent text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800 hover:text-stone-800 dark:hover:text-white'
                       }`}
                     >
                       {cat}

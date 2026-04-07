@@ -1,6 +1,0 @@
-src/components/Cart.tsx(635,29): error TS2339: Property 'phoneNumber_unused' does not exist on type 'OrderData'.
-src/components/Cart.tsx(638,92): error TS2339: Property 'phoneNumber_unused' does not exist on type 'OrderData'.
-src/components/StaffView.tsx(2090,36): error TS2339: Property 'phoneNumber' does not exist on type 'OrderData'.
-src/components/StaffView.tsx(2093,155): error TS2339: Property 'phoneNumber' does not exist on type 'OrderData'.
-src/lib/supabase.ts(3,33): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
-src/lib/supabase.ts(4,37): error TS2339: Property 'env' does not exist on type 'ImportMeta'.

@@ -8,7 +8,7 @@ import { useCart } from '../context/CartContext';
 import { useUI } from '../context/UIContext';
 import { currencyInputProps } from '../utils/inputUtils';
 
-import { BackToTopFab } from './BackToTopFab';
+
 
 export const SIZES = [
   { id: 'STD', name: 'Tiêu chuẩn', price: 0 },
@@ -31,34 +31,21 @@ interface GroupedMenuItem extends MenuItem {
   };
 }
 
-
+const virtuosoComponents = {
+  Header: () => <div className="h-4 lg:h-6" />,
+  List: React.forwardRef((props: any, ref: any) => <div {...props} ref={ref} className={props.className || ''} />),
+  Item: React.forwardRef((props: any, ref: any) => <div {...props} ref={ref} className={props.className || ''} />),
+};
 
 export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
   const { menuItems: rawMenuItems, orders, isLoading, isRefreshing, error, fetchAllData, createOrder, lastUpdated, updateMenuItem } = useData();
   const { cart, addToCart } = useCart();
   const virtuosoRef = React.useRef<VirtuosoGridHandle>(null);
-  const [scrollParent, setScrollParent] = useState<HTMLElement | null>(null);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const [scrollEl, setScrollEl] = React.useState<HTMLDivElement | null>(null);
   const categoryScrollRef = React.useRef<HTMLDivElement>(null);
-  const { isNavHidden, setIsNavHidden, setIsFabHidden } = useUI();
-  const isHeaderHidden = isNavHidden;
   const lastScrollTop = React.useRef(0);
-
-  useEffect(() => {
-    const handleScrollParent = () => {
-      const isDesktop = window.innerWidth >= 1024;
-      const inner = document.getElementById('pos-scroll-container');
-      const m = document.querySelector('main');
-      if (isDesktop && inner) {
-        setScrollParent(inner);
-      } else if (m) {
-        setScrollParent(m);
-      }
-    };
-    
-    handleScrollParent();
-    window.addEventListener('resize', handleScrollParent);
-    return () => window.removeEventListener('resize', handleScrollParent);
-  }, []);
+  const { isNavHidden, setIsNavHidden, setIsFabHidden } = useUI();
 
   const [activeCategory, setActiveCategory] = useState('Tất cả');
   const [sortBy, setSortBy] = useState<'default' | 'price_asc' | 'price_desc' | 'name_asc'>('default');
@@ -123,30 +110,28 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
     }
   }, [activeCategory]);
 
-  // Scroll detection → ẩn/hiện header bars
+  // Scroll detection → ẩn/hiện nav bars (listen on #pos-scroll-container)
   useEffect(() => {
-    const main = document.querySelector('main');
-    if (!main) return;
+    const container = scrollEl;
+    if (!container) return;
 
     const handleScroll = () => {
-      const st = main.scrollTop;
+      const st = container.scrollTop;
       const delta = st - lastScrollTop.current;
       if (delta > 8 && st > 80) {
-        // scroll xuống nhanh → ẩn
         setIsNavHidden(true);
       } else if (delta < -5 || st < 60) {
-        // scroll lên hoặc về đầu → hiện
         setIsNavHidden(false);
       }
       lastScrollTop.current = st;
     };
 
-    main.addEventListener('scroll', handleScroll, { passive: true });
+    container.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      main.removeEventListener('scroll', handleScroll);
-      setIsNavHidden(false); // reset khi rời trang Menu
+      container.removeEventListener('scroll', handleScroll);
+      setIsNavHidden(false);
     };
-  }, [setIsNavHidden]);
+  }, [scrollEl, setIsNavHidden]);
 
   const [showTimeAgoBadge, setShowTimeAgoBadge] = useState(false);
 
@@ -497,15 +482,9 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
   }
 
   return (
-    <div className="flex flex-col min-h-full lg:h-full lg:w-full lg:min-h-0 min-w-0">
+    <div className="h-full w-full flex flex-col min-h-0 min-w-0 relative">
       {/* ── Unified Dynamic Island: Search, Controls & Categories ── */}
-      <div
-        className={`fixed left-0 right-0 lg:static z-30 pointer-events-none px-4 lg:px-6 w-[max-w-100vw] flex-shrink-0 transition-transform duration-500 ease-in-out ${
-          isHeaderHidden 
-            ? 'top-4 lg:top-4 -translate-y-[calc(100%+80px)] lg:translate-y-0' 
-            : 'top-[68px] lg:mt-4 translate-y-0'
-        }`}
-      >
+      <div className="relative z-30 px-4 lg:px-6 w-full flex-shrink-0 pt-2 lg:pt-4 pb-2 lg:pb-4">
         {/* Loading Indicator */}
         {(isLoading || isRefreshing) && menuItems.length > 0 && (
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#C9252C] z-50 lg:hidden" />
@@ -641,30 +620,21 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
       {/* ── Content area ── */}
       <div 
         id="pos-scroll-container"
-        className={`flex-grow lg:flex-1 relative pb-32 lg:pb-0 min-h-[600px] lg:min-h-0 lg:overflow-y-auto transition-[padding] duration-300 ease-in-out lg:pt-0 custom-scrollbar ${isHeaderHidden ? 'pt-[72px]' : 'pt-[140px]'}`}
+        ref={(el) => { scrollContainerRef.current = el; setScrollEl(el); }}
+        className="flex-1 w-full min-h-0 pb-32 lg:pb-8 overflow-y-auto custom-scrollbar"
       >
         {filteredItems.length > 0 ? (
           <VirtuosoGrid
             ref={virtuosoRef}
-            customScrollParent={scrollParent || undefined}
+            customScrollParent={scrollEl ?? undefined}
             data={filteredItems}
             style={{ height: '100%' }}
             computeItemKey={(index, item) => item.name}
-            components={{
-              Header: () => <div className="h-4 lg:h-6" />,
-              List: React.forwardRef((props, ref) => (
-                <div 
-                  {...props} 
-                  ref={ref as any} 
-                  className={viewMode === 'grid' 
-                    ? "grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 lg:gap-5 px-4 pb-8" 
-                    : "flex flex-col gap-2.5 px-4 pb-8"} 
-                />
-              )),
-              Item: React.forwardRef((props, ref) => (
-                <div {...props} ref={ref as any} className="h-full" />
-              )),
-            }}
+            components={virtuosoComponents}
+            listClassName={viewMode === 'grid' 
+              ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-5 px-4 pb-8" 
+              : "flex flex-col gap-2.5 px-4 pb-8"}
+            itemClassName="h-full"
             itemContent={(index, item) => (
               <MenuItemCard 
                 item={item} 
@@ -689,7 +659,6 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
           </div>
         )}
 
-        <BackToTopFab />
       </div>
 
 

@@ -67,7 +67,7 @@ export interface OrderRow {
 export interface OrderData {
   orderId: string;
   branchName: string;
-  
+  phoneNumber?: string;
   tableNumber: string;
   items: CartItem[];
   total: number;

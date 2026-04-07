@@ -838,7 +838,7 @@ export function Cart({ appsScriptUrl, onNavigateSettings, asSidePanel = false }:
   }
 
   return (
-    <div className="flex flex-col h-full bg-stone-50 dark:bg-black">
+    <div className="flex flex-col h-full min-h-0 bg-stone-50 dark:bg-black">
       {/* Editing mode banner — not scrollable */}
       {editingOrderId && (
         <div className="mx-3 mt-3 shrink-0 flex items-center gap-2 px-3 py-2.5 bg-amber-50 dark:bg-amber-950 border border-amber-200/70 dark:border-amber-800/60 rounded-xl shadow-sm">

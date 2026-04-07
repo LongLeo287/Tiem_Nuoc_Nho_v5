@@ -228,38 +228,40 @@ export function OrderItemSheet({ order, menuItems: rawMenuItems, onClose, onSave
         {/* ── TAB: THÊM MÓN ── */}
         {activeTab === 'menu' && (
           <>
-            {/* Search */}
+            {/* Search — mirror Menu.tsx */}
             <div className="px-4 pb-2 shrink-0">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400 group-focus-within:text-[#C9252C] z-10 transition-colors">
+                  <Search className="h-4 w-4" />
+                </div>
                 <input
                   type="text"
-                  placeholder="Tìm món nhanh..."
+                  placeholder="Tìm món ngon..."
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  className="w-full h-10 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 pl-9 pr-9 rounded-xl font-bold text-[13px] text-stone-800 dark:text-white placeholder:text-stone-400 outline-none focus:border-[#C9252C]/40"
+                  className="w-full h-11 bg-stone-50 dark:bg-stone-800/50 border-none focus:ring-2 focus:ring-[#C9252C]/20 pl-10 pr-10 rounded-2xl font-bold text-[14px] text-stone-800 dark:text-white placeholder:text-stone-400 outline-none transition-all"
                   autoFocus
                 />
                 {search && (
-                  <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 tap-active">
-                    <X className="w-3.5 h-3.5" />
+                  <button onClick={() => setSearch('')} className="absolute inset-y-0 right-3 flex items-center text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 z-10 tap-active">
+                    <X className="h-4 w-4" />
                   </button>
                 )}
               </div>
             </div>
 
-            {/* Category pills */}
+            {/* Category pills — mirror Menu.tsx */}
             {!search && (
-              <div className="px-4 pb-2 shrink-0 overflow-x-auto no-scrollbar">
-                <div className="flex gap-1.5">
+               <div className="px-4 pb-2 shrink-0 overflow-x-auto whitespace-nowrap custom-scrollbar hide-scrollbar border-t border-stone-100 dark:border-stone-800 pt-2 mt-1">
+                <div className="flex items-center gap-2">
                   {categories.map(cat => (
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
-                      className={`shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+                      className={`shrink-0 px-5 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${
                         activeCategory === cat
-                          ? 'bg-[#C9252C] text-white shadow-sm shadow-red-200/40'
-                          : 'bg-white dark:bg-stone-800 text-stone-500 dark:text-stone-400 border border-stone-200 dark:border-stone-700'
+                          ? 'text-white bg-[#C9252C] shadow-md shadow-red-200 dark:shadow-none scale-105'
+                          : 'bg-transparent text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800 hover:text-stone-800 dark:hover:text-white'
                       }`}
                     >
                       {cat}
