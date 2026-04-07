@@ -897,7 +897,7 @@ export function Cart({ appsScriptUrl, onNavigateSettings, asSidePanel = false }:
         </section>
 
         {/* Order Form */}
-        <section className="bg-white dark:bg-stone-900 rounded-2xl p-3 border border-stone-100 dark:border-stone-800 shadow-sm">
+        <section className="bg-white dark:bg-stone-900 rounded-[28px] p-5 border border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
           <div className="flex items-center gap-2 mb-2.5">
             <div className="w-7 h-7 bg-red-50 dark:bg-red-900/20 text-[#C9252C] rounded-lg flex items-center justify-center border border-red-100 dark:border-red-900/30">
               <User className="w-3.5 h-3.5" />
@@ -959,7 +959,7 @@ export function Cart({ appsScriptUrl, onNavigateSettings, asSidePanel = false }:
         </section>
 
         {/* Price Breakdown – always visible */}
-        <section className="bg-stone-50 dark:bg-stone-950 rounded-2xl border border-stone-100 dark:border-stone-800 overflow-hidden">
+        <section className="bg-stone-50 dark:bg-stone-950 rounded-[28px] border border-stone-100/80 dark:border-stone-800/80 overflow-hidden">
           {/* Header */}
           <div className="flex items-center gap-2 px-3 pt-3 pb-2">
             <span className="w-0.5 h-4 bg-[#C9252C] rounded-full" />
@@ -997,8 +997,8 @@ export function Cart({ appsScriptUrl, onNavigateSettings, asSidePanel = false }:
 
       {/* Sticky Footer Summary */}
       <div className={asSidePanel
-        ? "sticky mt-auto bottom-0 left-0 right-0 px-4 py-3 bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-2xl border-t border-stone-200/50 dark:border-stone-800 z-40"
-        : "fixed bottom-20 lg:bottom-0 left-0 lg:left-[260px] right-0 px-4 py-3 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_30px_rgba(0,0,0,0.07)] dark:shadow-none"}>
+        ? "sticky mt-auto bottom-0 left-0 right-0 px-4 py-3 bg-stone-50/80 dark:bg-stone-950/80 backdrop-blur-3xl border-t border-stone-200/50 dark:border-stone-800 z-40"
+        : "fixed bottom-20 lg:bottom-0 left-0 lg:left-[260px] right-0 px-4 py-4 bg-white/80 dark:bg-black/80 backdrop-blur-3xl border-t border-stone-100/50 dark:border-stone-800/50 z-40 shadow-[0_-12px_40px_rgba(0,0,0,0.06)] dark:shadow-none"}>
         <div className={asSidePanel ? "space-y-2" : "max-w-md md:max-w-2xl lg:max-w-4xl mx-auto space-y-2"}>
           {/* Amount row — always visible */}
           <div className="flex items-baseline gap-1">
@@ -1031,7 +1031,7 @@ export function Cart({ appsScriptUrl, onNavigateSettings, asSidePanel = false }:
             <button
               onClick={handleOrder}
               disabled={isSubmitting || !tableNumber || !branch || (cart || []).length === 0}
-              className="flex-1 bg-[#C9252C] text-white py-3.5 rounded-2xl font-black text-sm shadow-lg shadow-red-200/60 dark:shadow-none tap-active flex items-center justify-center gap-2 disabled:opacity-40 disabled:grayscale uppercase tracking-wider"
+              className="flex-1 bg-gradient-to-r from-[#C9252C] to-[#E53935] text-white py-3.5 rounded-2xl font-black text-sm shadow-[0_8px_20px_rgba(201,37,44,0.3)] dark:shadow-[0_8px_20px_rgba(201,37,44,0.15)] tap-active flex items-center justify-center gap-2 disabled:opacity-40 disabled:grayscale uppercase tracking-wider hover:shadow-[0_12px_24px_rgba(201,37,44,0.4)] transition-all"
             >
               {isSubmitting ? (
                 <>

@@ -165,10 +165,10 @@ function OrderCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: Math.min(index * 0.04, 0.3) }}
-      className={`bg-white dark:bg-stone-900 rounded-2xl border overflow-hidden ${
+      className={`bg-white dark:bg-stone-900 rounded-[24px] lg:rounded-[28px] border overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${
         order.hasAddedItems
-          ? 'border-emerald-400 dark:border-emerald-600 shadow-emerald-100 dark:shadow-emerald-900/20 shadow-md'
-          : 'border-stone-100 dark:border-stone-800'
+          ? 'border-emerald-400 dark:border-emerald-600 shadow-[0_8px_24px_rgba(16,185,129,0.2)] dark:shadow-[0_8px_24px_rgba(16,185,129,0.1)]'
+          : 'border-stone-100/80 dark:border-stone-800/80'
       }`}
     >
       {/* ── Header row ──────────────────────────────── */}
@@ -214,9 +214,9 @@ function OrderCard({
       {/* ── Items: Admin → OrderItemSheet, Staff → dropdown ── */}
       <button
         onClick={isAdmin ? () => setShowOrderSheet(true) : onToggle}
-        className="w-full mx-0 border-t border-stone-50 dark:border-stone-800 px-4 py-2 flex items-center justify-between tap-active"
+        className="w-full mx-0 border-t border-stone-100/60 dark:border-stone-800/50 px-4 py-3 flex items-center justify-between tap-active transition-colors hover:bg-stone-50 dark:hover:bg-stone-900/50"
       >
-        <span className="text-[9px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-widest">
+        <span className="text-[10px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-widest">
           {(order.items || []).length} món
           {!isExpanded && (
             <span className="text-stone-300 dark:text-stone-600 ml-2 font-normal normal-case tracking-normal text-[9px]">
@@ -776,7 +776,7 @@ export function OrderHistory() {
   return (
     <div className="flex flex-col pb-24 bg-stone-50 dark:bg-black min-h-full">
       {/* Time filter — admin: tùy chọn; staff: cố định hôm nay */}
-      <div className="sticky top-0 z-20 bg-stone-50 dark:bg-black">
+      <div className="sticky top-0 z-20 bg-stone-50/80 dark:bg-stone-950/80 backdrop-blur-2xl px-2 lg:px-4">
       {isAdmin ? (
         <div className="flex gap-1.5 overflow-x-auto px-4 pt-5 pb-3 no-scrollbar">
           {([
@@ -815,10 +815,10 @@ export function OrderHistory() {
           {/* Đơn xong — filter button */}
           <button
             onClick={() => setStatusFilter(f => f === 'completed' ? 'all' : 'completed')}
-            className={`rounded-2xl p-3 border text-center transition-all tap-active ${
+            className={`rounded-[24px] p-4 lg:p-5 border text-center transition-all tap-active ${
               statusFilter === 'completed'
-                ? 'bg-emerald-600 border-emerald-500 shadow-lg shadow-emerald-900/20'
-                : 'bg-white dark:bg-stone-900 border-stone-100 dark:border-stone-800'
+                ? 'bg-emerald-600 border-emerald-500 shadow-[0_8px_24px_rgba(16,185,129,0.3)]'
+                : 'bg-white dark:bg-stone-900 border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-lg'
             }`}
           >
             <p className={`text-[8px] font-black uppercase tracking-widest mb-0.5 ${
@@ -831,10 +831,10 @@ export function OrderHistory() {
           {/* Đang chờ — filter button */}
           <button
             onClick={() => setStatusFilter(f => f === 'pending' ? 'all' : 'pending')}
-            className={`rounded-2xl p-3 border text-center transition-all tap-active ${
+            className={`rounded-[24px] p-4 lg:p-5 border text-center transition-all tap-active ${
               statusFilter === 'pending'
-                ? 'bg-amber-500 border-amber-400 shadow-lg shadow-amber-900/20'
-                : 'bg-white dark:bg-stone-900 border-stone-100 dark:border-stone-800'
+                ? 'bg-amber-500 border-amber-400 shadow-[0_8px_24px_rgba(245,158,11,0.3)]'
+                : 'bg-white dark:bg-stone-900 border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-lg'
             }`}
           >
             <p className={`text-[8px] font-black uppercase tracking-widest mb-0.5 ${
@@ -845,7 +845,7 @@ export function OrderHistory() {
             }`}>{stats.pending}</p>
           </button>
           {/* Doanh thu — static */}
-          <div className="bg-white dark:bg-stone-900 rounded-2xl p-3 border border-stone-100 dark:border-stone-800 text-center">
+          <div className="bg-white dark:bg-stone-900 rounded-[24px] p-4 lg:p-5 border border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] text-center flex flex-col justify-center">
             <p className="text-[8px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-0.5">Doanh thu</p>
             <p className="text-[13px] font-black text-[#C9252C] leading-none">{(stats.revenue / 1000).toFixed(0)}K</p>
           </div>

@@ -424,7 +424,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
                 key={`desk-${item.to}-${index}`}
                 onClick={() => handleTabClick(item.to)}
                 // Use relative positioning so that pseudo-elements can be attached
-                className={`w-full group relative flex items-center gap-3.5 px-4 py-3 rounded-2xl transition-all duration-300 ${isActive ? 'bg-red-50 dark:bg-red-900/20 text-[#C9252C] dark:text-red-400' : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/50'}`}
+                className={`tap-active w-full group relative flex items-center gap-3.5 px-4 py-3 rounded-2xl transition-all duration-300 ${isActive ? 'bg-red-50 dark:bg-red-900/20 text-[#C9252C] dark:text-red-400 font-bold' : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/50'}`}
               >
                 {isActive && (
                   <motion.div 
@@ -734,7 +734,7 @@ function AppContent({ appsScriptUrl, setAppsScriptUrl }: AppContentProps) {
                 key={`${item.to}-${index}`}
                 id={item.to === '/cart' ? 'bottom-nav-cart' : undefined}
                 onClick={() => handleTabClick(item.to)}
-                className="relative flex flex-col items-center gap-0.5 px-4 py-2 rounded-[20px] min-w-[56px]"
+                className="tap-active relative flex flex-col items-center gap-0.5 px-4 py-2 rounded-[20px] min-w-[56px]"
               >
                 {isActive && (
                   <motion.div
