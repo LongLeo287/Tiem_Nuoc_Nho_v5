@@ -495,152 +495,150 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
 
   return (
     <div className="flex flex-col min-h-full lg:h-full lg:w-full lg:min-h-0 min-w-0">
-      {/* ── Layer 1: Search + Controls ── */}
+      {/* ── Unified Dynamic Island: Search, Controls & Categories ── */}
       <div
-        className={`fixed left-0 right-0 top-[56px] lg:static lg:inset-x-auto z-30 bg-white/80 dark:bg-stone-950/80 backdrop-blur-2xl px-4 pt-4 pb-3 border-b border-stone-100/50 dark:border-stone-800/80 shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
-          isHeaderHidden ? '-translate-y-full lg:translate-y-0' : 'translate-y-0'
+        className={`fixed left-0 right-0 lg:static z-30 pointer-events-none px-4 lg:px-6 w-[max-w-100vw] flex-shrink-0 transition-transform duration-500 ease-in-out ${
+          isHeaderHidden 
+            ? 'top-4 lg:top-4 -translate-y-[calc(100%+80px)] lg:translate-y-0' 
+            : 'top-[68px] lg:mt-4 translate-y-0'
         }`}
       >
         {/* Loading Indicator */}
         {(isLoading || isRefreshing) && menuItems.length > 0 && (
-          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#C9252C] z-50" />
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#C9252C] z-50 lg:hidden" />
         )}
 
-        <div className="flex gap-2 items-center relative z-50">
-          {/* Search Bar */}
-          <div className="relative flex-grow group">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400 group-focus-within:text-[#C9252C] z-10">
-              <Search className="h-4 w-4" />
-            </div>
-            <input
-              type="text"
-              placeholder="Tìm món ngon..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-11 bg-stone-100 dark:bg-stone-800 border border-transparent focus:border-[#C9252C] focus:bg-white dark:focus:bg-stone-950 pl-10 pr-10 rounded-2xl font-bold text-[14px] text-stone-800 dark:text-white placeholder:text-stone-400 outline-none relative z-0"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 z-10 tap-active"
-              >
-                <div className="w-8 h-8 flex items-center justify-center bg-stone-200 dark:bg-stone-700 rounded-full">
-                  <X className="h-4 w-4" />
-                </div>
-              </button>
-            )}
-
-          </div>
-
-          <div className="flex gap-1.5">
-            {/* View Mode Toggle */}
-            <button
-              onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-              className="w-11 h-11 flex-shrink-0 flex items-center justify-center bg-stone-100 dark:bg-stone-800 rounded-2xl text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700"
-              title={viewMode === 'grid' ? 'Chuyển sang dạng danh sách' : 'Chuyển sang dạng lưới'}
-            >
-              {viewMode === 'grid' ? <List className="w-5 h-5" /> : <LayoutGrid className="w-5 h-5" />}
-            </button>
-
-            {/* Sort Toggle */}
-            <div className="relative">
-              <button
-                onClick={() => setShowSortMenu(!showSortMenu)}
-                className={`w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-2xl ${
-                  sortBy !== 'default' ? 'bg-[#C9252C] text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700'
-                }`}
-              >
-                <ArrowUp className={`w-5 h-5 ${sortBy === 'price_desc' ? 'rotate-180' : ''}`} />
-              </button>
-              {showSortMenu && (
-                <>
-                  <div onClick={() => setShowSortMenu(false)} className="fixed inset-0 z-40" />
-                  <div className="absolute right-0 top-14 w-52 bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 z-50 overflow-hidden">
-                    <div className="p-2 space-y-1">
-                      {[
-                        { id: 'default', label: 'Mặc định', icon: LayoutGrid, iconClass: '' },
-                        { id: 'price_asc', label: 'Giá: Thấp đến Cao', icon: ArrowUp, iconClass: '' },
-                        { id: 'price_desc', label: 'Giá: Cao đến Thấp', icon: ArrowUp, iconClass: 'rotate-180' },
-                        { id: 'name_asc', label: 'Tên: A-Z', icon: List, iconClass: '' },
-                      ].map((option) => (
-                        <button
-                          key={option.id}
-                          onClick={() => { setSortBy(option.id as any); setShowSortMenu(false); }}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[12px] font-black ${
-                            sortBy === option.id ? 'bg-red-50 dark:bg-red-900 text-[#C9252C] dark:text-red-400' : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800'
-                          }`}
-                        >
-                          <option.icon className={`w-4 h-4 ${option.iconClass}`} />
-                          {option.label}
-                          {sortBy === option.id && <Check className="w-3.5 h-3.5 ml-auto" />}
-                        </button>
-                      ))}
-                    </div>
+        <div className="glass-premium rounded-[32px] lg:rounded-[40px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.12)] dark:shadow-none flex flex-col p-2 lg:p-3 mx-auto w-full max-w-[800px] gap-2">
+          {/* Row 1: Search + Controls */}
+          <div className="flex gap-2 items-center relative z-50">
+            {/* Search Bar */}
+            <div className="relative flex-grow group">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400 group-focus-within:text-[#C9252C] z-10 transition-colors">
+                <Search className="h-4 w-4 lg:h-5 lg:w-5" />
+              </div>
+              <input
+                type="text"
+                placeholder="Tìm món ngon..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-12 lg:h-14 bg-white/50 dark:bg-stone-900/50 border border-transparent focus:border-[#C9252C]/30 focus:bg-white dark:focus:bg-stone-900 pl-10 lg:pl-12 pr-10 rounded-[24px] lg:rounded-[28px] font-bold text-[14px] lg:text-[15px] text-stone-800 dark:text-white placeholder:text-stone-400 outline-none relative z-0 transition-all shadow-inner dark:shadow-[inset_0_2px_10px_rgba(0,0,0,0.2)]"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-[#C9252C] z-10 tap-active transition-colors"
+                >
+                  <div className="w-8 h-8 flex items-center justify-center bg-stone-200/50 dark:bg-stone-700/50 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">
+                    <X className="h-4 w-4" />
                   </div>
-                </>
+                </button>
               )}
             </div>
 
-            {/* Reload Button */}
-            <button
-              onClick={() => fetchAllData(false)}
-              disabled={isRefreshing || isLoading}
-              title="Làm mới dữ liệu thực đơn"
-              className="w-11 h-11 flex-shrink-0 flex items-center justify-center bg-stone-100 dark:bg-stone-800 rounded-2xl text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700 disabled:opacity-50 relative"
-            >
-              <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'text-[#C9252C]' : ''}`} />
-              {timeAgo && (
-                <div className={`absolute -bottom-1.5 bg-stone-800 dark:bg-stone-200 text-white dark:text-stone-900 text-[8px] font-black px-1.5 py-0.5 rounded-full whitespace-nowrap scale-75 origin-bottom transition-opacity duration-500 ${showTimeAgoBadge ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                  {timeAgo.replace(' trước', '')}
-                </div>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Layer 2: Category Tabs ── */}
-      <div
-        className={`fixed left-0 right-0 top-[120px] lg:static lg:inset-x-auto z-20 bg-white/80 dark:bg-stone-950/80 backdrop-blur-2xl border-b border-stone-100/50 dark:border-stone-800/80 transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
-          isHeaderHidden ? '-translate-y-[58px] lg:translate-y-0' : 'translate-y-0'
-        }`}
-      >
-        <div
-          ref={categoryScrollRef}
-          className="flex gap-2 overflow-x-auto py-3 lg:py-4 px-4 no-scrollbar"
-        >
-          {displayCategories.map((category, index) => {
-            const isActive = activeCategory === category && !searchQuery;
-            return (
+            <div className="flex gap-1.5 flex-shrink-0">
+              {/* View Mode Toggle */}
               <button
-                key={`category-${category}-${index}`}
-                data-active={isActive}
-                onClick={() => {
-                  setActiveCategory(category);
-                  setSearchQuery('');
-                }}
-                className={`relative flex-shrink-0 px-5 py-2.5 rounded-[20px] text-[11px] font-black uppercase tracking-widest transition-all duration-300 border ${
-                  isActive
-                    ? 'text-white bg-gradient-to-r from-[#C9252C] to-[#E53935] border-transparent shadow-[0_4px_16px_rgba(201,37,44,0.3)] dark:shadow-[0_4px_16px_rgba(201,37,44,0.15)]'
-                    : 'bg-stone-100 dark:bg-stone-800/80 text-stone-500 dark:text-stone-400 border-transparent hover:bg-stone-200 dark:hover:bg-stone-700 hover:text-stone-700 active:scale-95'
-                }`}
+                onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
+                className="w-12 h-12 lg:w-14 lg:h-14 flex-shrink-0 flex items-center justify-center bg-transparent lg:bg-white/40 dark:lg:bg-stone-900/40 rounded-[24px] lg:rounded-[28px] text-stone-600 dark:text-stone-400 hover:bg-white/50 dark:hover:bg-stone-800 transition-colors border border-transparent"
+                title={viewMode === 'grid' ? 'Chuyển sang dạng danh sách' : 'Chuyển sang dạng lưới'}
               >
-                <span className="relative z-10 flex items-center gap-1.5">
-                  {category === 'Yêu thích' && (
-                    <Heart className={`w-3 h-3 ${isActive ? 'fill-current' : ''}`} />
-                  )}
-                  {category}
-                </span>
+                {viewMode === 'grid' ? <List className="w-5 h-5 lg:w-6 lg:h-6" /> : <LayoutGrid className="w-5 h-5 lg:w-6 lg:h-6" />}
               </button>
-            );
-          })}
+
+              {/* Sort Toggle */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowSortMenu(!showSortMenu)}
+                  className={`w-12 h-12 lg:w-14 lg:h-14 flex-shrink-0 flex items-center justify-center rounded-[24px] lg:rounded-[28px] transition-all border border-transparent ${
+                    sortBy !== 'default' ? 'bg-[#C9252C] text-white shadow-lg shadow-red-900/20' : 'bg-transparent lg:bg-white/40 dark:lg:bg-stone-900/40 text-stone-600 dark:text-stone-400 hover:bg-white/50 dark:hover:bg-stone-800'
+                  }`}
+                >
+                  <ArrowUp className={`w-5 h-5 lg:w-6 lg:h-6 transition-transform duration-300 ${sortBy === 'price_desc' ? 'rotate-180' : ''}`} />
+                </button>
+                {showSortMenu && (
+                  <>
+                    <div onClick={() => setShowSortMenu(false)} className="fixed inset-0 z-40" />
+                    <div className="absolute right-0 top-[60px] lg:top-[70px] w-52 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xl rounded-[24px] border border-stone-200/50 dark:border-stone-700/50 shadow-2xl z-50 overflow-hidden">
+                      <div className="p-1.5 space-y-0.5">
+                        {[
+                          { id: 'default', label: 'Mặc định', icon: LayoutGrid, iconClass: '' },
+                          { id: 'price_asc', label: 'Giá: Thấp đến Cao', icon: ArrowUp, iconClass: '' },
+                          { id: 'price_desc', label: 'Giá: Cao đến Thấp', icon: ArrowUp, iconClass: 'rotate-180' },
+                          { id: 'name_asc', label: 'Tên: A-Z', icon: List, iconClass: '' },
+                        ].map((option) => (
+                          <button
+                            key={option.id}
+                            onClick={() => { setSortBy(option.id as any); setShowSortMenu(false); }}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-[20px] text-[12px] font-black transition-colors ${
+                              sortBy === option.id ? 'bg-red-50 dark:bg-red-900/30 text-[#C9252C] dark:text-red-400' : 'text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
+                            }`}
+                          >
+                            <option.icon className={`w-4 h-4 ${option.iconClass}`} />
+                            {option.label}
+                            {sortBy === option.id && <Check className="w-3.5 h-3.5 ml-auto text-[#C9252C]" />}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Reload Button */}
+              <button
+                onClick={() => fetchAllData(false)}
+                disabled={isRefreshing || isLoading}
+                title="Làm mới dữ liệu thực đơn"
+                className="w-12 h-12 lg:w-14 lg:h-14 flex-shrink-0 flex items-center justify-center bg-transparent lg:bg-white/40 dark:lg:bg-stone-900/40 rounded-[24px] lg:rounded-[28px] text-stone-600 dark:text-stone-400 hover:bg-white/50 dark:hover:bg-stone-800 border border-transparent disabled:opacity-50 relative transition-all"
+              >
+                <RefreshCw className={`w-5 h-5 lg:w-6 lg:h-6 ${isRefreshing ? 'text-[#C9252C] animate-spin opacity-50' : ''}`} />
+                {timeAgo && (
+                  <div className={`absolute -bottom-1.5 bg-stone-800 dark:bg-stone-200 text-white dark:text-stone-900 text-[8px] font-black px-1.5 py-0.5 rounded-full whitespace-nowrap lg:scale-100 scale-75 origin-bottom transition-opacity duration-500 ${showTimeAgoBadge ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                    {timeAgo.replace(' trước', '')}
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Row 2: Category Tabs */}
+          <div
+            ref={categoryScrollRef}
+            className="flex gap-1.5 lg:gap-2 overflow-x-auto py-1 px-1 no-scrollbar w-full"
+          >
+            {displayCategories.map((category, index) => {
+              const isActive = activeCategory === category && !searchQuery;
+              return (
+                <button
+                  key={`category-${category}-${index}`}
+                  data-active={isActive}
+                  onClick={() => {
+                    setActiveCategory(category);
+                    setSearchQuery('');
+                  }}
+                  className={`relative flex-shrink-0 px-5 py-2.5 lg:py-3 rounded-[20px] lg:rounded-[24px] text-[11px] lg:text-[12px] font-black uppercase tracking-widest transition-all duration-300 border ${
+                    isActive
+                      ? 'text-white bg-gradient-to-r from-[#C9252C] to-[#E53935] border-transparent shadow-[0_4px_16px_rgba(201,37,44,0.3)] dark:shadow-[0_4px_16px_rgba(201,37,44,0.15)] lg:scale-[1.02]'
+                      : 'bg-transparent text-stone-500 dark:text-stone-400 border-transparent hover:bg-white/50 dark:hover:bg-stone-800/50 hover:text-stone-700 dark:hover:text-stone-300'
+                  }`}
+                >
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    {category === 'Yêu thích' && (
+                      <Heart className={`w-3 h-3 lg:w-3.5 lg:h-3.5 ${isActive ? 'fill-current' : ''}`} />
+                    )}
+                    {category}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* ── Content area ── */}
       <div 
         id="pos-scroll-container"
-        className={`flex-grow lg:flex-1 relative pb-32 lg:pb-0 min-h-[600px] lg:min-h-0 lg:overflow-y-auto transition-[padding] duration-300 ease-in-out lg:pt-0 custom-scrollbar ${isHeaderHidden ? 'pt-[62px]' : 'pt-[124px]'}`}
+        className={`flex-grow lg:flex-1 relative pb-32 lg:pb-0 min-h-[600px] lg:min-h-0 lg:overflow-y-auto transition-[padding] duration-300 ease-in-out lg:pt-0 custom-scrollbar ${isHeaderHidden ? 'pt-[72px]' : 'pt-[210px]'}`}
       >
         {filteredItems.length > 0 ? (
           <VirtuosoGrid
