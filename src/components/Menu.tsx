@@ -416,22 +416,25 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
   if (isLoading && menuItems.length === 0) {
     return (
       <div className="flex flex-col min-h-full bg-stone-50 dark:bg-black">
-        {/* Skeleton Layer 1 — Search + Controls */}
-        <div className="fixed left-0 right-0 lg:sticky lg:inset-auto lg:top-[-1px] z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md px-4 pt-3 pb-3 border-b border-stone-100/50 dark:border-stone-800/50 shadow-sm top-[56px] w-full">
-          <div className="flex gap-2 items-center animate-pulse">
-            <div className="flex-grow h-11 bg-stone-100 dark:bg-stone-800 rounded-2xl" />
-            <div className="w-11 h-11 bg-stone-100 dark:bg-stone-800 rounded-2xl flex-shrink-0" />
-            <div className="w-11 h-11 bg-stone-100 dark:bg-stone-800 rounded-2xl flex-shrink-0" />
-            <div className="w-11 h-11 bg-stone-100 dark:bg-stone-800 rounded-2xl flex-shrink-0" />
-          </div>
-        </div>
+        <div className="sticky top-4 lg:top-4 z-40 px-4 mt-2 mb-6 pointer-events-none">
+          <div className="glass-premium rounded-[40px] p-2 flex flex-col gap-2 shadow-elevation border border-white/60 dark:border-white/10 relative overflow-hidden">
+            {/* Dynamic Island Shimmer Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+            
+            {/* Skeleton Layer 1 — Search + Controls */}
+            <div className="flex gap-2 items-center px-2 pt-2 animate-pulse">
+              <div className="flex-grow h-12 bg-stone-100/50 dark:bg-stone-800/50 rounded-full" />
+              <div className="w-12 h-12 bg-stone-100/50 dark:bg-stone-800/50 rounded-full flex-shrink-0" />
+              <div className="w-12 h-12 bg-stone-100/50 dark:bg-stone-800/50 rounded-full flex-shrink-0" />
+              <div className="w-12 h-12 bg-stone-100/50 dark:bg-stone-800/50 rounded-full flex-shrink-0" />
+            </div>
 
-        {/* Skeleton Layer 2 — Category Tabs */}
-        <div className="fixed left-0 right-0 lg:sticky lg:inset-auto lg:top-[68px] z-20 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 top-[120px] w-full">
-          <div className="flex gap-2 py-2 px-4 overflow-hidden animate-pulse">
-            {[80, 64, 96, 72, 60].map((w, i) => (
-              <div key={i} className={`h-8 w-[${w}px] bg-stone-100 dark:bg-stone-800 rounded-xl flex-shrink-0`} />
-            ))}
+            {/* Skeleton Layer 2 — Category Tabs */}
+            <div className="flex gap-2.5 px-2 pb-2 overflow-hidden animate-pulse">
+              {[80, 64, 96, 72, 60].map((w, i) => (
+                <div key={i} className={`h-10 w-[${w}px] bg-stone-100/50 dark:bg-stone-800/50 rounded-full flex-shrink-0`} />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -508,7 +511,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#C9252C] z-50 lg:hidden" />
         )}
 
-        <div className="glass-premium rounded-[32px] lg:rounded-[40px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.12)] dark:shadow-none flex flex-col p-2 lg:p-3 mx-auto w-full max-w-[800px] gap-2">
+        <div className="glass-premium rounded-[32px] lg:rounded-[40px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.12)] dark:shadow-none flex flex-col p-2 lg:p-3 w-full gap-2">
           {/* Row 1: Search + Controls */}
           <div className="flex gap-2 items-center relative z-50">
             {/* Search Bar */}
