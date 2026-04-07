@@ -497,7 +497,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
     <div className="flex flex-col min-h-full lg:h-full lg:w-full lg:min-h-0 min-w-0">
       {/* ── Layer 1: Search + Controls ── */}
       <div
-        className={`fixed left-0 right-0 top-[56px] lg:static lg:inset-x-auto z-30 bg-white/95 dark:bg-[#0a0a0a] backdrop-blur-none px-4 pt-4 pb-3 border-b border-stone-100/50 dark:border-white/5 shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
+        className={`fixed left-0 right-0 top-[56px] lg:static lg:inset-x-auto z-30 bg-white/80 dark:bg-stone-950/80 backdrop-blur-2xl px-4 pt-4 pb-3 border-b border-stone-100/50 dark:border-stone-800/80 shadow-sm lg:shadow-none transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
           isHeaderHidden ? '-translate-y-full lg:translate-y-0' : 'translate-y-0'
         }`}
       >
@@ -601,7 +601,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
 
       {/* ── Layer 2: Category Tabs ── */}
       <div
-        className={`fixed left-0 right-0 top-[120px] lg:static lg:inset-x-auto z-20 bg-white/95 dark:bg-[#0a0a0a] backdrop-blur-none border-b border-stone-100 dark:border-white/5 transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
+        className={`fixed left-0 right-0 top-[120px] lg:static lg:inset-x-auto z-20 bg-white/80 dark:bg-stone-950/80 backdrop-blur-2xl border-b border-stone-100/50 dark:border-stone-800/80 transition-transform duration-300 ease-in-out w-full flex-shrink-0 ${
           isHeaderHidden ? '-translate-y-[58px] lg:translate-y-0' : 'translate-y-0'
         }`}
       >
@@ -619,10 +619,10 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
                   setActiveCategory(category);
                   setSearchQuery('');
                 }}
-                className={`relative flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-200 border ${
+                className={`relative flex-shrink-0 px-5 py-2.5 rounded-[20px] text-[11px] font-black uppercase tracking-widest transition-all duration-300 border ${
                   isActive
-                    ? 'text-white bg-[#C9252C] border-[#C9252C] shadow-lg shadow-red-900/20'
-                    : 'bg-stone-100 dark:bg-stone-800/50 text-stone-500 dark:text-stone-400 border-transparent hover:bg-stone-200 dark:hover:bg-stone-800 active:scale-95'
+                    ? 'text-white bg-gradient-to-r from-[#C9252C] to-[#E53935] border-transparent shadow-[0_4px_16px_rgba(201,37,44,0.3)] dark:shadow-[0_4px_16px_rgba(201,37,44,0.15)]'
+                    : 'bg-stone-100 dark:bg-stone-800/80 text-stone-500 dark:text-stone-400 border-transparent hover:bg-stone-200 dark:hover:bg-stone-700 hover:text-stone-700 active:scale-95'
                 }`}
               >
                 <span className="relative z-10 flex items-center gap-1.5">
@@ -876,7 +876,7 @@ const MenuItemCard = memo(({
   return (
     <div 
       onClick={handleItemClick}
-      className={`group relative bg-white dark:bg-stone-900 rounded-[28px] lg:rounded-3xl p-4 flex flex-col justify-between h-full border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer ${item.isOutOfStock ? 'opacity-60 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''} ${colorClass}`}
+      className={`group relative bg-white dark:bg-stone-900 rounded-[28px] lg:rounded-[32px] p-5 flex flex-col justify-between h-full border border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 cursor-pointer ${item.isOutOfStock ? 'opacity-60 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''} ${colorClass}`}
     >
       {item.isOutOfStock && (
         <div className="absolute inset-0 z-20 bg-white/40 dark:bg-black/40 backdrop-blur-[1px] flex items-center justify-center rounded-[28px] lg:rounded-3xl">
@@ -921,11 +921,11 @@ const MenuItemCard = memo(({
         </div>
       </div>
 
-      <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/5">
+      <div className="mt-auto pt-5 border-t border-stone-100 dark:border-stone-800">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[#C9252C] font-black text-[17px] xl:text-[19px] tracking-tighter shrink-0">
+          <p className="text-[#C9252C] font-black text-[18px] xl:text-[20px] tracking-tight shrink-0">
             {item.price.toLocaleString('vi-VN')}
-            <span className="text-[10px] align-top ml-0.5 uppercase">đ</span>
+            <span className="text-[11px] align-top ml-0.5 uppercase tracking-widest text-[#C9252C]/70">đ</span>
           </p>
           
           {hasOptions && (
@@ -934,7 +934,7 @@ const MenuItemCard = memo(({
                 e.stopPropagation();
                 if (!item.isOutOfStock) onAddQuick(e);
               }}
-              className="w-10 h-10 rounded-[14px] flex items-center justify-center shadow-md tap-active transition-all active:scale-90 bg-[#C9252C] text-white shadow-red-200 dark:shadow-none hover:bg-red-700 shrink-0"
+              className="tap-active w-11 h-11 rounded-[16px] flex items-center justify-center bg-gradient-to-r from-[#C9252C] to-[#E53935] text-white shadow-[0_4px_16px_rgba(201,37,44,0.3)] dark:shadow-none hover:shadow-[0_8px_24px_rgba(201,37,44,0.4)] shrink-0"
               title="Tùy chọn"
             >
               <Plus className="w-5 h-5" />

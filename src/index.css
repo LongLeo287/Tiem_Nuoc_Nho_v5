@@ -95,31 +95,44 @@
 
 @layer components {
   .glass-header {
-    @apply sticky top-0 z-40 bg-white dark:bg-black border-b border-stone-100 dark:border-stone-800;
+    @apply sticky top-0 z-40 bg-white/80 dark:bg-stone-950/80 backdrop-blur-2xl border-b border-stone-100/50 dark:border-stone-800/80;
   }
   
   .glass-nav {
-    @apply sticky bottom-0 z-40 bg-white dark:bg-black border-t border-stone-100 dark:border-stone-800;
+    @apply sticky bottom-0 z-40 bg-white/85 dark:bg-stone-950/85 backdrop-blur-2xl border-t border-stone-100/50 dark:border-stone-800/80;
     padding-bottom: env(safe-area-inset-bottom);
   }
 
+  .glass-premium {
+    @apply bg-white/70 dark:bg-stone-900/70 backdrop-blur-3xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-none border border-white/40 dark:border-white/5;
+  }
+
   .input-field {
-    @apply w-full p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-stone-50 dark:bg-stone-900 border-none focus:ring-2 focus:ring-[#C9252C]/20 focus:bg-white dark:focus:bg-black font-medium placeholder:text-stone-400 text-stone-800 dark:text-stone-200 text-sm sm:text-base;
+    @apply w-full p-4 rounded-[20px] bg-stone-50 dark:bg-stone-900 border border-transparent focus:ring-4 focus:ring-[#C9252C]/10 focus:border-[#C9252C]/30 focus:bg-white dark:focus:bg-stone-950 font-bold placeholder:text-stone-400 text-stone-800 dark:text-stone-200 text-base transition-all duration-300;
   }
 
   .btn-primary {
-    @apply w-full bg-[#C9252C] text-white py-3 sm:py-4 rounded-xl sm:rounded-[20px] font-black text-base sm:text-lg shadow-none flex items-center justify-center gap-2 hover:bg-[#B91C1C];
+    @apply w-full bg-gradient-to-r from-[#C9252C] to-[#E53935] text-white py-4 rounded-[20px] font-black text-lg shadow-[0_8px_20px_rgba(201,37,44,0.3)] dark:shadow-[0_8px_20px_rgba(201,37,44,0.15)] flex items-center justify-center gap-2 hover:shadow-[0_12px_24px_rgba(201,37,44,0.4)] transition-all duration-300;
   }
 
   .btn-secondary {
-    @apply w-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 py-3 sm:py-4 rounded-xl sm:rounded-[20px] font-bold text-base sm:text-lg flex items-center justify-center gap-2 hover:bg-stone-200 dark:hover:bg-stone-700;
+    @apply w-full bg-stone-100 dark:bg-stone-800/80 text-stone-700 dark:text-stone-300 py-4 rounded-[20px] font-bold text-lg flex items-center justify-center gap-2 hover:bg-stone-200 dark:hover:bg-stone-700/80 transition-all duration-300;
   }
 
   .card {
-    @apply bg-white dark:bg-stone-900 rounded-xl sm:rounded-[24px] p-4 sm:p-5 shadow-none border border-stone-100 dark:border-stone-800;
+    @apply bg-white dark:bg-stone-900 rounded-[28px] p-5 lg:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.03)] dark:shadow-none border border-stone-100 dark:border-stone-800/80 transition-all duration-300;
   }
 }
 
 .tap-active {
-  @apply active:opacity-80;
+  @apply active:scale-[0.96] active:opacity-90 transition-all duration-200 ease-out;
+}
+
+/* Tinh chỉnh typography tracking chuẩn Apple */
+h1, h2, h3, h4, h5, h6 {
+  @apply tracking-tight;
+}
+
+.text-caption {
+  @apply text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em];
 }
