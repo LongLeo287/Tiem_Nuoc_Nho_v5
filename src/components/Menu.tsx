@@ -657,7 +657,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
                   {...props} 
                   ref={ref as any} 
                   className={viewMode === 'grid' 
-                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 lg:gap-5 px-4 pb-8" 
+                    ? "grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 lg:gap-5 px-4 pb-8" 
                     : "flex flex-col gap-2.5 px-4 pb-8"} 
                 />
               )),
