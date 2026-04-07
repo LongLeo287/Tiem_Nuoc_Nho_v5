@@ -209,35 +209,53 @@ export function FinanceDashboard() {
     <div className="flex flex-col bg-stone-50 dark:bg-black/20 min-h-full pb-24 relative">
       <div ref={observerRef} className="absolute top-0 left-0 w-full h-1" />
       
-      {/* Sticky Header / Compact Mode */}
-      <div className={`sticky top-0 z-30 transition-all duration-300 ${
-        isScrolled 
-          ? 'glass-header shadow-sm px-4 py-3 -mx-6 -mt-6 mb-6' 
-          : 'bg-transparent px-4 py-2 -mx-6 -mt-6 mb-4'
-      }`}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h2 className={`font-black text-stone-800 dark:text-white tracking-tight transition-all duration-300 ${
-              isScrolled ? 'text-lg' : 'text-2xl'
-            }`}>
-              Tài Chính
-            </h2>
-            {isScrolled && (
-              <div className="flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-lg">
-                <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">
-                  {stats.today.revenue.toLocaleString()}đ
-                </span>
-              </div>
-            )}
-          </div>
-          <button 
-            onClick={() => setShowAddModal(true)}
-            className={`bg-[#C9252C] text-white rounded-full flex items-center justify-center shadow-lg shadow-red-200 dark:shadow-none tap-active transition-all duration-300 ${
-              isScrolled ? 'w-9 h-9' : 'w-11 h-11'
+      {/* Sticky Header / Dynamic Island */}
+      <div className="sticky top-0 z-40 -mx-6 -mt-6 pointer-events-none">
+        <div className={`transition-all duration-500 ${isScrolled ? 'p-3 sm:p-4' : 'px-6 py-4'}`}>
+          <motion.div 
+            layout
+            className={`pointer-events-auto flex items-center justify-between transition-all duration-500 ${
+              isScrolled 
+                ? 'glass-premium rounded-[32px] px-5 py-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.1)] dark:shadow-none mx-auto border border-white/60 dark:border-white/10' 
+                : 'bg-transparent'
             }`}
+            style={{ maxWidth: isScrolled ? '600px' : '100%' }}
           >
-            <Plus className={isScrolled ? 'w-5 h-5' : 'w-6 h-6'} />
-          </button>
+            <div className="flex items-center gap-3">
+              <motion.h2 layout className={`font-black tracking-tighter text-stone-800 dark:text-white transition-all duration-500 ${
+                isScrolled ? 'text-xl' : 'text-3xl drop-shadow-sm'
+              }`}>
+                Tài Chính
+              </motion.h2>
+              <AnimatePresence>
+                {isScrolled && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.5, filter: 'blur(4px)' }}
+                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                    exit={{ opacity: 0, scale: 0.5, filter: 'blur(4px)' }}
+                    transition={{ type: "spring", bounce: 0.5 }}
+                    className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/20 px-2.5 py-1.5 rounded-xl border border-emerald-500/20"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                    <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 tracking-wider">
+                      {stats.today.revenue.toLocaleString()}<span className="text-[10px] ml-0.5 opacity-80">đ</span>
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            <motion.button 
+              layout
+              whileHover={{ scale: 1.05, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setShowAddModal(true)}
+              className={`bg-gradient-to-br from-[#C9252C] to-[#E53935] text-white rounded-full flex items-center justify-center transition-all duration-500 shadow-[0_8px_20px_rgba(201,37,44,0.3)] dark:shadow-[0_8px_20px_rgba(201,37,44,0.15)] ${
+                isScrolled ? 'w-10 h-10' : 'w-12 h-12'
+              }`}
+            >
+              <Plus strokeWidth={isScrolled ? 3 : 2.5} className={isScrolled ? 'w-5 h-5' : 'w-6 h-6'} />
+            </motion.button>
+          </motion.div>
         </div>
       </div>
 
