@@ -607,7 +607,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
           {/* Row 2: Category Tabs */}
           <div
             ref={categoryScrollRef}
-            className="flex gap-1.5 lg:gap-2 overflow-x-auto py-1 px-1 no-scrollbar w-full"
+            className="flex gap-1.5 lg:gap-2 overflow-x-auto pt-1 pb-4 -mb-3 px-1 no-scrollbar w-full"
           >
             {displayCategories.map((category, index) => {
               const isActive = activeCategory === category && !searchQuery;
