@@ -358,12 +358,12 @@ function OrderCard({
 
           {/* Công nợ — Admin có thể thu sau */}
           {isDebt && isAdmin && (
-            <div className="flex gap-2">
+            <div className="flex flex-wrap sm:flex-nowrap gap-2">
               <button
                 onClick={() => onUpdateStatus(order.orderId, 'Hoàn thành', {
                   paymentStatus: 'Đã thanh toán', paymentMethod: 'Tiền mặt',
                 })}
-                className="flex-1 flex items-center justify-center gap-1 py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
+                className="flex-1 flex items-center justify-center gap-1 py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active whitespace-nowrap px-1.5"
               >
                 💵 Thu tiền mặt
               </button>
@@ -371,7 +371,7 @@ function OrderCard({
                 onClick={() => onUpdateStatus(order.orderId, 'Hoàn thành', {
                   paymentStatus: 'Đã thanh toán', paymentMethod: 'Chuyển khoản',
                 })}
-                className="flex-1 flex items-center justify-center gap-1 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200/70 dark:border-blue-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
+                className="flex-1 flex items-center justify-center gap-1 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200/70 dark:border-blue-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active whitespace-nowrap px-1.5"
               >
                 🏦 Đã chuyển khoản
               </button>
@@ -380,12 +380,12 @@ function OrderCard({
 
           {/* ADMIN: đơn bình thường (chưa xong) — flow Đang xử lý → Đang pha chế → Hoàn thành */}
           {!isDone && !isPendingPayment && (
-            <div className="flex gap-2">
+            <div className="flex flex-wrap sm:flex-nowrap gap-2">
               {/* Nút hành động chính */}
               {order.orderStatus !== 'Đang làm' && order.orderStatus !== 'Đã nhận' && (
                 <button
                   onClick={() => onUpdateStatus(order.orderId, 'Đang xử lý')}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border border-orange-200/70 dark:border-orange-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border border-orange-200/70 dark:border-orange-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active whitespace-nowrap px-1.5"
                 >
                   <Clock className="w-3 h-3" /> Nhận đơn
                 </button>
@@ -393,7 +393,7 @@ function OrderCard({
               {order.orderStatus === 'Đã nhận' && (
                 <button
                   onClick={() => onUpdateStatus(order.orderId, 'Đang pha chế')}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200/70 dark:border-blue-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200/70 dark:border-blue-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active whitespace-nowrap px-1.5"
                 >
                   <Coffee className="w-3 h-3" /> Bắt đầu pha
                 </button>
@@ -401,7 +401,7 @@ function OrderCard({
               {order.orderStatus === 'Đang làm' && (
                 <button
                   onClick={() => onUpdateStatus(order.orderId, 'Hoàn thành')}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800/40 rounded-xl text-[9px] font-black uppercase tracking-widest tap-active whitespace-nowrap px-1.5"
                 >
                   <Check className="w-3 h-3" /> Hoàn tất
                 </button>
@@ -441,7 +441,7 @@ function OrderCard({
 
           {/* Admin Payment Choices UI - extracted out to be usable from multiple places */}
           {showAdminPayChoice && (
-            <div className="flex gap-2">
+            <div className="flex flex-wrap sm:flex-nowrap gap-2">
               <button
                 onClick={() => handleAdminCollect('Ti\u1ec1n m\u1eb7t')}
                 className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-stone-700 dark:bg-stone-700 text-white rounded-xl text-[9px] font-black uppercase tracking-widest tap-active"
@@ -853,7 +853,7 @@ export function OrderHistory() {
       )}
 
       {/* Order list */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 px-4">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(310px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-3 px-4">
         <AnimatePresence mode="popLayout">
           {(displayOrders || []).length === 0 ? (
             <motion.div
