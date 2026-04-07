@@ -58,7 +58,7 @@ const SwipeableTransaction = ({ transaction, onDelete }: { transaction: SoTayIte
         dragElastic={0.1}
         onDragEnd={handleDragEnd}
         animate={controls}
-        className="relative bg-white dark:bg-stone-900 p-4 rounded-[24px] border border-stone-100 dark:border-stone-800 flex items-center justify-between shadow-sm touch-pan-y"
+        className="relative glass-premium p-4 rounded-[24px] border border-white/50 dark:border-white/10 flex items-center justify-between shadow-sm touch-pan-y"
       >
         <div className="flex items-center gap-3">
           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
@@ -90,7 +90,7 @@ const SwipeableTransaction = ({ transaction, onDelete }: { transaction: SoTayIte
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white dark:bg-stone-900 rounded-[32px] p-8 max-w-sm w-full shadow-2xl border border-stone-100 dark:border-stone-800"
+              className="glass-premium rounded-[32px] p-8 max-w-sm w-full shadow-2xl border border-white/50 dark:border-white/10"
             >
               <h3 className="text-xl font-extrabold text-stone-800 dark:text-white mb-3">Xóa giao dịch?</h3>
               <p className="text-stone-500 dark:text-stone-400 mb-8 leading-relaxed">Bạn có chắc chắn muốn xóa giao dịch <span className="font-bold text-stone-800 dark:text-white">{itemToRemove.ghi_chu}</span> không?</p>
@@ -212,7 +212,7 @@ export function FinanceDashboard() {
       {/* Sticky Header / Compact Mode */}
       <div className={`sticky top-0 z-30 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-white/90 dark:bg-stone-900/90 backdrop-blur-xl border-b border-stone-100 dark:border-stone-800 shadow-sm px-4 py-3 -mx-6 -mt-6 mb-6' 
+          ? 'glass-header shadow-sm px-4 py-3 -mx-6 -mt-6 mb-6' 
           : 'bg-transparent px-4 py-2 -mx-6 -mt-6 mb-4'
       }`}>
         <div className="flex items-center justify-between">
@@ -317,14 +317,14 @@ export function FinanceDashboard() {
 
         {/* Week & Month Cards - 2 Columns */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white dark:bg-stone-900 rounded-[24px] p-5 border border-stone-100 dark:border-stone-800 shadow-sm">
+          <div className="glass-premium p-5 rounded-[24px]">
             <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-1">Tuần này</p>
             <p className="text-2xl font-black text-stone-800 dark:text-white tracking-tight">{stats.week.revenue.toLocaleString()}đ</p>
             <div className="mt-2 text-[10px] font-bold text-stone-400">
               Lãi: <span className="text-emerald-500">{stats.week.net.toLocaleString()}đ</span>
             </div>
           </div>
-          <div className="bg-white dark:bg-stone-900 rounded-[24px] p-5 border border-stone-100 dark:border-stone-800 shadow-sm">
+          <div className="glass-premium p-5 rounded-[24px]">
             <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-1">Tháng này</p>
             <p className="text-2xl font-black text-stone-800 dark:text-white tracking-tight">{stats.month.revenue.toLocaleString()}đ</p>
             <div className="mt-2 text-[10px] font-bold text-stone-400">
@@ -354,7 +354,7 @@ export function FinanceDashboard() {
           ))}
           
           {sortedTransactions.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-12 text-stone-400 bg-white dark:bg-stone-900 rounded-[24px] border border-stone-100 dark:border-stone-800">
+            <div className="flex flex-col items-center justify-center py-12 text-stone-400 glass-premium rounded-[24px] border border-white/50 dark:border-white/10">
               <Wallet className="w-12 h-12 mb-3 opacity-20" />
               <p className="text-xs font-bold">Chưa có giao dịch nào</p>
             </div>
@@ -365,7 +365,7 @@ export function FinanceDashboard() {
         {visibleCount < sortedTransactions.length && (
           <button 
             onClick={handleLoadMore}
-            className="w-full py-4 mt-2 bg-white dark:bg-stone-900 border border-stone-100 dark:border-stone-800 rounded-[24px] text-xs font-black text-stone-500 uppercase tracking-widest tap-active shadow-sm"
+            className="w-full py-4 mt-2 glass-premium border border-white/50 dark:border-white/10 rounded-[24px] text-xs font-black text-stone-500 uppercase tracking-widest tap-active shadow-sm"
           >
             Tải thêm giao dịch
           </button>
@@ -387,16 +387,16 @@ export function FinanceDashboard() {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
-              className="relative bg-white dark:bg-stone-900 w-full max-w-md rounded-[32px] p-6 shadow-2xl space-y-6"
+              className="relative glass-premium w-full max-w-md rounded-[32px] p-6 shadow-2xl space-y-6"
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-black text-stone-800 dark:text-white">Thêm giao dịch</h3>
-                <button onClick={() => setShowAddModal(false)} className="w-11 h-11 bg-stone-100 dark:bg-stone-800 rounded-full flex items-center justify-center text-stone-500 tap-active">
+                <button onClick={() => setShowAddModal(false)} className="w-11 h-11 bg-white/40 dark:bg-stone-800/40 rounded-full flex items-center justify-center text-stone-500 tap-active">
                   <ChevronDown className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-2xl">
+              <div className="flex bg-white/40 dark:bg-stone-800/40 p-1 rounded-2xl">
                 <button 
                   onClick={() => setNewTransType('Thu')}
                   className={`flex-1 py-3 rounded-xl font-black text-sm transition-all tap-active ${
