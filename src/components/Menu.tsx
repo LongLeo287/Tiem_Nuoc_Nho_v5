@@ -641,7 +641,7 @@ export function Menu({ appsScriptUrl, onNavigateSettings }: MenuProps) {
       {/* ── Content area ── */}
       <div 
         id="pos-scroll-container"
-        className={`flex-grow lg:flex-1 relative pb-32 lg:pb-0 min-h-[600px] lg:min-h-0 lg:overflow-y-auto transition-[padding] duration-300 ease-in-out lg:pt-0 custom-scrollbar ${isHeaderHidden ? 'pt-[72px]' : 'pt-[180px]'}`}
+        className={`flex-grow lg:flex-1 relative pb-32 lg:pb-0 min-h-[600px] lg:min-h-0 lg:overflow-y-auto transition-[padding] duration-300 ease-in-out lg:pt-0 custom-scrollbar ${isHeaderHidden ? 'pt-[72px]' : 'pt-[140px]'}`}
       >
         {filteredItems.length > 0 ? (
           <VirtuosoGrid
