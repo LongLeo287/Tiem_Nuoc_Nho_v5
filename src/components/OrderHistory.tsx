@@ -776,9 +776,10 @@ export function OrderHistory() {
   return (
     <div className="flex flex-col pb-24 bg-stone-50 dark:bg-black min-h-full">
       {/* Time filter — admin: tùy chọn; staff: cố định hôm nay */}
-      <div className="sticky top-0 z-20 bg-stone-50/80 dark:bg-stone-950/80 backdrop-blur-2xl px-2 lg:px-4">
+      {/* Time filter — Dynamic Island */}
+      <div className="sticky top-4 z-20 pointer-events-none mb-6">
       {isAdmin ? (
-        <div className="flex gap-1.5 overflow-x-auto px-4 pt-5 pb-3 no-scrollbar">
+        <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex gap-1.5 overflow-x-auto p-1.5 mx-auto w-max max-w-[calc(100%-2rem)] no-scrollbar">
           {([
             { id: 'day',   label: 'Hôm nay' },
             { id: 'week',  label: 'Tuần này' },
@@ -788,10 +789,10 @@ export function OrderHistory() {
             <button
               key={r.id}
               onClick={() => setTimeRange(r.id)}
-              className={`flex-shrink-0 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest tap-active transition-all ${
+              className={`flex-shrink-0 px-4 py-2.5 rounded-[24px] text-[10px] font-black uppercase tracking-widest tap-active transition-all ${
                 timeRange === r.id
-                  ? 'bg-[#C9252C] text-white shadow-lg shadow-red-900/20 scale-105'
-                  : 'bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400'
+                  ? 'bg-[#C9252C] text-white shadow-lg shadow-red-900/20 scale-[1.02]'
+                  : 'bg-transparent text-stone-500 hover:bg-stone-100/50 dark:hover:bg-stone-800/50'
               }`}
             >
               {r.label}
@@ -799,11 +800,13 @@ export function OrderHistory() {
           ))}
         </div>
       ) : (
-        <div className="px-4 pt-5 pb-2 flex items-center gap-2">
-          <Clock className="w-3.5 h-3.5 text-stone-400 dark:text-stone-500" />
-          <span className="text-[10px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-widest">Đơn hôm nay</span>
+        <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex items-center gap-2 p-3 mx-auto w-max max-w-[calc(100%-2rem)]">
+          <Clock className="w-4 h-4 text-stone-400 dark:text-stone-500 ml-1" />
+          <span className="text-[10px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-widest">Đơn hôm nay</span>
           {stats.pending > 0 && (
-            <span className="ml-auto text-[10px] font-black text-amber-500 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-full border border-amber-200/60 dark:border-amber-800/30">{stats.pending} chờ</span>
+            <span className="ml-2 text-[10px] font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2.5 py-1 rounded-full border border-amber-200/60 dark:border-amber-800/30 shadow-sm">
+              {stats.pending} chờ
+            </span>
           )}
         </div>
       )}
