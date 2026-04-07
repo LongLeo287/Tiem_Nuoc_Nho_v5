@@ -73,26 +73,39 @@ function StaffManagementView() {
 
   return (
     <div className="space-y-6 pb-20">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 px-1">
-        <div className="space-y-0.5">
-          <h2 className="text-2xl font-black text-stone-800 dark:text-white tracking-tight">Quản lý nhân sự</h2>
-          <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Nhân viên & Chấm công & Lịch sử</p>
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-end px-1">
+          <div className="space-y-0.5">
+            <h2 className="text-2xl font-black text-stone-800 dark:text-white tracking-tight">Quản lý nhân sự</h2>
+            <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Nhân viên & Chấm công & Lịch sử</p>
+          </div>
         </div>
-        <div className="flex bg-white/40 dark:bg-stone-800/40 p-1 rounded-2xl border border-stone-200 dark:border-stone-700">
-          {[
-            { id: 'list', label: 'Danh sách', icon: Users },
-            { id: 'timesheet', label: 'Chấm công', icon: Calendar },
-            { id: 'logs', label: 'Lịch sử', icon: History }
-          ].map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${activeTab === tab.id ? 'bg-white dark:bg-stone-700 shadow-sm text-[#C9252C] dark:text-red-400' : 'text-stone-500 hover:text-stone-700 dark:hover:text-stone-300'}`}
-            >
-              <tab.icon className="w-3.5 h-3.5" />
-              <span className="hidden xs:inline">{tab.label}</span>
-            </button>
-          ))}
+
+        {/* Dynamic Island: Tab Navigation */}
+        <div className="sticky top-[88px] lg:top-4 z-40 pointer-events-none mb-4 -mx-2">
+          <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex gap-2 overflow-x-auto p-1.5 mx-auto w-max max-w-[calc(100%-1rem)] no-scrollbar scroll-smooth">
+            {[
+              { id: 'list', label: 'Nhân sự', icon: Users, color: 'bg-indigo-500' },
+              { id: 'timesheet', label: 'Chấm công', icon: Calendar, color: 'bg-emerald-500' },
+              { id: 'logs', label: 'Lịch sử', icon: History, color: 'bg-amber-500' }
+            ].map(tab => {
+              const isSelected = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`px-4 py-2.5 rounded-[24px] whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all tap-active flex items-center gap-2 border ${
+                    isSelected
+                      ? `${tab.color} text-white border-transparent shadow-lg shadow-stone-200 dark:shadow-none scale-[1.02]`
+                      : 'bg-transparent text-stone-500 dark:text-stone-400 border-transparent hover:bg-stone-100/50 dark:hover:bg-stone-800/50'
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span className="hidden xs:inline">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -2457,27 +2470,34 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 </div>
               </div>
 
-              {/* Search Bar for Inventory */}
-              <div className="px-1">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
-                    <Search className="w-4 h-4" />
+              {/* Dynamic Island: Inventory Search */}
+              <div className="sticky top-[88px] lg:top-4 z-40 pointer-events-none mb-6 -mx-2">
+                <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex gap-2 items-center p-1.5 mx-auto w-[90%] max-w-md">
+                  <div className="relative flex-1">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
+                      <Search className="w-4 h-4" />
+                    </div>
+                    <input 
+                      type="text"
+                      placeholder="Tìm kiếm nguyên liệu..."
+                      value={inventorySearchQuery}
+                      onChange={(e) => setInventorySearchQuery(e.target.value)}
+                      className="w-full bg-transparent border-transparent pl-9 pr-9 py-2.5 rounded-[24px] font-bold text-[13px] text-stone-800 dark:text-white placeholder:text-stone-400 focus:ring-0 outline-none"
+                    />
+                    {inventorySearchQuery && (
+                      <button
+                        onClick={() => setInventorySearchQuery('')}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-[#C9252C] transition-colors tap-active"
+                      >
+                        <XCircle className="h-4 w-4" />
+                      </button>
+                    )}
                   </div>
-                  <input 
-                    type="text"
-                    placeholder="Tìm kiếm nguyên liệu, mã số..."
-                    value={inventorySearchQuery}
-                    onChange={(e) => setInventorySearchQuery(e.target.value)}
-                    className="w-full glass-premium border border-stone-200 dark:border-stone-800 pl-10 pr-10 py-3 rounded-2xl font-medium text-[15px] text-stone-800 dark:text-white placeholder:text-stone-400 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none shadow-sm"
-                  />
-                  {inventorySearchQuery && (
-                    <button
-                      onClick={() => setInventorySearchQuery('')}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 tap-active"
-                    >
-                      <XCircle className="h-4 w-4 bg-stone-200 dark:bg-stone-800 rounded-full p-0.5" />
-                    </button>
-                  )}
+                  <div className="w-px h-8 bg-stone-200 dark:bg-stone-700 hidden sm:block"></div>
+                  <div className="hidden sm:flex px-3 items-center gap-1.5 text-[10px] font-black text-stone-400 uppercase tracking-widest shrink-0">
+                    <Filter className="w-3.5 h-3.5" />
+                    <span>Lọc</span>
+                  </div>
                 </div>
               </div>
 
