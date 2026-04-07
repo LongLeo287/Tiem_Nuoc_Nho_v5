@@ -428,7 +428,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
               <button
                 onClick={() => fetchAllData(false)}
                 disabled={isRefreshing}
-                className="w-14 h-14 bg-white dark:bg-stone-900 rounded-[24px] flex items-center justify-center text-stone-400 hover:text-stone-900 dark:hover:text-white tap-active shadow-sm border border-stone-100 dark:border-stone-800"
+                className="w-14 h-14 glass-premium rounded-[24px] flex items-center justify-center text-stone-400 hover:text-stone-900 dark:hover:text-white tap-active shadow-sm border border-white/50 dark:border-white/10"
               >
                 <RefreshCw className={`w-6 h-6 ${isRefreshing ? 'animate-spin' : ''}`} />
               </button>
@@ -467,7 +467,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
         ].map((stat, i) => (
           <div
             key={stat.label}
-            className="bg-white dark:bg-stone-900 p-4 rounded-3xl border border-stone-100 dark:border-stone-800 shadow-sm"
+            className="glass-premium p-4 rounded-3xl border border-white/50 dark:border-white/10 shadow-sm"
           >
             <div className={`w-10 h-10 ${stat.bg} dark:bg-opacity-10 ${stat.color} rounded-xl flex items-center justify-center mb-3`}>
               <stat.icon className="w-5 h-5" />
@@ -507,7 +507,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
             {/* Autocomplete Suggestions */}
               {isSearchExpanded && searchQuery.trim() && (
                 <div
-                  className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-stone-900 border border-stone-100 dark:border-stone-800 rounded-2xl shadow-xl overflow-hidden z-50"
+                  className="absolute top-full left-0 right-0 mt-2 glass-premium border border-white/50 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden z-50"
                 >
                   {menuItems
                     .filter(item => 
@@ -576,7 +576,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
               className={`px-4 py-2 rounded-xl whitespace-nowrap text-[13px] font-bold tap-active border ${
                 activeCategory === cat && !searchQuery
                   ? 'bg-[#C9252C] text-white border-[#C9252C] shadow-sm shadow-red-200 dark:shadow-none'
-                  : 'bg-white dark:bg-stone-900/80 text-stone-600 dark:text-stone-300 border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-800'
+                  : 'glass-premium/80 text-stone-600 dark:text-stone-300 border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-800'
               }`}
             >
               {cat}
@@ -648,7 +648,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
                       placeholder="Tìm kiếm nguyên liệu dự báo..."
                       value={forecastSearchQuery}
                       onChange={(e) => setForecastSearchQuery(e.target.value)}
-                      className="w-full bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 pl-10 pr-10 py-3 rounded-2xl font-medium text-[15px] text-stone-800 dark:text-white placeholder:text-stone-400 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none shadow-sm"
+                      className="w-full glass-premium border border-stone-200 dark:border-stone-800 pl-10 pr-10 py-3 rounded-2xl font-medium text-[15px] text-stone-800 dark:text-white placeholder:text-stone-400 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none shadow-sm"
                     />
                     {forecastSearchQuery && (
                       <button
@@ -668,12 +668,12 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
                   {filteredForecast.map((item, idx) => (
                     <div
                       key={item.ma_mon}
-                      className={`bg-white dark:bg-stone-900 p-6 rounded-[32px] border shadow-sm transition-all ${
+                      className={`glass-premium p-6 rounded-[32px] border shadow-sm transition-all ${
                         item.inventoryQty === 0 
                           ? 'border-red-200 dark:border-red-900/50 bg-red-50/30 dark:bg-red-900/5' 
                           : item.daysLeft <= 3 
                             ? 'border-amber-200 dark:border-amber-900/50 bg-amber-50/30 dark:bg-amber-900/5' 
-                            : 'border-stone-100 dark:border-stone-800'
+                            : 'border-white/50 dark:border-white/10'
                       }`}
                     >
                       <div className="flex justify-between items-start mb-6">
@@ -694,7 +694,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
                       </div>
                       
                       <div className="space-y-4">
-                        <div className="h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
+                        <div className="h-2 bg-white/40 dark:bg-stone-800/40 rounded-full overflow-hidden">
                           <div 
                             style={{ width: `${Math.min(100, (item.inventoryQty || 0) / 0.5)}%` }}
                             className={`h-full ${item.daysLeft <= 3 ? 'bg-red-500' : 'bg-emerald-500'}`}
@@ -727,7 +727,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
               
               {aiInsights && (
                 <div 
-                  className="bg-white dark:bg-stone-900 p-8 rounded-[40px] border border-stone-100 dark:border-stone-800 shadow-sm"
+                  className="glass-premium p-8 rounded-[32px]"
                 >
                   <div className="flex items-center gap-3 mb-6">
                     <Sparkles className="w-6 h-6 text-emerald-500" />
@@ -756,7 +756,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
                   {filteredItems.map((item, idx) => (
                     <div
                       key={item.ma_mon}
-                      className={`group bg-white dark:bg-stone-900 rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-xl relative overflow-hidden ${!item.co_san ? 'opacity-50 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''} ${viewLayout === 'list' ? 'flex items-center p-4' : 'p-6'}`}
+                      className={`group glass-premium rounded-[28px] shadow-sm hover:shadow-xl relative overflow-hidden ${!item.co_san ? 'opacity-50 grayscale bg-stone-50/50 dark:bg-stone-900/50' : ''} ${viewLayout === 'list' ? 'flex items-center p-4' : 'p-6'}`}
                     >
                       {!item.co_san && (
                         <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]" 
@@ -850,10 +850,10 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-xl">
           <div 
-            className="bg-white dark:bg-stone-900 w-full max-w-xl rounded-t-[48px] sm:rounded-[48px] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] border-t sm:border border-stone-100 dark:border-stone-800"
+            className="glass-premium w-full max-w-xl rounded-t-[48px] sm:rounded-[48px] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] border-t sm:border border-white/50 dark:border-white/10"
           >
               {/* Modal Header */}
-              <div className="p-10 border-b border-stone-50 dark:border-stone-800 flex justify-between items-center bg-white dark:bg-stone-900 sticky top-0 z-10">
+              <div className="p-10 border-b border-stone-50 dark:border-stone-800 flex justify-between items-center glass-premium sticky top-0 z-10">
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 bg-[#C9252C] text-white rounded-[28px] flex items-center justify-center shadow-xl shadow-red-200 dark:shadow-none">
                     {editingItem ? <Edit2 className="w-8 h-8" /> : <Plus className="w-8 h-8" />}

@@ -78,7 +78,7 @@ function StaffManagementView() {
           <h2 className="text-2xl font-black text-stone-800 dark:text-white tracking-tight">Quản lý nhân sự</h2>
           <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Nhân viên & Chấm công & Lịch sử</p>
         </div>
-        <div className="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-2xl border border-stone-200 dark:border-stone-700">
+        <div className="flex bg-white/40 dark:bg-stone-800/40 p-1 rounded-2xl border border-stone-200 dark:border-stone-700">
           {[
             { id: 'list', label: 'Danh sách', icon: Users },
             { id: 'timesheet', label: 'Chấm công', icon: Calendar },
@@ -100,7 +100,7 @@ function StaffManagementView() {
         <div className="space-y-4">
           <button 
             onClick={() => setIsAdding(!isAdding)}
-            className="w-full py-4 bg-white dark:bg-stone-900 border-2 border-dashed border-stone-200 dark:border-stone-800 rounded-[24px] flex items-center justify-center gap-2 text-stone-400 hover:text-[#C9252C] hover:border-[#C9252C]/30 transition-all group"
+            className="w-full py-4 glass-premium border-2 border-dashed border-stone-200 dark:border-stone-800 rounded-[24px] flex items-center justify-center gap-2 text-stone-400 hover:text-[#C9252C] hover:border-[#C9252C]/30 transition-all group"
           >
             <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
             <span className="text-xs font-black uppercase tracking-widest">Thêm nhân viên mới</span>
@@ -113,7 +113,7 @@ function StaffManagementView() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 onSubmit={handleAdd} 
-                className="bg-white dark:bg-stone-900 p-6 rounded-[32px] border border-stone-100 dark:border-stone-800 space-y-5 shadow-xl shadow-stone-900/5"
+                className="glass-premium p-6 rounded-[32px] border border-white/50 dark:border-white/10 space-y-5 shadow-xl shadow-stone-900/5"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
@@ -122,7 +122,7 @@ function StaffManagementView() {
                       placeholder="Nguyễn Văn A" 
                       value={newStaff.name}
                       onChange={e => setNewStaff({...newStaff, name: e.target.value})}
-                      className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-100 dark:border-stone-800 text-sm font-bold focus:ring-2 focus:ring-[#C9252C]/20 outline-none"
+                      className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-white/50 dark:border-white/10 text-sm font-bold focus:ring-2 focus:ring-[#C9252C]/20 outline-none"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -131,7 +131,7 @@ function StaffManagementView() {
                       placeholder="nva_staff" 
                       value={newStaff.username}
                       onChange={e => setNewStaff({...newStaff, username: e.target.value})}
-                      className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-100 dark:border-stone-800 text-sm font-bold focus:ring-2 focus:ring-[#C9252C]/20 outline-none"
+                      className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-white/50 dark:border-white/10 text-sm font-bold focus:ring-2 focus:ring-[#C9252C]/20 outline-none"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -142,7 +142,7 @@ function StaffManagementView() {
                       value={newStaff.pin}
                       maxLength={4}
                       onChange={e => setNewStaff({...newStaff, pin: e.target.value})}
-                      className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-100 dark:border-stone-800 text-sm font-bold focus:ring-2 focus:ring-[#C9252C]/20 outline-none"
+                      className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-white/50 dark:border-white/10 text-sm font-bold focus:ring-2 focus:ring-[#C9252C]/20 outline-none"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -151,7 +151,7 @@ function StaffManagementView() {
                       <select 
                         value={newStaff.role}
                         onChange={e => setNewStaff({...newStaff, role: e.target.value as any})}
-                        className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-100 dark:border-stone-800 text-sm font-bold outline-none"
+                        className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-white/50 dark:border-white/10 text-sm font-bold outline-none"
                       >
                         <option value="staff">Nhân viên</option>
                         <option value="manager">Quản lý</option>
@@ -165,7 +165,7 @@ function StaffManagementView() {
                         value={newStaff.hourlyRate || ''}
                         onChange={e => setNewStaff({...newStaff, hourlyRate: Number(e.target.value)})}
                         {...currencyInputProps}
-                        className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-100 dark:border-stone-800 text-sm font-bold focus:ring-2 focus:ring-[#C9252C]/20 outline-none"
+                        className="w-full p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-white/50 dark:border-white/10 text-sm font-bold focus:ring-2 focus:ring-[#C9252C]/20 outline-none"
                       />
 
                     </div>
@@ -184,7 +184,7 @@ function StaffManagementView() {
               <motion.div 
                 layout
                 key={staff.id} 
-                className="bg-white dark:bg-stone-900 p-5 rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-md transition-all group"
+                className="glass-premium p-5 rounded-[28px] hover:shadow-md transition-all group"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-4">
@@ -233,14 +233,14 @@ function StaffManagementView() {
                 </div>
 
                 {editingId === staff.id && (
-                  <div className="mt-6 p-5 bg-stone-50 dark:bg-stone-950 rounded-2xl space-y-4 border border-stone-100 dark:border-stone-800">
+                  <div className="mt-6 p-5 bg-stone-50 dark:bg-stone-950 rounded-2xl space-y-4 border border-white/50 dark:border-white/10">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-stone-400 uppercase tracking-widest px-1">Tên</label>
                         <input 
                           type="text"
                           defaultValue={staff.name}
-                          className="w-full p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
+                          className="w-full p-2.5 rounded-xl glass-premium border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
                           id={`edit-name-${staff.id}`}
                         />
                       </div>
@@ -249,7 +249,7 @@ function StaffManagementView() {
                         <input 
                           type="text"
                           defaultValue={staff.username}
-                          className="w-full p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
+                          className="w-full p-2.5 rounded-xl glass-premium border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
                           id={`edit-username-${staff.id}`}
                         />
                       </div>
@@ -261,7 +261,7 @@ function StaffManagementView() {
                           type="text"
                           defaultValue={staff.pin}
                           maxLength={6}
-                          className="w-full p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
+                          className="w-full p-2.5 rounded-xl glass-premium border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
                           id={`edit-pin-${staff.id}`}
                         />
                       </div>
@@ -269,7 +269,7 @@ function StaffManagementView() {
                         <label className="text-[9px] font-black text-stone-400 uppercase tracking-widest px-1">Vai trò</label>
                         <select 
                           defaultValue={staff.role}
-                          className="w-full p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
+                          className="w-full p-2.5 rounded-xl glass-premium border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
                           id={`edit-role-${staff.id}`}
                         >
                           <option value="staff">Staff</option>
@@ -282,7 +282,7 @@ function StaffManagementView() {
                           type="number"
                           defaultValue={staff.hourlyRate}
                           {...currencyInputProps}
-                          className="w-full p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
+                          className="w-full p-2.5 rounded-xl glass-premium border border-stone-200 dark:border-stone-800 text-xs font-bold outline-none"
                           id={`edit-rate-${staff.id}`}
                         />
 
@@ -328,11 +328,11 @@ function StaffManagementView() {
       )}
 
       {activeTab === 'timesheet' && (
-        <div className="bg-white dark:bg-stone-900 rounded-[32px] border border-stone-100 dark:border-stone-800 overflow-hidden shadow-sm">
+        <div className="glass-premium rounded-[28px] overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-stone-50 dark:bg-stone-950 border-b border-stone-100 dark:border-stone-800">
+                <tr className="bg-stone-50 dark:bg-stone-950 border-b border-white/50 dark:border-white/10">
                   <th className="px-6 py-5 text-[10px] font-black text-stone-400 uppercase tracking-widest">Ngày</th>
                   <th className="px-6 py-5 text-[10px] font-black text-stone-400 uppercase tracking-widest">Nhân viên</th>
                   <th className="px-6 py-5 text-[10px] font-black text-stone-400 uppercase tracking-widest">Check In</th>
@@ -351,13 +351,13 @@ function StaffManagementView() {
                     return (
                       <tr key={sheet.id} className="hover:bg-stone-50 dark:hover:bg-stone-800/30 transition-colors group">
                         <td className="px-6 py-4">
-                          <span className="text-xs font-black text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-2 py-1 rounded-lg">
+                          <span className="text-xs font-black text-stone-600 dark:text-stone-300 bg-white/40 dark:bg-stone-800/40 px-2 py-1 rounded-lg">
                             {new Date(sheet.date).toLocaleDateString('vi-VN')}
                           </span>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-xs font-black text-stone-500 group-hover:bg-[#C9252C] group-hover:text-white transition-all">
+                            <div className="w-8 h-8 rounded-xl bg-white/40 dark:bg-stone-800/40 flex items-center justify-center text-xs font-black text-stone-500 group-hover:bg-[#C9252C] group-hover:text-white transition-all">
                               {staff?.name.charAt(0)}
                             </div>
                             <span className="text-sm font-black text-stone-800 dark:text-white">{staff?.name || 'Unknown'}</span>
@@ -391,11 +391,11 @@ function StaffManagementView() {
       )}
 
       {activeTab === 'logs' && (
-        <div className="bg-white dark:bg-stone-900 rounded-[32px] border border-stone-100 dark:border-stone-800 overflow-hidden shadow-sm">
+        <div className="glass-premium rounded-[28px] overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-stone-50 dark:bg-stone-950 border-b border-stone-100 dark:border-stone-800">
+                <tr className="bg-stone-50 dark:bg-stone-950 border-b border-white/50 dark:border-white/10">
                   <th className="px-6 py-5 text-[10px] font-black text-stone-400 uppercase tracking-widest">Thời gian</th>
                   <th className="px-6 py-5 text-[10px] font-black text-stone-400 uppercase tracking-widest">Người thực hiện</th>
                   <th className="px-6 py-5 text-[10px] font-black text-stone-400 uppercase tracking-widest">Hành động</th>
@@ -422,14 +422,14 @@ function StaffManagementView() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-lg bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-[10px] font-black text-stone-500">
+                          <div className="w-6 h-6 rounded-lg bg-white/40 dark:bg-stone-800/40 flex items-center justify-center text-[10px] font-black text-stone-500">
                             {log.performerName.charAt(0)}
                           </div>
                           <span className="text-xs font-black text-stone-800 dark:text-white">{log.performerName}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="px-2 py-1 rounded-lg bg-stone-100 dark:bg-stone-800 text-[10px] font-black text-stone-600 dark:text-stone-300 uppercase tracking-wider">
+                        <span className="px-2 py-1 rounded-lg bg-white/40 dark:bg-stone-800/40 text-[10px] font-black text-stone-600 dark:text-stone-300 uppercase tracking-wider">
                           {log.action}
                         </span>
                       </td>
@@ -1216,7 +1216,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
     <div className="flex flex-col min-h-full pb-24">
       {/* Top Navigation Tabs */}
       {location.pathname.startsWith('/staff/operations') && (
-        <div className="sticky top-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 transition-colors">
+        <div className="sticky top-0 z-30 glass-header transition-colors">
           <div className="flex items-center gap-3 p-3">
             <div className="flex-grow flex flex-col gap-2">
               <div className="flex gap-1 overflow-x-auto scrollbar-hide py-0.5">
@@ -1346,7 +1346,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                   <button
                     key={item.id}
                     onClick={() => setViewMode(item.id as any)}
-                    className="bg-white dark:bg-stone-900 p-5 rounded-3xl border border-stone-100 dark:border-stone-800 shadow-sm flex flex-col items-center justify-center gap-3 tap-active hover:scale-[1.02] transition-all"
+                    className="glass-premium p-5 rounded-[28px] flex flex-col items-center justify-center gap-3 tap-active hover:scale-[1.02] transition-all"
                   >
                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${item.bg} ${item.color}`}>
                       <item.icon className="w-6 h-6" />
@@ -1385,7 +1385,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 </div>
                 <button 
                   onClick={() => fetchAllData(false)}
-                  className="w-10 h-10 bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
+                  className="w-10 h-10 glass-premium rounded-2xl border border-white/50 dark:border-white/10 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
                 >
                   <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C9252C]' : ''}`} />
                 </button>
@@ -1441,7 +1441,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               {/* Recent Cash Movements */}
               <div className="space-y-4">
                 <h3 className="text-stone-400 dark:text-stone-500 font-black text-[10px] uppercase tracking-widest px-1">Biến động gần đây</h3>
-                <div className="bg-white dark:bg-stone-900 rounded-[32px] border border-stone-100 dark:border-stone-800 overflow-hidden shadow-sm">
+                <div className="glass-premium rounded-[28px] overflow-hidden shadow-sm">
                   {[
                     ...orders
                       .filter(o => o.paymentMethod === 'Tiền mặt' && (o.paymentStatus === 'Đã thanh toán' || o.orderStatus === 'Hoàn thành'))
@@ -1504,7 +1504,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
             >
               {/* Daily Summary Card - New Section */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-white dark:bg-stone-900 p-5 sm:p-6 rounded-3xl sm:rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-4">
+                <div className="glass-premium p-5 sm:p-6 rounded-3xl sm:rounded-[32px] space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center flex-shrink-0">
                       <TrendingUp className="w-5 h-5" />
@@ -1522,7 +1522,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                     />
                   </div>
                 </div>
-                <div className="bg-white dark:bg-stone-900 p-5 sm:p-6 rounded-3xl sm:rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-4">
+                <div className="glass-premium p-5 sm:p-6 rounded-3xl sm:rounded-[32px] space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center flex-shrink-0">
                       <ListOrdered className="w-5 h-5" />
@@ -1592,7 +1592,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               </div>
 
               {/* Revenue Trend Chart */}
-              <div className="bg-white dark:bg-stone-900 p-8 rounded-[48px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-6">
+              <div className="glass-premium p-8 rounded-[40px] space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-black text-stone-800 dark:text-white text-sm uppercase tracking-widest">Xu hướng Doanh thu</h3>
@@ -1643,7 +1643,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               </div>
 
               {/* Inventory Health Widget */}
-              <div className="bg-white dark:bg-stone-900 p-8 rounded-[48px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-6">
+              <div className="glass-premium p-8 rounded-[40px] space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-black text-stone-800 dark:text-white text-sm uppercase tracking-widest">Sức khỏe Kho hàng</h3>
@@ -1694,7 +1694,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               </div>
 
               {/* AI Insight Section */}
-              <div className="bg-white dark:bg-stone-900 p-8 rounded-[48px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-6 relative overflow-hidden group">
+              <div className="glass-premium p-8 rounded-[40px] space-y-6 relative overflow-hidden group">
                 <div className="absolute -right-10 -top-10 w-48 h-48 bg-red-50 dark:bg-red-900/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
                 <div className="flex items-center justify-between relative z-10">
                   <div className="flex items-center gap-4">
@@ -1734,7 +1734,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
 
               {/* Bento Grid Stats */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white dark:bg-stone-900 p-6 rounded-[40px] border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-md transition-all duration-300 space-y-4 relative overflow-hidden group">
+                <div className="glass-premium p-6 rounded-[32px] hover:shadow-md transition-all duration-300 space-y-4 relative overflow-hidden group">
                   <div className="absolute -right-4 -top-4 w-24 h-24 bg-emerald-50 dark:bg-emerald-900/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
                   <div className="w-14 h-14 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-[20px] flex items-center justify-center">
                     <TrendingUp className="w-7 h-7" />
@@ -1745,7 +1745,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-stone-900 p-6 rounded-[40px] border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-md transition-all duration-300 space-y-4 relative overflow-hidden group">
+                <div className="glass-premium p-6 rounded-[32px] hover:shadow-md transition-all duration-300 space-y-4 relative overflow-hidden group">
                   <div className="absolute -right-4 -top-4 w-24 h-24 bg-red-50 dark:bg-red-900/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
                   <div className="w-14 h-14 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-[20px] flex items-center justify-center">
                     <TrendingDown className="w-7 h-7" />
@@ -1759,7 +1759,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
 
               {/* Top Items Section */}
               {dashboardData?.topItems && dashboardData.topItems.length > 0 && (
-                <div className="bg-white dark:bg-stone-900 p-8 rounded-[40px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-6">
+                <div className="glass-premium p-8 rounded-[32px] space-y-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-black text-stone-800 dark:text-white text-sm uppercase tracking-widest">Món bán chạy</h3>
@@ -1791,7 +1791,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               )}
 
               {/* Monthly Performance Section */}
-              <div className="bg-white dark:bg-stone-900 p-8 rounded-[48px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-8">
+              <div className="glass-premium p-8 rounded-[40px] space-y-8">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-black text-stone-800 dark:text-white text-sm uppercase tracking-widest">Hiệu suất tháng {new Date().getMonth() + 1}</h3>
@@ -1819,7 +1819,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               </div>
 
               {/* Inventory Forecast Section */}
-              <div className="bg-white dark:bg-stone-900 p-8 rounded-[48px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-8">
+              <div className="glass-premium p-8 rounded-[40px] space-y-8">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-black text-stone-800 dark:text-white text-sm uppercase tracking-widest">Dự báo tồn kho</h3>
@@ -1860,7 +1860,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               </div>
 
               {/* Recent Activity Summary */}
-              <div className="bg-white dark:bg-stone-900 rounded-[24px] p-6 border border-stone-100 dark:border-stone-800 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-none space-y-5">
+              <div className="glass-premium rounded-[24px] p-6 border border-white/50 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-none space-y-5">
                 <h3 className="text-stone-400 dark:text-stone-500 font-black text-xs uppercase tracking-widest">Tóm tắt hoạt động</h3>
                 <div className="space-y-1">
                   <div className="flex items-center justify-between py-3 border-b border-stone-50 dark:border-stone-800 last:border-0">
@@ -1912,14 +1912,14 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                   <button 
                     onClick={() => setShowSettings(!showSettings)}
                     className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all tap-active ${
-                      showSettings ? 'bg-stone-900 dark:bg-white text-white dark:text-black shadow-xl' : 'bg-white dark:bg-stone-900 text-stone-400 dark:text-stone-500 border border-stone-100 dark:border-stone-800 shadow-sm'
+                      showSettings ? 'bg-stone-900 dark:bg-white text-white dark:text-black shadow-xl' : 'glass-premium text-stone-400 dark:text-stone-500 border border-white/50 dark:border-white/10 shadow-sm'
                     }`}
                   >
                     <SettingsIcon className="w-4 h-4" />
                   </button>
                   <button 
                     onClick={() => fetchAllData(false)}
-                    className="w-10 h-10 bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
+                    className="w-10 h-10 glass-premium rounded-2xl border border-white/50 dark:border-white/10 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
                   >
                     <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C9252C]' : ''}`} />
                   </button>
@@ -1948,12 +1948,12 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                         className={`px-4 py-2.5 rounded-2xl whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all tap-active flex items-center gap-2 border ${
                           isSelected
                             ? `${status.color} text-white border-transparent shadow-lg shadow-stone-200 dark:shadow-none scale-105`
-                            : 'bg-white dark:bg-stone-900 text-stone-400 dark:text-stone-500 border-stone-100 dark:border-stone-800 shadow-sm'
+                            : 'glass-premium text-stone-400 dark:text-stone-500 border-white/50 dark:border-white/10 shadow-sm'
                         }`}
                       >
                         {status.label}
                         <span className={`px-1.5 py-0.5 rounded-md text-[9px] ${
-                          isSelected ? 'bg-white/20 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400'
+                          isSelected ? 'bg-white/20 text-white' : 'bg-white/40 dark:bg-stone-800/40 text-stone-500 dark:text-stone-400'
                         }`}>
                           {status.count}
                         </span>
@@ -1967,7 +1967,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 <motion.div 
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-5 bg-white dark:bg-stone-900 rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-xl space-y-4"
+                  className="p-5 glass-premium rounded-[28px] shadow-xl space-y-4"
                 >
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -2016,7 +2016,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               <div className="space-y-4">
                 {(!orders || (orders || []).length === 0) ? (
                   <div className="text-center py-24 flex flex-col items-center justify-center">
-                    <div className="w-20 h-20 bg-stone-100 dark:bg-stone-800 rounded-[32px] flex items-center justify-center mb-6 text-stone-300 dark:text-stone-600">
+                    <div className="w-20 h-20 bg-white/40 dark:bg-stone-800/40 rounded-[32px] flex items-center justify-center mb-6 text-stone-300 dark:text-stone-600">
                       <Package className="w-10 h-10" />
                     </div>
                     <h3 className="text-lg font-black text-stone-800 dark:text-white tracking-tight">Trống trải quá...</h3>
@@ -2035,8 +2035,8 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                         key={`order-item-${order.orderId}`}
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`bg-white dark:bg-stone-900 rounded-3xl overflow-hidden border-2 transition-all duration-300 ${
-                          isNew ? 'border-[#C9252C] shadow-2xl shadow-red-100 dark:shadow-none' : 'border-stone-100 dark:border-stone-800 shadow-sm'
+                        className={`glass-premium rounded-3xl overflow-hidden border-2 transition-all duration-300 ${
+                          isNew ? 'border-[#C9252C] shadow-2xl shadow-red-100 dark:shadow-none' : 'border-white/50 dark:border-white/10 shadow-sm'
                         }`}
                       >
                         {/* Card Header */}
@@ -2216,7 +2216,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                     disabled={currentPage === 1}
-                    className="w-12 h-12 bg-white dark:bg-stone-900 border border-stone-100 dark:border-stone-800 text-stone-600 dark:text-stone-300 rounded-2xl flex items-center justify-center disabled:opacity-30 tap-active shadow-sm"
+                    className="w-12 h-12 glass-premium border border-white/50 dark:border-white/10 text-stone-600 dark:text-stone-300 rounded-2xl flex items-center justify-center disabled:opacity-30 tap-active shadow-sm"
                   >
                     <ChevronRight className="w-5 h-5 rotate-180" />
                   </button>
@@ -2232,7 +2232,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                     disabled={currentPage === Math.ceil((orders || []).filter(order => filterStatus === 'All' || order.orderStatus === filterStatus).length / ITEMS_PER_PAGE)}
-                    className="w-12 h-12 bg-white dark:bg-stone-900 border border-stone-100 dark:border-stone-800 text-stone-600 dark:text-stone-300 rounded-2xl flex items-center justify-center disabled:opacity-30 tap-active shadow-sm"
+                    className="w-12 h-12 glass-premium border border-white/50 dark:border-white/10 text-stone-600 dark:text-stone-300 rounded-2xl flex items-center justify-center disabled:opacity-30 tap-active shadow-sm"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
@@ -2267,17 +2267,17 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 </div>
                 <button 
                   onClick={() => fetchAllData(false)}
-                  className="w-10 h-10 bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
+                  className="w-10 h-10 glass-premium rounded-2xl border border-white/50 dark:border-white/10 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
                 >
                   <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C9252C]' : ''}`} />
                 </button>
               </div>
 
-              <div className="bg-white dark:bg-stone-900 rounded-[32px] border border-stone-100 dark:border-stone-800 overflow-hidden shadow-sm">
+              <div className="glass-premium rounded-[28px] overflow-hidden shadow-sm">
                 <div className="overflow-x-auto no-scrollbar">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="bg-stone-50 dark:bg-stone-800/50 border-b border-stone-100 dark:border-stone-800">
+                      <tr className="bg-stone-50 dark:bg-stone-800/50 border-b border-white/50 dark:border-white/10">
                         <th className="p-5 text-[9px] font-black text-stone-400 uppercase tracking-[0.2em]">Ngày</th>
                         <th className="p-5 text-[9px] font-black text-stone-400 uppercase tracking-[0.2em]">Mã đơn</th>
                         <th className="p-5 text-[9px] font-black text-stone-400 uppercase tracking-[0.2em] text-right">Tổng thu</th>
@@ -2343,7 +2343,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 <div className="flex gap-2">
                   <button 
                     onClick={() => fetchAllData(false)}
-                    className="w-10 h-10 bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
+                    className="w-10 h-10 glass-premium rounded-2xl border border-white/50 dark:border-white/10 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
                   >
                     <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C9252C]' : ''}`} />
                   </button>
@@ -2358,7 +2358,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
 
               {/* Expense Chart */}
               {expensesByCategory.length > 0 && (
-                <div className="bg-white dark:bg-stone-900 p-8 rounded-[40px] border border-stone-100 dark:border-stone-800 shadow-sm space-y-6">
+                <div className="glass-premium p-8 rounded-[32px] space-y-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-black text-stone-800 dark:text-white text-sm uppercase tracking-widest">Phân bổ chi tiêu</h3>
@@ -2375,7 +2375,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               <div className="space-y-4">
                 {(soTayData || []).length === 0 ? (
                   <div className="text-center py-24 flex flex-col items-center justify-center">
-                    <div className="w-20 h-20 bg-stone-100 dark:bg-stone-800 rounded-[32px] flex items-center justify-center mb-6 text-stone-300 dark:text-stone-600">
+                    <div className="w-20 h-20 bg-white/40 dark:bg-stone-800/40 rounded-[32px] flex items-center justify-center mb-6 text-stone-300 dark:text-stone-600">
                       <Wallet className="w-10 h-10" />
                     </div>
                     <h3 className="text-lg font-black text-stone-800 dark:text-white tracking-tight">Chưa có chi tiêu</h3>
@@ -2387,7 +2387,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                       key={`expense-item-${index}`}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="bg-white dark:bg-stone-900 p-5 rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-sm flex items-center justify-between hover:shadow-md transition-all"
+                      className="glass-premium p-5 rounded-[28px] flex items-center justify-between hover:shadow-md transition-all"
                     >
                       <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm ${
@@ -2444,7 +2444,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 <div className="flex gap-2">
                   <button 
                     onClick={() => fetchInventory()}
-                    className="w-10 h-10 bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
+                    className="w-10 h-10 glass-premium rounded-2xl border border-white/50 dark:border-white/10 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
                   >
                     <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C9252C]' : ''}`} />
                   </button>
@@ -2468,7 +2468,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                     placeholder="Tìm kiếm nguyên liệu, mã số..."
                     value={inventorySearchQuery}
                     onChange={(e) => setInventorySearchQuery(e.target.value)}
-                    className="w-full bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 pl-10 pr-10 py-3 rounded-2xl font-medium text-[15px] text-stone-800 dark:text-white placeholder:text-stone-400 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none shadow-sm"
+                    className="w-full glass-premium border border-stone-200 dark:border-stone-800 pl-10 pr-10 py-3 rounded-2xl font-medium text-[15px] text-stone-800 dark:text-white placeholder:text-stone-400 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none shadow-sm"
                   />
                   {inventorySearchQuery && (
                     <button
@@ -2483,7 +2483,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
 
               {/* Modern Stats Cards */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white dark:bg-stone-900 p-6 rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-sm relative overflow-hidden">
+                <div className="glass-premium p-6 rounded-[32px] border border-white/50 dark:border-white/10 shadow-sm relative overflow-hidden">
                   <div className="absolute -right-4 -top-4 opacity-5">
                     <Package className="w-24 h-24" />
                   </div>
@@ -2493,7 +2493,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                     <span className="text-[10px] font-bold text-stone-400 uppercase">món</span>
                   </div>
                 </div>
-                <div className="bg-white dark:bg-stone-900 p-6 rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-sm relative overflow-hidden">
+                <div className="glass-premium p-6 rounded-[32px] border border-white/50 dark:border-white/10 shadow-sm relative overflow-hidden">
                   <div className="absolute -right-4 -top-4 opacity-5">
                     <AlertCircle className="w-24 h-24 text-red-500" />
                   </div>
@@ -2517,7 +2517,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
 
                 <div className="grid grid-cols-1 gap-3">
                   {(filteredInventoryItems || []).length === 0 ? (
-                    <div className="bg-white dark:bg-stone-900 rounded-[32px] p-12 border border-stone-100 dark:border-stone-800 text-center">
+                    <div className="glass-premium rounded-[32px] p-12 border border-white/50 dark:border-white/10 text-center">
                       <Package className="w-12 h-12 text-stone-200 mx-auto mb-4" />
                       <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Không tìm thấy nguyên liệu</p>
                     </div>
@@ -2528,12 +2528,12 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.05 }}
-                        className={`bg-white dark:bg-stone-900 p-5 rounded-28px border shadow-sm flex items-center justify-between group hover:shadow-md transition-all ${
+                        className={`glass-premium p-5 rounded-28px border shadow-sm flex items-center justify-between group hover:shadow-md transition-all ${
                           (item.inventoryQty || 0) === 0 
                             ? 'border-red-200 dark:border-red-900/50 bg-red-50/30 dark:bg-red-900/5' 
                             : (item.inventoryQty || 0) <= 5 
                               ? 'border-amber-200 dark:border-amber-900/50 bg-amber-50/30 dark:bg-amber-900/5' 
-                              : 'border-stone-100 dark:border-stone-800'
+                              : 'border-white/50 dark:border-white/10'
                         }`}
                       >
                         <div className="flex items-center gap-4">
@@ -2586,7 +2586,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               {/* Forecast & Logs Section */}
               <div className="grid grid-cols-1 gap-6">
                 {/* Forecast */}
-                <div className="bg-white dark:bg-stone-900 rounded-[40px] p-8 border border-stone-100 dark:border-stone-800 shadow-sm">
+                <div className="glass-premium rounded-[40px] p-8 border border-white/50 dark:border-white/10 shadow-sm">
                   <div className="flex items-center justify-between mb-8">
                     <div className="space-y-1">
                       <h3 className="font-black text-stone-800 dark:text-white text-lg tracking-tight">Dự báo nhập hàng</h3>
@@ -2634,7 +2634,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                 <div className="space-y-4">
                   <h3 className="text-[11px] font-black text-stone-400 uppercase tracking-[0.2em] px-1">Lịch sử nhập kho</h3>
                   {(inventoryLogs || []).length === 0 ? (
-                    <div className="bg-white dark:bg-stone-900 rounded-[32px] p-12 border border-stone-100 dark:border-stone-800 text-center">
+                    <div className="glass-premium rounded-[32px] p-12 border border-white/50 dark:border-white/10 text-center">
                       <Package className="w-12 h-12 text-stone-200 mx-auto mb-4" />
                       <p className="text-xs font-black text-stone-400 uppercase tracking-widest">Chưa có lịch sử nhập kho</p>
                     </div>
@@ -2644,7 +2644,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                         key={`inventory-log-${idx}`}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="bg-white dark:bg-stone-900 p-6 rounded-[32px] border border-stone-100 dark:border-stone-800 shadow-sm"
+                        className="glass-premium p-6 rounded-[32px] border border-white/50 dark:border-white/10 shadow-sm"
                       >
                         <div className="flex justify-between items-start mb-4">
                           <div className="space-y-2">
@@ -2693,7 +2693,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              className="bg-white dark:bg-stone-900 rounded-t-[40px] w-full p-8 shadow-2xl space-y-6 border-t border-stone-100 dark:border-stone-800"
+              className="glass-premium rounded-t-[40px] w-full p-8 shadow-2xl space-y-6 border-t border-white/50 dark:border-white/10"
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-black text-stone-800 dark:text-white">Thêm giao dịch</h3>
@@ -2780,7 +2780,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              className="bg-white dark:bg-stone-900 rounded-t-[40px] w-full p-8 shadow-2xl space-y-6 border-t border-stone-100 dark:border-stone-800"
+              className="glass-premium rounded-t-[40px] w-full p-8 shadow-2xl space-y-6 border-t border-white/50 dark:border-white/10"
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-black text-stone-800 dark:text-white">Nhập kho nguyên liệu</h3>
@@ -2869,7 +2869,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-stone-900 rounded-[32px] w-full max-w-sm p-6 shadow-2xl space-y-5 border border-stone-100 dark:border-stone-800"
+              className="glass-premium rounded-[32px] w-full max-w-sm p-6 shadow-2xl space-y-5 border border-white/50 dark:border-white/10"
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-black text-stone-800 dark:text-white">Cập nhật tồn kho</h3>
@@ -2903,7 +2903,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                   <button
                     type="button"
                     onClick={() => setEditingInventoryItem(null)}
-                    className="flex-1 py-3 bg-stone-100 dark:bg-stone-800 text-stone-500 font-bold rounded-2xl"
+                    className="flex-1 py-3 bg-white/40 dark:bg-stone-800/40 text-stone-500 font-bold rounded-2xl"
                   >
                     Hủy
                   </button>
@@ -2944,7 +2944,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="w-full bg-white dark:bg-stone-900 rounded-t-[40px] p-6 pb-10 space-y-5"
+              className="w-full glass-premium rounded-t-[40px] p-6 pb-10 space-y-5"
               onClick={e => e.stopPropagation()}
             >
               {/* Header */}
