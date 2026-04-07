@@ -172,10 +172,10 @@ function OrderCard({
       }`}
     >
       {/* ── Header row ──────────────────────────────── */}
-      <div className="px-4 pt-3.5 pb-2.5 flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
+      <div className="px-4 pt-3.5 pb-2.5 flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+        <div className="flex-1 min-w-[160px]">
           {/* ID + time */}
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className="text-[9px] font-black text-stone-400 dark:text-stone-500 bg-stone-50 dark:bg-stone-800 px-1.5 py-0.5 rounded-md tracking-widest uppercase border border-stone-100 dark:border-stone-700">
               #{order.orderId.slice(-8)}
             </span>
@@ -195,7 +195,7 @@ function OrderCard({
           </div>
         </div>
         {/* Total + status + hasAddedItems badge */}
-        <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+        <div className="flex flex-col items-end gap-1.5 flex-shrink-0 min-w-max">
           <p className="text-[#C9252C] font-black text-base tracking-tighter leading-none">
             {order.total.toLocaleString()}<span className="text-xs">đ</span>
           </p>
@@ -811,11 +811,11 @@ export function OrderHistory() {
 
       {/* Stats — chỉ admin thấy doanh thu */}
       {isAdmin && (filteredOrders || []).length > 0 && (
-        <div className="mx-4 mb-3 grid grid-cols-3 gap-2">
+        <div className="mx-4 mb-3 flex overflow-x-auto gap-2 no-scrollbar pb-1 items-stretch">
           {/* Đơn xong — filter button */}
           <button
             onClick={() => setStatusFilter(f => f === 'completed' ? 'all' : 'completed')}
-            className={`rounded-[24px] p-4 lg:p-5 border text-center transition-all tap-active ${
+            className={`rounded-[24px] p-4 lg:p-5 border text-center transition-all tap-active flex-1 min-w-[100px] shrink-0 ${
               statusFilter === 'completed'
                 ? 'bg-emerald-600 border-emerald-500 shadow-[0_8px_24px_rgba(16,185,129,0.3)]'
                 : 'bg-white dark:bg-stone-900 border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-lg'
@@ -831,7 +831,7 @@ export function OrderHistory() {
           {/* Đang chờ — filter button */}
           <button
             onClick={() => setStatusFilter(f => f === 'pending' ? 'all' : 'pending')}
-            className={`rounded-[24px] p-4 lg:p-5 border text-center transition-all tap-active ${
+            className={`rounded-[24px] p-4 lg:p-5 border text-center transition-all tap-active flex-1 min-w-[100px] shrink-0 ${
               statusFilter === 'pending'
                 ? 'bg-amber-500 border-amber-400 shadow-[0_8px_24px_rgba(245,158,11,0.3)]'
                 : 'bg-white dark:bg-stone-900 border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-lg'
@@ -845,9 +845,9 @@ export function OrderHistory() {
             }`}>{stats.pending}</p>
           </button>
           {/* Doanh thu — static */}
-          <div className="bg-white dark:bg-stone-900 rounded-[24px] p-4 lg:p-5 border border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] text-center flex flex-col justify-center">
+          <div className="bg-white dark:bg-stone-900 rounded-[24px] p-4 lg:p-5 border border-stone-100/80 dark:border-stone-800/80 shadow-[0_4px_24px_rgba(0,0,0,0.02)] text-center flex flex-col justify-center flex-1 min-w-[100px] shrink-0">
             <p className="text-[8px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-0.5">Doanh thu</p>
-            <p className="text-[13px] font-black text-[#C9252C] leading-none">{(stats.revenue / 1000).toFixed(0)}K</p>
+            <p className={`text-[13px] font-black leading-none ${stats.revenue ? 'text-[#C9252C]' : 'text-stone-400 dark:text-stone-500'}`}>{((stats.revenue || 0) / 1000).toFixed(0)}K</p>
           </div>
         </div>
       )}
