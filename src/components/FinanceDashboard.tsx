@@ -212,12 +212,11 @@ export function FinanceDashboard() {
       {/* Sticky Header / Dynamic Island */}
       <div className="sticky top-0 z-40 -mx-6 -mt-6 pointer-events-none">
         <div className={`transition-all duration-500 ${isScrolled ? 'p-3 sm:p-4' : 'px-6 py-4'}`}>
-          <motion.div 
-            layout
-            className={`pointer-events-auto flex items-center justify-between transition-all duration-500 ${
+          <div 
+            className={`pointer-events-auto flex items-center justify-between transition-all duration-500 origin-top ${
               isScrolled 
                 ? 'glass-premium rounded-[32px] px-5 py-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.1)] dark:shadow-none mx-auto border border-white/60 dark:border-white/10' 
-                : 'bg-transparent'
+                : 'bg-transparent border border-transparent rounded-[32px]'
             }`}
             style={{ maxWidth: isScrolled ? '600px' : '100%' }}
           >
@@ -255,7 +254,7 @@ export function FinanceDashboard() {
             >
               <Plus strokeWidth={isScrolled ? 3 : 2.5} className={isScrolled ? 'w-5 h-5' : 'w-6 h-6'} />
             </motion.button>
-          </motion.div>
+          </div>
         </div>
       </div>
 
