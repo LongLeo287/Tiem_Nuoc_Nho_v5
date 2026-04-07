@@ -15,27 +15,26 @@ export const QuickQrFab: React.FC<QuickQrFabProps> = ({ onClick, appMode }) => {
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const getScrollElement = () => {
-      const isDesktop = window.innerWidth >= 1024;
-      const inner = document.getElementById('pos-scroll-container');
-      const main = document.querySelector('main');
-      return (isDesktop && inner) ? inner : main;
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement | Document;
+      
+      const scrollHeight = target instanceof Document ? target.documentElement.scrollHeight : target.scrollHeight;
+      const clientHeight = target instanceof Document ? target.documentElement.clientHeight : target.clientHeight;
+      
+      const isScrollableNode = scrollHeight > clientHeight + 20;
+
+      if (isScrollableNode) {
+        setIsScrolling(true);
+        if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
+        scrollTimerRef.current = setTimeout(() => {
+          setIsScrolling(false);
+        }, 400);
+      }
     };
 
-    const target = getScrollElement();
-    if (!target) return;
-
-    const handleScroll = () => {
-      setIsScrolling(true);
-      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
-      scrollTimerRef.current = setTimeout(() => {
-        setIsScrolling(false);
-      }, 400);
-    };
-
-    target.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, true);
     return () => {
-      target.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll, true);
       if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
     };
   }, []);

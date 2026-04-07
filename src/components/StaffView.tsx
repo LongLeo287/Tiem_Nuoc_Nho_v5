@@ -83,7 +83,7 @@ function StaffManagementView() {
 
         {/* Dynamic Island: Tab Navigation */}
         <div className="sticky top-[88px] lg:top-4 z-40 pointer-events-none mb-4 -mx-2">
-          <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex gap-2 overflow-x-auto p-1.5 mx-auto w-max max-w-[calc(100%-1rem)] no-scrollbar scroll-smooth">
+          <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex justify-between gap-1 sm:gap-2 p-1.5 mx-auto w-full max-w-[calc(100%-1rem)] lg:w-max overflow-hidden">
             {[
               { id: 'list', label: 'Nhân sự', icon: Users, color: 'bg-indigo-500' },
               { id: 'timesheet', label: 'Chấm công', icon: Calendar, color: 'bg-emerald-500' },
@@ -94,14 +94,14 @@ function StaffManagementView() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-4 py-2.5 rounded-[24px] whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all tap-active flex items-center gap-2 border ${
+                  className={`flex-1 lg:flex-none flex items-center justify-center gap-1 sm:gap-2 px-1 py-2.5 sm:px-4 sm:py-2.5 rounded-[24px] whitespace-nowrap text-[9px] sm:text-[10px] font-black uppercase tracking-tight sm:tracking-widest transition-all tap-active border ${
                     isSelected
                       ? `${tab.color} text-white border-transparent shadow-lg shadow-stone-200 dark:shadow-none scale-[1.02]`
                       : 'bg-transparent text-stone-500 dark:text-stone-400 border-transparent hover:bg-stone-100/50 dark:hover:bg-stone-800/50'
                   }`}
                 >
-                  <tab.icon className="w-4 h-4" />
-                  <span className="hidden xs:inline">{tab.label}</span>
+                  <tab.icon className="w-4 h-4 shrink-0" />
+                  <span className="hidden xs:inline truncate">{tab.label}</span>
                 </button>
               );
             })}
@@ -1213,6 +1213,15 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
 
   const COLORS = ['#C9252C', '#B91C1C', '#991B1B', '#7F1D1D', '#450A0A'];
 
+  const menuStats = useMemo(() => {
+    if (!menuItems) return { total: 0, categories: 0, outOfStock: 0 };
+    return {
+      total: menuItems.length,
+      categories: new Set(menuItems.map(m => m.category)).size,
+      outOfStock: menuItems.filter(m => m.isOutOfStock).length
+    };
+  }, [menuItems]);
+
   if (!appsScriptUrl) {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] text-center px-6">
@@ -1226,59 +1235,128 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
   }
 
   return (
-    <div className="flex flex-col min-h-full pb-24">
-      {/* Top Navigation Tabs - Dynamic Island */}
+    <div className="flex flex-col h-full min-h-0 overflow-y-auto custom-scrollbar pb-24">
+      {/* Global Header for Operations to stay above Navigation Tabs */}
       {location.pathname.startsWith('/staff/operations') && (
-        <div className="sticky top-4 z-40 px-4 mt-2 mb-6 pointer-events-none">
-          <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.1)] dark:shadow-none flex items-center justify-between gap-2 p-2 mx-auto max-w-[500px]">
-            <div className="flex-grow flex flex-col gap-2 min-w-0">
-              <div className="flex gap-1 overflow-x-auto no-scrollbar px-1">
-                {[
-                  { id: 'orders', label: 'Đơn', icon: ListOrdered },
-                  { id: 'inventory', label: 'Kho', icon: Package },
-                  { id: 'menu', label: 'Menu', icon: MenuIcon },
-                ].map((tab) => {
-                  const isActive = viewMode === tab.id;
-                  const Icon = tab.icon;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setViewMode(tab.id as any)}
-                      className={`flex-shrink-0 px-4 py-2.5 rounded-[24px] transition-all duration-300 flex items-center gap-2 tap-active ${
-                        isActive 
-                          ? 'bg-stone-800 dark:bg-white text-white dark:text-black shadow-md' 
-                          : 'bg-transparent text-stone-500 hover:bg-stone-100/50 dark:hover:bg-stone-800/50'
-                      }`}
-                    >
-                      <Icon className={`w-4 h-4 ${isActive ? 'opacity-100' : 'opacity-70'}`} />
-                      <AnimatePresence mode="popLayout">
-                        {isActive && (
-                          <motion.span
-                            initial={{ width: 0, opacity: 0, x: -5 }}
-                            animate={{ width: 'auto', opacity: 1, x: 0 }}
-                            exit={{ width: 0, opacity: 0, x: -5 }}
-                            className="text-[10px] font-black uppercase tracking-widest whitespace-nowrap overflow-hidden"
-                          >
-                            {tab.label}
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
-                    </button>
-                  );
-                })}
+        <div className="px-5 pt-4 pb-0">
+          {viewMode === 'orders' && (
+            <div className="flex justify-between items-center mb-2">
+              <div className="space-y-0.5">
+                <h2 className="text-stone-800 dark:text-white font-black text-2xl tracking-tight">Đơn hàng</h2>
+                <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Quản lý & Vận hành</p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => fetchAllData(false)}
+                  disabled={isRefreshing}
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all tap-active glass-premium text-stone-400 dark:text-stone-500 border border-white/50 dark:border-white/10 shadow-sm"
+                  title="Làm mới dữ liệu"
+                >
+                  <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin text-emerald-600' : ''}`} />
+                </button>
+                <button 
+                  onClick={() => setShowSettings(!showSettings)}
+                  className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all tap-active ${
+                    showSettings ? 'bg-stone-900 dark:bg-white text-white dark:text-black shadow-xl' : 'glass-premium text-stone-400 dark:text-stone-500 border border-white/50 dark:border-white/10 shadow-sm'
+                  }`}
+                >
+                  <SettingsIcon className="w-5 h-5" />
+                </button>
               </div>
             </div>
-            
-            <button
-              onClick={() => {
-                if (viewMode === 'inventory') fetchInventory();
-                else fetchAllData(false);
-              }}
-              disabled={isRefreshing}
-              className={`flex-shrink-0 w-11 h-11 ${isRefreshing ? 'bg-stone-100 dark:bg-stone-800' : 'bg-white dark:bg-stone-900 border border-stone-200/50 dark:border-stone-800/50 hover:bg-stone-50 dark:hover:bg-stone-800'} text-stone-500 dark:text-stone-400 rounded-[24px] flex items-center justify-center tap-active shadow-sm transition-all`}
-            >
-              <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin opacity-50' : ''}`} />
-            </button>
+          )}
+          {viewMode === 'inventory' && (
+            <div className="flex justify-between items-center mb-2">
+              <div className="space-y-0.5">
+                <h2 className="text-stone-800 dark:text-white font-black text-2xl tracking-tight">Quản lý Kho</h2>
+                <p className="text-[10px] font-black text-stone-400 uppercase tracking-[0.2em]">Tồn kho & Nguyên liệu</p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => fetchInventory()}
+                  disabled={isRefreshing}
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all tap-active glass-premium text-stone-400 dark:text-stone-500 border border-white/50 dark:border-white/10 shadow-sm"
+                  title="Làm mới dữ liệu"
+                >
+                  <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin text-emerald-600' : ''}`} />
+                </button>
+                <button 
+                  onClick={() => setShowInventoryForm(true)}
+                  className="w-10 h-10 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-100 dark:shadow-none tap-active hover:bg-emerald-700 transition-all active:scale-95"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          )}
+          {viewMode === 'menu' && (
+            <div className="flex justify-between items-center mb-2">
+              <div className="space-y-0.5">
+                <h2 className="text-stone-800 dark:text-white font-black text-2xl tracking-tight">Thực đơn</h2>
+                <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">
+                  {menuStats.total} món • {menuStats.categories} danh mục • {menuStats.outOfStock} hết hàng
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => fetchAllData(false)}
+                  disabled={isRefreshing}
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all tap-active glass-premium text-stone-400 dark:text-stone-500 border border-white/50 dark:border-white/10 shadow-sm"
+                  title="Làm mới dữ liệu"
+                >
+                  <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin text-emerald-600' : ''}`} />
+                </button>
+                <button 
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-add-menu-modal'))}
+                  className="w-10 h-10 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-100 dark:shadow-none tap-active hover:bg-emerald-700 transition-all active:scale-95"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Top Navigation Tabs - Full Width Menu */}
+      {location.pathname.startsWith('/staff/operations') && (
+        <div className="sticky top-0 z-40 bg-stone-100/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-stone-200 dark:border-stone-800 px-5 lg:-mx-6 lg:px-11 pt-3 pb-0 pointer-events-auto">
+          <div className="flex justify-between items-end gap-4 max-w-7xl mx-auto">
+            {/* Desktop spacer to balance the refresh button for perfect centering */}
+            <div className="hidden lg:block w-8"></div>
+
+            <div className="flex-grow flex gap-6 overflow-x-auto no-scrollbar justify-start lg:justify-center">
+              {[
+                { id: 'orders', label: 'Luồng Đơn', icon: ListOrdered },
+                { id: 'inventory', label: 'Tồn Kho', icon: Package },
+                { id: 'menu', label: 'Thực Đơn', icon: MenuIcon },
+              ].map((tab) => {
+                const isActive = viewMode === tab.id;
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setViewMode(tab.id as any)}
+                    className={`flex-shrink-0 pb-3 transition-all duration-300 flex items-center gap-2 relative ${
+                      isActive 
+                        ? 'text-emerald-600 dark:text-emerald-400 font-black' 
+                        : 'text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-white font-bold'
+                    }`}
+                  >
+                    <Icon className={`w-4 h-4 ${isActive ? 'opacity-100' : 'opacity-70'}`} />
+                    <span className="text-sm tracking-tight">{tab.label}</span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNavigationTabIndicator"
+                        className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t-full bg-emerald-600 dark:bg-emerald-400"
+                        initial={false}
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
@@ -1916,32 +1994,11 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-6"
             >
-              <div className="flex justify-between items-center px-1">
-                <div className="space-y-0.5">
-                  <h2 className="text-stone-800 dark:text-white font-black text-lg tracking-tight">Đơn hàng</h2>
-                  <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Quản lý & Vận hành</p>
-                </div>
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => setShowSettings(!showSettings)}
-                    className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all tap-active ${
-                      showSettings ? 'bg-stone-900 dark:bg-white text-white dark:text-black shadow-xl' : 'glass-premium text-stone-400 dark:text-stone-500 border border-white/50 dark:border-white/10 shadow-sm'
-                    }`}
-                  >
-                    <SettingsIcon className="w-4 h-4" />
-                  </button>
-                  <button 
-                    onClick={() => fetchAllData(false)}
-                    className="w-10 h-10 glass-premium rounded-2xl border border-white/50 dark:border-white/10 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
-                  >
-                    <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C9252C]' : ''}`} />
-                  </button>
-                </div>
-              </div>
 
               {/* Status Filter Pills - Dynamic Island */}
-              <div className="sticky top-[88px] lg:top-4 z-30 pointer-events-none mb-4 -mt-2">
-                <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex gap-2 overflow-x-auto p-1.5 mx-auto w-max max-w-[calc(100%-2rem)] no-scrollbar scroll-smooth">
+              <div className="sticky top-[45px] z-30 pointer-events-none bg-stone-100/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl -mx-6 px-4 sm:px-6 pt-4 pb-2 mb-4 -mt-6 border-b border-stone-200 dark:border-stone-800">
+                <div className="glass-premium rounded-[32px] lg:rounded-[40px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.12)] p-2 lg:p-3 w-full lg:w-max lg:mx-auto">
+                  <div className="flex gap-1.5 lg:gap-2 overflow-x-auto no-scrollbar w-full">
                   {[
                     { id: 'All', label: 'Tất cả', count: (orders || []).length, color: 'bg-stone-500' },
                     { id: 'Chờ xử lý', label: 'Mới', count: (orders || []).filter(o => o.orderStatus === 'Chờ xử lý').length, color: 'bg-amber-500' },
@@ -1958,14 +2015,14 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                           setFilterStatus(status.id);
                           setCurrentPage(1);
                         }}
-                        className={`px-4 py-2.5 rounded-[24px] whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all tap-active flex items-center gap-2 border ${
+                        className={`relative flex-shrink-0 flex items-center gap-1.5 px-5 py-2.5 lg:py-3 rounded-[20px] lg:rounded-[24px] text-[11px] lg:text-[12px] font-black uppercase tracking-widest transition-all duration-300 border ${
                           isSelected
-                            ? `${status.color} text-white border-transparent shadow-lg shadow-stone-200 dark:shadow-none scale-[1.02]`
-                            : 'bg-transparent text-stone-500 dark:text-stone-400 border-transparent hover:bg-stone-100/50 dark:hover:bg-stone-800/50'
+                            ? `${status.color} text-white border-transparent shadow-[0_4px_16px_rgba(0,0,0,0.2)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] lg:scale-[1.02]`
+                            : 'bg-transparent text-stone-500 dark:text-stone-400 border-transparent hover:bg-white/50 dark:hover:bg-stone-800/50 hover:text-stone-700 dark:hover:text-stone-300'
                         }`}
                       >
-                        {status.label}
-                        <span className={`px-1.5 py-0.5 rounded-md text-[9px] ${
+                        <span className="relative z-10">{status.label}</span>
+                        <span className={`relative z-10 shrink-0 px-1.5 py-0.5 rounded-md text-[9px] ${
                           isSelected ? 'bg-white/20 text-white' : 'bg-stone-100 dark:bg-stone-800/40 text-stone-500 dark:text-stone-400'
                         }`}>
                           {status.count}
@@ -1973,6 +2030,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                       </button>
                     );
                   })}
+                  </div>
                 </div>
               </div>
 
@@ -2448,31 +2506,10 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
               exit={{ opacity: 0, scale: 0.98 }}
               className="space-y-6 pb-20"
             >
-              {/* Header Section */}
-              <div className="flex justify-between items-end px-1">
-                <div className="space-y-1">
-                  <h2 className="text-2xl font-black text-stone-800 dark:text-white tracking-tight">Quản lý Kho</h2>
-                  <p className="text-[10px] font-black text-stone-400 uppercase tracking-[0.2em]">Tồn kho & Nguyên liệu</p>
-                </div>
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => fetchInventory()}
-                    className="w-10 h-10 glass-premium rounded-2xl border border-white/50 dark:border-white/10 flex items-center justify-center text-stone-400 dark:text-stone-500 tap-active shadow-sm"
-                  >
-                    <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C9252C]' : ''}`} />
-                  </button>
-                  <button 
-                    onClick={() => setShowInventoryForm(true)}
-                    className="w-12 h-12 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-100 dark:shadow-none tap-active hover:bg-emerald-700 transition-all active:scale-95"
-                  >
-                    <Plus className="w-6 h-6" />
-                  </button>
-                </div>
-              </div>
 
               {/* Dynamic Island: Inventory Search */}
-              <div className="sticky top-[88px] lg:top-4 z-40 pointer-events-none mb-6 -mx-2">
-                <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex gap-2 items-center p-1.5 mx-auto w-[90%] max-w-md">
+              <div className="sticky top-[45px] lg:top-[45px] z-40 pointer-events-none bg-stone-100/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl -mx-6 lg:-mx-12 px-6 lg:px-12 pt-4 pb-4 mb-6 -mt-6 border-b border-stone-200 dark:border-stone-800">
+                <div className="glass-premium rounded-[32px] pointer-events-auto border border-white/60 dark:border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-none flex gap-2 items-center p-1.5 lg:mx-auto w-full max-w-md">
                   <div className="relative flex-1">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
                       <Search className="w-4 h-4" />

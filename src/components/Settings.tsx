@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Save, CheckCircle2, Store, Printer, Volume2, Wifi, Moon, Sun, Database, RotateCcw, Clock, AlertCircle, User, LogOut, Shield, Users, Plus, Trash2, Edit2, KeyRound, X } from 'lucide-react';
+import { Settings as SettingsIcon, Save, CheckCircle2, Store, Printer, Volume2, Wifi, Moon, Sun, Database, RotateCcw, Clock, AlertCircle, User, LogOut, Shield, Users, Plus, Trash2, Edit2, KeyRound, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 // native fetch is used automatically
 import { useData } from '../context/DataContext';

@@ -125,7 +125,7 @@
 }
 
 .tap-active {
-  @apply active:scale-[0.96] active:opacity-90 transition-all duration-200 ease-out;
+  @apply active:scale-[0.92] active:opacity-80 transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)];
 }
 
 /* Tinh chỉnh typography tracking chuẩn Apple */

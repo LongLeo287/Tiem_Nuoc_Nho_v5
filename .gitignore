@@ -10,3 +10,7 @@ coverage/
 metadata.json
 src_files.txt
 deploy_tools/
+tmp_scan.cjs
+ts_err.txt
+status.txt
+
