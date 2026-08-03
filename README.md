@@ -1,3 +1,5 @@
+**[▶ Xem trang giới thiệu dự án](https://tiem-nuoc-nho.vercel.app)**
+
 # 🥤 Tiệm Nước Nhỏ POS (Phiên bản 5)
 
 Hệ thống quản lý bán hàng (Point of Sale) đa nền tảng dành riêng cho Tiệm Nước Nhỏ, được thiết kế với tiêu chí: **Nhanh – Đẹp – Đa Năng**.
