@@ -25,7 +25,7 @@ import { notificationService } from './services/NotificationService';
 import { RoleGuard } from './components/ui/RoleGuard';
 import { StockAlertBanner } from './components/StockAlertBanner';
 
-const DEFAULT_URL = 'https://script.google.com/macros/s/REMOVED_GAS_DEPLOYMENT_ID/exec';
+import { DEFAULT_GAS_URL } from './config/gasConfig';
 
 interface AppContentProps {
   appsScriptUrl: string;
@@ -790,15 +790,17 @@ export default function App() {
   const [appsScriptUrl, setAppsScriptUrl] = useState<string>(() => {
     const saved = localStorage.getItem('appsScriptUrl');
     const lastDefault = localStorage.getItem('lastDefaultUrl');
-    
-    if (lastDefault !== DEFAULT_URL) {
-      localStorage.setItem('lastDefaultUrl', DEFAULT_URL);
+
+    // Chỉ ép về mặc định khi build thực sự có cấu hình VITE_GAS_URL.
+    // Nếu không có, giữ nguyên URL người dùng đã nhập trong Cài đặt.
+    if (DEFAULT_GAS_URL && lastDefault !== DEFAULT_GAS_URL) {
+      localStorage.setItem('lastDefaultUrl', DEFAULT_GAS_URL);
       if (!saved || saved.includes('script.google.com')) {
-        localStorage.setItem('appsScriptUrl', DEFAULT_URL);
-        return DEFAULT_URL;
+        localStorage.setItem('appsScriptUrl', DEFAULT_GAS_URL);
+        return DEFAULT_GAS_URL;
       }
     }
-    return saved || DEFAULT_URL;
+    return saved || DEFAULT_GAS_URL;
   });
 
   return (
