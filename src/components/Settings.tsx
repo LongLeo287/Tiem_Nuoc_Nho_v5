@@ -7,6 +7,7 @@ import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
 import { Staff } from '../types';
 import { SHOP, WIFI, PRINTER } from '../config/shopConfig';
+import { DEFAULT_GAS_URL, HAS_DEFAULT_GAS_URL } from '../config/gasConfig';
 
 interface SettingsProps {
   appsScriptUrl: string;
@@ -310,7 +311,7 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
   const [urlError, setUrlError] = useState<string | null>(null);
   const [isTestingConnection, setIsTestingConnection] = useState(false);
 
-  const DEFAULT_URL = 'https://script.google.com/macros/s/REMOVED_GAS_DEPLOYMENT_ID/exec';
+  const DEFAULT_URL = DEFAULT_GAS_URL;
 
   const validateUrl = (value: string) => {
     if (!value.trim()) return 'URL không được để trống';
@@ -611,12 +612,14 @@ export function Settings({ appsScriptUrl, setAppsScriptUrl, appMode }: SettingsP
                 >
                   {isTestingConnection ? 'Đang kiểm tra...' : 'Kiểm tra kết nối'}
                 </button>
-                <button
-                  onClick={handleRestoreDefault}
-                  className="px-4 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-500 py-3 rounded-xl font-bold text-xs hover:bg-stone-100 transition-colors"
-                >
-                  Mặc định
-                </button>
+                {HAS_DEFAULT_GAS_URL && (
+                  <button
+                    onClick={handleRestoreDefault}
+                    className="px-4 bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-500 py-3 rounded-xl font-bold text-xs hover:bg-stone-100 transition-colors"
+                  >
+                    Mặc định
+                  </button>
+                )}
               </div>
             </div>
           </section>
