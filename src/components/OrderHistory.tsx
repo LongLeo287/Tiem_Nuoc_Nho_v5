@@ -4,7 +4,7 @@ import {
   AlertCircle, ChevronRight, FileText, Sparkles, TrendingUp, Banknote, Edit2, Plus, Search,
 } from 'lucide-react';
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { generateContent } from "../lib/aiClient";
 import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
@@ -685,13 +685,12 @@ export function OrderHistory() {
       }
       
       const availableItems = menuItems.filter(i => !i.isOutOfStock).map(i => i.name);
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-      const response = await ai.models.generateContent({
+      const response = await generateContent({
         model: 'gemini-3-flash-preview',
         contents: `Tạo 1 thông báo lịch sử đơn hàng trống cho app quán nước. GenZ, ngắn gọn. Tiêu đề <25 ký tự, Nội dung <80 ký tự. JSON: title, content, button, emoji. Gợi ý món: ${availableItems.slice(0, 5).join(', ')}`,
         config: {
           responseMimeType: 'application/json',
-          responseSchema: { type: Type.OBJECT, properties: { title: { type: Type.STRING }, content: { type: Type.STRING }, button: { type: Type.STRING }, emoji: { type: Type.STRING } }, required: ['title','content','button','emoji'] }
+          responseSchema: { type: 'OBJECT', properties: { title: { type: 'STRING' }, content: { type: 'STRING' }, button: { type: 'STRING' }, emoji: { type: 'STRING' } }, required: ['title','content','button','emoji'] }
         }
       });
       const result = JSON.parse(response.text || '{}');
