@@ -9,7 +9,7 @@ import {
   Info, LayoutGrid, List, SlidersHorizontal, Wand2
 } from 'lucide-react';
 import { Solar, Lunar } from 'lunar-javascript';
-import { GoogleGenAI, Type } from "@google/genai";
+import { generateContent } from "../lib/aiClient";
 import { useData } from '../context/DataContext';
 
 interface MenuManagerProps {
@@ -205,7 +205,6 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
     if (isGeneratingInsights) return;
     setIsGeneratingInsights(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
       const salesData = inventoryForecast.map(item => ({
         name: item.ten_mon,
         dailySales: item.dailyConsumption.toFixed(2),
@@ -220,7 +219,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
       3. Gợi ý chiến lược tồn kho ngắn hạn.
       Trả về kết quả bằng tiếng Việt, ngắn gọn, súc tích, định dạng Markdown.`;
 
-      const response = await ai.models.generateContent({
+      const response = await generateContent({
         model: "gemini-3-flash-preview",
         contents: prompt,
       });
@@ -237,7 +236,6 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
     if (isGeneratingSeasonal) return;
     setIsGeneratingSeasonal(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
       const now = new Date();
       const solar = Solar.fromDate(now);
       const lunar = solar.getLunar();
@@ -265,7 +263,7 @@ export function MenuManager({ appsScriptUrl }: MenuManagerProps) {
       3. Gợi ý các món nên đẩy mạnh hoặc chuẩn bị nguyên liệu sớm.
       Trả về kết quả bằng tiếng Việt, chuyên nghiệp, định dạng Markdown.`;
 
-      const response = await ai.models.generateContent({
+      const response = await generateContent({
         model: "gemini-3-flash-preview",
         contents: prompt,
       });
