@@ -21,7 +21,7 @@ import { RefreshCw, CheckCircle2, Clock, XCircle, Coffee, DollarSign, AlertCircl
 import { motion, AnimatePresence } from 'motion/react';
 import { OrderData, Expense, Staff } from '../types';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { GoogleGenAI } from "@google/genai";
+import { generateContent } from "../lib/aiClient";
 import { useUI } from '../context/UIContext';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
@@ -1799,8 +1799,7 @@ export function StaffView({ appsScriptUrl, appMode }: StaffViewProps) {
                   </div>
                   <button 
                     onClick={async () => {
-                      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-                      const response = await ai.models.generateContent({
+                      const response = await generateContent({
                         model: "gemini-3-flash-preview",
                         contents: `Phân tích số liệu kinh doanh quán nước:
                         - Doanh thu: ${stats.revenue}đ

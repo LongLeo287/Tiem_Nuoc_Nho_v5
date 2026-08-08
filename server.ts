@@ -1,9 +1,11 @@
+import "dotenv/config";
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import { WebSocketServer, WebSocket } from "ws";
 import http from "http";
 import net from "net";
 import cors from "cors";
+import { generateContent } from "./api/_gemini";
 
 async function startServer() {
   const app = express();
@@ -54,6 +56,21 @@ async function startServer() {
 
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
+  });
+
+  // ─── PROXY AI ───────────────────────────────────────────────────────────────
+  // Bản local của api/ai/generate.ts (Vercel). Dùng chung lõi api/_gemini.ts
+  // để hành vi local và production không lệch nhau.
+  // Dùng app.all + tự kiểm method để khớp bản Vercel: nếu chỉ khai báo
+  // app.post thì GET sẽ rơi xuống Vite middleware và trả về HTML của SPA
+  // kèm mã 200, lệch hẳn với production (405).
+  app.all("/api/ai/generate", async (req, res) => {
+    if (req.method !== "POST") {
+      res.status(405).json({ error: "Chỉ hỗ trợ POST" });
+      return;
+    }
+    const result = await generateContent(req.body || {});
+    res.status(result.status).json(result.body);
   });
 
   // ─── THERMAL PRINTER via ESC/POS over TCP ───────────────────────────────────
