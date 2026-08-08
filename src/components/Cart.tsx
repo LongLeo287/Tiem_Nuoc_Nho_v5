@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Trash2, Plus, Minus, AlertCircle, Edit2, X, ShoppingBag, Clock, CheckCircle2, RefreshCw, ChevronRight, Sparkles, User, FileText, Save, History, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { GoogleGenAI, Type } from "@google/genai";
+import { generateContent } from "../lib/aiClient";
 import { CartItem, OrderData } from '../types';
 import { SIZES, TOPPINGS } from './Menu';
 import { useUI } from '../context/UIContext';
@@ -360,22 +360,21 @@ export function Cart({ appsScriptUrl, onNavigateSettings, asSidePanel = false }:
         } catch (e) {}
       }
 
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-      const response = await ai.models.generateContent({
+      const response = await generateContent({
         model: "gemini-3-flash-preview", // Model tối ưu nhất cho text
-        contents: `Tạo 1 thông báo giỏ hàng trống cho app quán nước. 
+        contents: `Tạo 1 thông báo giỏ hàng trống cho app quán nước.
         Style: GenZ, lầy lội, phũ, thả thính. ${menuContext}
-        Tiêu đề < 25 ký tự, Nội dung < 80 ký tự. 
+        Tiêu đề < 25 ký tự, Nội dung < 80 ký tự.
         Trả về JSON: title, content, button, emoji.`,
         config: {
           responseMimeType: "application/json",
           responseSchema: {
-            type: Type.OBJECT,
+            type: "OBJECT",
             properties: {
-              title: { type: Type.STRING },
-              content: { type: Type.STRING },
-              button: { type: Type.STRING },
-              emoji: { type: Type.STRING }
+              title: { type: "STRING" },
+              content: { type: "STRING" },
+              button: { type: "STRING" },
+              emoji: { type: "STRING" }
             },
             required: ["title", "content", "button", "emoji"]
           }
